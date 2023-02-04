@@ -1,17 +1,22 @@
-import mongoose, { Schema, SchemaTypes } from "mongoose";
+import mongoose, { Schema, SchemaTypes, models } from "mongoose";
 
-interface IUser {
+export interface IUser {
   id: number;
+  username: string;
   name: string;
   email: string;
-  bio_id: string;
+  bio_id?: string;
 }
 
-const UserSchema = new mongoose.Schema<IUser>({
-  id: SchemaTypes.UUID,
-  name: String,
-  email: String,
-  bio_id: SchemaTypes.UUID,
-});
+const UserSchema = new Schema<IUser>(
+  {
+    id: SchemaTypes.ObjectId,
+    username: String,
+    name: String,
+    email: String,
+    bio_id: SchemaTypes.ObjectId,
+  },
+  { collection: "user" }
+);
 
-export default mongoose.models.User || mongoose.model("User", UserSchema);
+export default models.User || mongoose.model("User", UserSchema);
