@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 const MONGODB_URI: string | undefined = process.env.MONGODB_URI;
+console.log(MONGODB_URI);
 
 if (!MONGODB_URI) {
   throw new Error(
@@ -15,10 +16,12 @@ if (!cached) {
 
 async function connectDB() {
   if (mongoose.connection.readyState >= 1) {
+    console.log("Already connected to MongoDB");
     return;
   }
 
   mongoose.connect(MONGODB_URI as string).then((connection) => connection);
+  console.log("Connected to MongoDB");
 }
 
 export default connectDB;
