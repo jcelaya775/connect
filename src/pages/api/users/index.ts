@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import connectDB from "../../connectDB";
-import User, { IUser } from "../../models/User";
+import connectDB from "../../../connectDB";
+import User, { IUser } from "../../../models/User";
 
 type Data = {
   name?: string;
@@ -20,10 +20,8 @@ export default async function handler(
     case "GET":
       try {
         const users: IUser[] = await User.find({});
-        console.log(users);
         res.status(200).json({ success: true, data: users });
       } catch (error) {
-        console.log("catch");
         res.status(400).json({ success: false });
       }
       break;
