@@ -6,7 +6,7 @@ export interface IComment extends Document {
   username: string;
 };
 
-const commentSchema: Schema = new Schema<IComment>(
+const CommentSchema: Schema = new Schema<IComment>(
   {
     content: {
       type: String,
@@ -29,7 +29,7 @@ export interface IPost extends Document {
   shared_with: Number /* 1:public, 2: friends, 3: private*/;
   likes: Number;
   views: Number;
-  comments: Comment[];
+  comments: IComment[];
   content: string;
   bio_id?: string;
 }
@@ -42,12 +42,7 @@ const PostSchema: Schema = new Schema<IPost>({
   likes: Number,
   views: Number,
   content: String,
-  
-  bio_id: SchemaTypes.ObjectId,
-  comments: {  // TODO: fix
-    type: [],
-    required: true,
-  }
+  comments: [CommentSchema],
 });
 
 export default models.Post || mongoose.model("Post", PostSchema);
