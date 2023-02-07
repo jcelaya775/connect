@@ -1,25 +1,6 @@
 import mongoose, { Schema, SchemaTypes, models, Document } from "mongoose";
+import Comment, { IComment } from "../models/Comment";
 
-export interface IComment extends Document {
-	likes: Number;
-	content: string;
-	username: string;
-}
-
-const CommentSchema: Schema = new Schema<IComment>({
-	content: {
-		type: String,
-		required: true,
-	},
-	username: {
-		type: String,
-		required: true,
-	},
-	likes: {
-		type: Number,
-		default: 0,
-	},
-});
 export interface IPost extends Document {
 	username: string;
 	name: string;
@@ -38,7 +19,7 @@ const PostSchema: Schema = new Schema<IPost>({
 	likes: Number,
 	views: Number,
 	content: String,
-	comments: [CommentSchema],
+	comments: [Comment]
 });
 
 export default models.Post || mongoose.model("Post", PostSchema);
