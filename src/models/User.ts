@@ -1,7 +1,6 @@
 import mongoose, { Schema, SchemaTypes, models } from "mongoose";
 
 export interface IUser {
-	id: number;
 	username: string;
 	name: string;
 	email: string;
@@ -9,7 +8,6 @@ export interface IUser {
 }
 
 const UserSchema = new Schema<IUser>({
-	id: SchemaTypes.ObjectId,
 	username: String,
 	name: String,
 	email: String,

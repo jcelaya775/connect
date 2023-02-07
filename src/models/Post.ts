@@ -21,7 +21,6 @@ const CommentSchema: Schema = new Schema<IComment>({
 	},
 });
 export interface IPost extends Document {
-	id: number;
 	username: string;
 	name: string;
 	shared_with: Number /* 1:public, 2: friends, 3: private*/;
@@ -33,7 +32,6 @@ export interface IPost extends Document {
 }
 
 const PostSchema: Schema = new Schema<IPost>({
-	id: SchemaTypes.ObjectId,
 	username: String,
 	name: String,
 	shared_with: Number,
