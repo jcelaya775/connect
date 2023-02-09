@@ -5,6 +5,8 @@ export interface IUser {
   username: string;
   name: string;
   email: string;
+  pass_hash: string;
+  code: Number;
   bio_id?: string;
 }
 
