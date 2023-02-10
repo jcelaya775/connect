@@ -1,26 +1,25 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import connectDB from "../../../connectDB";
-import User, { IUser } from "../../../models/User";
+import Collection, { ICollection } from "@/models/Collection";
 
 type Data = {
-	name?: string;
 	success: boolean;
-	data?: IUser[];
+	data?: ICollection[];
 };
 
 export default async function handler(
 	req: NextApiRequest,
-	res: NextApiResponse<Data>
+	res: NextApiResponse
 ) {
 	const { method } = req;
-	console.log(`method: ${method}`);
+
 	await connectDB();
+
 	switch (method) {
 		case "GET":
 			try {
-				const users: IUser[] = await User.find({});
-				res.status(200).json({ success: true, data: users });
-				console.log(users);
+				const collections = Collection.find({});
+				res.status(200).json({ success: true, data: collections });
 			} catch (error) {
 				res.status(400).json({ success: false });
 			}

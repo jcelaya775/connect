@@ -1,11 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import connectDB from "../../../connectDB";
-import User, { IUser } from "../../../models/User";
+import About, { IAbout } from "../../../models/About";
 
 type Data = {
-	name?: string;
 	success: boolean;
-	data?: IUser[];
+	data?: IAbout[];
 };
 
 export default async function handler(
@@ -13,14 +12,17 @@ export default async function handler(
 	res: NextApiResponse<Data>
 ) {
 	const { method } = req;
-	console.log(`method: ${method}`);
+
 	await connectDB();
 	switch (method) {
 		case "GET":
 			try {
-				const users: IUser[] = await User.find({});
-				res.status(200).json({ success: true, data: users });
-				console.log(users);
+				const about: IAbout[] = await About.find();
+				res.status(200).json({
+					success: true,
+					data: about,
+				});
+				console.log(about);
 			} catch (error) {
 				res.status(400).json({ success: false });
 			}

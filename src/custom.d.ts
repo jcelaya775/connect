@@ -1,4 +1,5 @@
 declare global {
-  var mongoose: any;
+	var mongoose: any;
 }
+
 export {};

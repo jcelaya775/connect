@@ -1,24 +1,27 @@
 import mongoose from "mongoose";
 const MONGODB_URI: string | undefined = process.env.MONGODB_URI;
+console.log(MONGODB_URI);
 
 if (!MONGODB_URI) {
-  throw new Error(
-    "Please define the MONGODB_URI environment variable inside .env.local"
-  );
+	throw new Error(
+		"Please define the MONGODB_URI environment variable inside .env.local"
+	);
 }
 
 let cached = global.mongoose;
 
 if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null };
+	cached = global.mongoose = { conn: null, promise: null };
 }
 
 async function connectDB() {
-  if (mongoose.connection.readyState >= 1) {
-    return;
-  }
+	if (mongoose.connection.readyState >= 1) {
+		console.log("Already connected to MongoDB");
+		return;
+	}
 
-  mongoose.connect(MONGODB_URI as string).then((connection) => connection);
+	mongoose.connect(MONGODB_URI as string).then((connection) => connection);
+	console.log("Connected to MongoDB");
 }
 
 export default connectDB;
