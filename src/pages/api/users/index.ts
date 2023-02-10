@@ -3,6 +3,7 @@ import connectDB from "../../../connectDB";
 import User, { IUser } from "../../../models/User";
 import { hashPassword, comparePassword } from "@/validation/passwordHash";
 import { userValidationSchema } from "@/validation/userValidation";
+import { sendEmail } from "@/validation/verificationEmail";
 
 type Data = {
   name?: string;
@@ -30,7 +31,10 @@ export default async function handler(
         //find user with username matching req
         let username = req.body.username
         let thisUser = await User.findOne({ username });
-        
+        const { query } = req
+        if('code' in query) {
+          
+        }
         //hash the attempted password
         let attemptedPassHash = await hashPassword(req.body.password);
         let userPassHash = thisUser.pass_hash;
@@ -52,24 +56,35 @@ export default async function handler(
       }
       break;
     case "POST":
-      // try {
-      //   const validationResult = userValidationSchema.validate(req.body.username);
-      //   if (validationResult.error) {
-      //     return res.status(400).json({ success: false });
-      //   }
-      //   const { name, email, password, username } = req.body; 
-      //   const hashedPassword = await hashPassword(req.body.password);
-      //   const user = new User({
-      //     username: req.body.username,
-      //     email: req.body.email,
-      //     password: hashedPassword,
-      //   });
-      //   await user.save();
-      //   res.status(201).json({ success: true });
-      // } catch (error) {
-      //   res.status(400).json({ success: false });
-      // }
-      // break;
+      try {
+        //make sure email follows conventions
+        const validationResult = userValidationSchema.validate(req.body.email);
+        if (validationResult.error) {
+          return res.status(400).json({ success: false });
+        }
+        //store the data into const's
+        const { name, email, password, username } = req.body; 
+        const hashedPassword = await hashPassword(req.body.password);
+        let vCode = (Math.random() * (99999 - 11111) + 11111);
+
+        //create the wire frame user
+        const wireUser = new User({
+          username: req.body.username,
+          email: req.body.email,
+          code: vCode,
+          password: hashedPassword,
+        });
+
+        //save the user
+        await wireUser.save();
+
+        //send the verification email and success status
+        sendEmail(email, name, vCode);
+        res.status(201).json({ success: true });
+      } catch (error) {
+        res.status(400).json({ success: false });
+      }
+      break;
     case "PUT":
       break;
     case "DELETE":

@@ -1,5 +1,5 @@
 import AWS from 'aws-sdk';
-export const sendEmail = (email: string, name: string) => {
+export const sendEmail = (email: string, name: string, code: Number) => {
   return new Promise((resolve, reject) => {
     const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -12,7 +12,6 @@ export const sendEmail = (email: string, name: string) => {
 			// make sure this is the right region
       region: 'us-west-2'
     });
-		let code = (Math.random() * (99999 - 11111) + 11111);
     const params = {
       Destination: {
         ToAddresses: [email]
@@ -33,7 +32,7 @@ export const sendEmail = (email: string, name: string) => {
 								<p>Please enter the following code to verify your account:</p>\
 								<p><strong>${code}</strong></p>\
 								<p>Best regards,</p>\
-								<p>[Your Name or Company Name]</p>\
+								<p>Connect: The Social Media Hub</p>\
 							</body>\
 						</html>`
 					}
@@ -45,7 +44,7 @@ export const sendEmail = (email: string, name: string) => {
       Source: 'connectsocialmediahub@gmail.com'
     };
 
-    ses.sendEmail(params, (err, data) => {
+    ses.sendEmail(params, (err: any, data: any) => {
       if (err) {
         reject(err);
       } else {
