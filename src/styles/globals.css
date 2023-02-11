@@ -1,4 +1,4 @@
-@tailwind base;
+/* @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -108,4 +108,12 @@ a {
 	html {
 		color-scheme: dark;
 	}
+} */
+
+body {
+  background: #F4F4F2;
+  margin: 0;
+  padding: 0;
+  font-family: 'Sofia Sans Extra Condensed', sans-serif;
+  color: #495464
 }
