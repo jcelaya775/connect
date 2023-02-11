@@ -5,15 +5,16 @@ import { hashPassword, comparePassword } from "@/validation/passwordHash";
 import { userValidationSchema } from "@/validation/userValidation";
 
 type Data = {
-  name?: string;
-  success: boolean;
-  data?: IUser[];
+	name?: string;
+	success: boolean;
+	data?: IUser[];
 };
 
 export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Data>
+	req: NextApiRequest,
+	res: NextApiResponse<Data>
 ) {
+<<<<<<< HEAD
   const { method } = req;
 
   await connectDB();
@@ -78,4 +79,29 @@ export default async function handler(
       res.status(400).json({ success: false });
       break;
   }
+=======
+	const { method } = req;
+	console.log(`method: ${method}`);
+	await connectDB();
+	switch (method) {
+		case "GET":
+			try {
+				const users: IUser[] = await User.find({});
+				res.status(200).json({ success: true, data: users });
+				console.log(users);
+			} catch (error) {
+				res.status(400).json({ success: false });
+			}
+			break;
+		case "POST":
+			break;
+		case "PUT":
+			break;
+		case "DELETE":
+			break;
+		default:
+			res.status(400).json({ success: false });
+			break;
+	}
+>>>>>>> develop
 }
