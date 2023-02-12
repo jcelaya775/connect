@@ -15,9 +15,9 @@ const SignUpBox = () => {
 
 	const comparePasswords = () => {
 		if (password === confirmPassword) {
-			setPasswordsMatch((prev) => (prev = true));
+			setPasswordsMatch(true);
 		} else {
-			setPasswordsMatch((prev) => (prev = false));
+			setPasswordsMatch(false);
 		}
 	};
 
