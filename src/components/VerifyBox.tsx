@@ -1,9 +1,8 @@
 import loginstyle from '@/styles/FormBox.module.css'
 import Image from "next/image";
 import logo from '@/images/link_icon_content.svg'
-import Link from 'next/link'
 
-const login_box = () => (
+const VerifyBox = () => (
     <div className={loginstyle.container}>
             <form action="#" method="post">
                 <h1>Connect
@@ -12,23 +11,16 @@ const login_box = () => (
                 <h3 className={loginstyle.tagline}>
                     The Social Media Hub
                 </h3>
-                <input className={loginstyle.forminput} type="text" placeholder="Email Address"/><br />
-                <input className={loginstyle.forminput} type="password" placeholder="Password"/>
                 <p className={loginstyle.message}>
-                    <Link href="#">
-                        Forgot Password
-                    </Link>
+                    To complete registration enter your email address and verification code.
                 </p>
+                <input className={loginstyle.forminput} type="text" placeholder="Email Address"/><br />
+                <input className={loginstyle.forminput} type="text" placeholder="Verification Code"/><br />
                 <button className={loginstyle.button}>
-                    Login
+                    Verify Account
                 </button>
-                <Link href="/signup">
-                    <button className={loginstyle.button}>
-                        Sign Up
-                    </button>
-                </Link>
             </form>
         </div>
 );
 
-export default login_box
+export default VerifyBox

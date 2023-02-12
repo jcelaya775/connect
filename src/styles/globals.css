@@ -117,3 +117,13 @@ body {
   font-family: 'Sofia Sans Extra Condensed', sans-serif;
   color: #495464
 }
+
+a {
+	color: #495464;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+a:hover{
+	color: #BBBFCA;
+}

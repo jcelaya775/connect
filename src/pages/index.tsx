@@ -5,7 +5,9 @@ import style from '@/styles/FormBox.module.css'
 import logo from '@/images/link_icon_content.svg'
 import Link from 'next/link'
 
-export default function Home() {
+export default function Home({ data }: any) {
+	console.log(data)
+	
 	return (
 	  <>
 		<Head>
@@ -19,7 +21,7 @@ export default function Home() {
 		<div className={style.container}>
 				  <div>
 					  <h1>Connect
-						  <img className={style.logo} src={logo} alt=""></img>
+						  <Image className={style.icon} src={logo} alt=""></Image>
 					  </h1>
 					  <h3>
 						  The Social Media Hub
@@ -29,14 +31,24 @@ export default function Home() {
 							  Login
 						  </button>
 					  </Link>
-					  <a href="/signup" >
+					  <Link href="/signup" >
 						  <button className={style.button}>
 							  Sign Up
 						  </button>
-					  </a>
+					  </Link>
 				  </div>
 			  </div>
 	  </>
 	);
   }
   
+export async function getStaticProps() {
+	const res = await fetch("http://localhost:3000/api/users")
+	const json = await res.json()
+
+	return {
+		props: {
+			data: json,
+		}
+	}
+}

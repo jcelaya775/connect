@@ -3,7 +3,7 @@ import Image from "next/image";
 import logo from '@/images/link_icon_content.svg'
 import Link from 'next/link'
 
-const login_box = () => (
+const LoginBox = () => (
     <div className={loginstyle.container}>
             <form action="#" method="post">
                 <h1>Connect
@@ -12,17 +12,20 @@ const login_box = () => (
                 <h3 className={loginstyle.tagline}>
                     The Social Media Hub
                 </h3>
+                <input className={loginstyle.forminput} type="text" placeholder="First Name"/><br />
+                <input className={loginstyle.forminput} type="text" placeholder="Last Name"/><br />
                 <input className={loginstyle.forminput} type="text" placeholder="Email Address"/><br />
-                <input className={loginstyle.forminput} type="password" placeholder="Password"/>
+                <input className={loginstyle.forminput} type="password" placeholder="Password"/><br />
+                <input className={loginstyle.forminput} type="password" placeholder="Confirm Password"/>
                 <p className={loginstyle.message}>
-                    <Link href="#">
-                        Forgot Password
-                    </Link>
+                    Already have an account?&nbsp;
+                    <strong>
+                        <Link href="/login">
+                            Login
+                        </Link>
+                    </strong>
                 </p>
-                <button className={loginstyle.button}>
-                    Login
-                </button>
-                <Link href="/signup">
+                <Link href="#">
                     <button className={loginstyle.button}>
                         Sign Up
                     </button>
@@ -31,4 +34,4 @@ const login_box = () => (
         </div>
 );
 
-export default login_box
+export default LoginBox
