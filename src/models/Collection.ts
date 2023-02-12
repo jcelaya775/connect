@@ -6,11 +6,11 @@ export interface ICollection {
 	user_id: number;
 }
 
-const CollectionSchema: Schema = new Schema<ICollection>({
+const CollectionSchema = new Schema<ICollection>({
 	name: String,
 	icon: String,
 	user_id: SchemaTypes.ObjectId,
 });
 
-export default models.CollectionSchema ||
+export default models.Collection ||
 	mongoose.model("Collection", CollectionSchema);

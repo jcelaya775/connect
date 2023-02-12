@@ -1,5 +1,5 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import connectDB from "../../../connectDB";
+import connectDB from "@/connectDB";
+import { NextApiRequest, NextApiResponse } from "next";
 import Collection, { ICollection } from "@/models/Collection";
 
 type Data = {
@@ -9,7 +9,7 @@ type Data = {
 
 export default async function handler(
 	req: NextApiRequest,
-	res: NextApiResponse
+	res: NextApiResponse<Data>
 ) {
 	const { method } = req;
 
@@ -18,11 +18,12 @@ export default async function handler(
 	switch (method) {
 		case "GET":
 			try {
-				const collections = Collection.find({});
+				const collections = await Collection.find({});
 				res.status(200).json({ success: true, data: collections });
 			} catch (error) {
 				res.status(400).json({ success: false });
 			}
+
 			break;
 		case "POST":
 			break;
