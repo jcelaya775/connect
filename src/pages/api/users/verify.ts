@@ -2,8 +2,6 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import connectDB from "../../../connectDB";
 import User, { IUser } from "../../../models/User";
 import { sendVerificationEmail } from "../auth/signup/transport"
-import { hashPassword, comparePassword } from "@/Validation/passwordHash";
-import { userValidationSchema } from "@/Validation/userValidation";
 
 
 type Data = {
@@ -24,8 +22,8 @@ export default async function handler(
 		case "GET":
 
 			try{
-					let userID = req.body.id;
-					const user = await User.findById(userID);
+				const { _id } = req.body;
+					const user = await User.findById(_id);
 					if (!user) {
 							return res.status(404).json({success: false,});
 					}
