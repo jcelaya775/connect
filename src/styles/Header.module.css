@@ -26,3 +26,7 @@
     color: #F4F4F2;
     text-decoration: none;
 }
+
+.home_link:hover {
+	color: #F4F4F2;
+}
