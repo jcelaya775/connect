@@ -43,12 +43,6 @@
     margin-top: 0px;
 }
 
-.link:before {
-    color: #495464;
-    font-size: 14px;
-    font-weight: bold;
-}
-
 .button {
     background-color: #495464;
     border: none;

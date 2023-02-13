@@ -4,6 +4,7 @@ import User, { IUser } from "../../../models/User";
 import { sendVerificationEmail } from "../auth/signup/transport"
 import { hashPassword, comparePassword } from "@/validation/passwordHash";
 import { userValidationSchema } from "@/validation/userValidation";
+import { sendEmail } from "@/validation/verificationEmail";
 
 type Data = {
     success: boolean;
