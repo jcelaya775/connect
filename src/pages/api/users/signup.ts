@@ -2,12 +2,10 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import connectDB from "../../../connectDB";
 import User, { IUser } from "../../../models/User";
 import { sendVerificationEmail } from "../auth/signup/transport"
-import { hashPassword, comparePassword } from "@/Validation/passwordHash";
-import { userValidationSchema } from "@/Validation/userValidation";
-import { sendEmail } from "@/Validation/verificationEmail";
+import { hashPassword, comparePassword } from "@/validation/passwordHash";
+import { userValidationSchema } from "@/validation/userValidation";
 
 type Data = {
-    name?: string;
     success: boolean;
     data?: IUser[];
 };
@@ -17,6 +15,13 @@ res: NextApiResponse<Data>){
 	const { method } = req;
 	await connectDB();
 	switch (method) {
+		case "GET":
+			const { _id } = req.body;
+			const user = await User.findById(_id);
+			if (!user) {
+				return res.status(404).json({ success: false});
+			}
+			return res.status(200).json({ success: true, data: user });
 		case "POST":
 			try{
 				//make sure email follows conventions
@@ -50,23 +55,17 @@ res: NextApiResponse<Data>){
 		case "PUT":
 			try {
         // Get the user ID and verification code from the request body
-        const { userId, code } = req.body;
+        const { _id, code } = req.body;
         
 
         // Verify the user's code
         // You should add the logic to verify the code here
-        const thisUser = await User.findOne({ _id: userId });
-        if(code == thisUser.code){
-          thisUser.Update({ _id: userId },
+        const thisUser = await User.findOneAndUpdate({ _id },
           { $set: { is_verified: true, code: null,} },
           { new: true })
           // Return the updated user
           res.status(200).json({success: true, data: thisUser});
         }
-        else{
-          res.status(400).json({success: false}); 
-        }
-      } 
       catch (error) {
         // Return an error response
         res.status(500).json({
