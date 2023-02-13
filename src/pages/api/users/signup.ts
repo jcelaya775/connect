@@ -2,9 +2,9 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import connectDB from "../../../connectDB";
 import User, { IUser } from "../../../models/User";
 import { sendVerificationEmail } from "../auth/signup/transport"
-import { hashPassword, comparePassword } from "@/Validation/passwordHash";
-import { userValidationSchema } from "@/Validation/userValidation";
-import { sendEmail } from "@/Validation/verificationEmail";
+import { hashPassword, comparePassword } from "@/validation/passwordHash";
+import { userValidationSchema } from "@/validation/userValidation";
+import { sendEmail } from "@/validation/verificationEmail";
 
 type Data = {
     name?: string;
