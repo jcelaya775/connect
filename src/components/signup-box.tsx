@@ -33,6 +33,7 @@ const SignUpBox = () => {
 					className={loginstyle.forminput}
 					type="text"
 					placeholder="First Name"
+					pattern="^[a-z '-]{1,30}+$/i"
 					required
 				/>
 				<br />
@@ -40,13 +41,15 @@ const SignUpBox = () => {
 					className={loginstyle.forminput}
 					type="text"
 					placeholder="Last Name"
+					pattern="^[a-z '-]{1,30}+$/i"
 					required
 				/>
 				<br />
 				<input
 					className={loginstyle.forminput}
-					type="text"
+					type="email"
 					placeholder="Email Address"
+					pattern="^[\w-.]+@([\w-]+.)+[\w-]{2,4}$"
 					required
 				/>
 				<br />
@@ -54,6 +57,7 @@ const SignUpBox = () => {
 					className={loginstyle.forminput}
 					type="password"
 					placeholder="Password"
+					pattern="^(?=.[0-9])(?=.[a-z])(?=.[A-Z])(?=.[*.!@$%^&(){}[]:;<>,.?/~_+-=|]).{8,32}$"
 					required
 					onChange={(e) => setPassword(e.target.value)}
 				/>

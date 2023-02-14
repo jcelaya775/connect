@@ -13,14 +13,18 @@ const LoginBox = () => (
 			<h3 className={loginstyle.tagline}>The Social Media Hub</h3>
 			<input
 				className={loginstyle.forminput}
-				type="text"
+				type="email"
 				placeholder="Email Address"
+				pattern="^[\w-.]+@([\w-]+.)+[\w-]{2,4}$"
+				required
 			/>
 			<br />
 			<input
 				className={loginstyle.forminput}
 				type="password"
 				placeholder="Password"
+				pattern="^(?=.[0-9])(?=.[a-z])(?=.[A-Z])(?=.[*.!@$%^&(){}[]:;<>,.?/~_+-=|]).{8,32}$"
+				required
 			/>
 			<p className={loginstyle.message}>
 				<a href="#" className={loginstyle.link}>
