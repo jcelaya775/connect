@@ -6,8 +6,8 @@ import logo from "@/images/link_icon_content.svg";
 import Link from "next/link";
 
 export default function Home({ data }: any) {
-	console.log(data)
-	
+	console.log(data);
+
 	return (
 		<>
 			<Head>
@@ -38,15 +38,15 @@ export default function Home({ data }: any) {
 			</div>
 		</>
 	);
-  }
-  
+}
+
 export async function getStaticProps() {
-	const res = await fetch("http://localhost:3000/api/users")
-	const json = await res.json()
+	const res = await fetch("http://localhost:3000/api/users");
+	const json = await res.json();
 
 	return {
 		props: {
 			data: json,
-		}
-	}
+		},
+	};
 }
