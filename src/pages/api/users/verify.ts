@@ -1,15 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import connectDB from "../../../connectDB";
 import User, { IUser } from "../../../models/User";
-import { sendVerificationEmail } from "../auth/signup/transport"
-import { hashPassword, comparePassword } from "@/Validation/passwordHash";
-import { userValidationSchema } from "@/Validation/userValidation";
-
 
 type Data = {
-    verificationCode?: Number,
-    success: boolean;
-  };
+	success: boolean;
+	user?: IUser;
+};
 
 export default async function handler(
 	req: NextApiRequest,
@@ -18,22 +14,32 @@ export default async function handler(
 	const { method } = req;
 
 	await connectDB();
-	
+
 	//returns true and the verification code as a number
 	switch (method) {
-		case "GET":
+		case "PUT":
+			try {
+				// Get the user ID and verification code from the request body
+				const { _id, code } = req.body;
+				const user = await User.findOne({ _id });
 
-			try{
-					let userID = req.body.id;
-					const user = await User.findById(userID);
-					if (!user) {
-							return res.status(404).json({success: false,});
-					}
-					let vCode = user.code;
-					return res.status(200).json({verificationCode: vCode, success: true});
-				}
-			catch (err) {
-					res.status(404).json({success: false});
+				// User not found
+				if (!user) res.status(404).json({ success: false });
+
+				// Verify the user's code
+				if (user.code !== code) res.status(403).json({ success: false });
+
+				// Update fields
+				user.is_verified = true;
+				user.code = undefined;
+
+				await user.save();
+
+				res.status(200).json({ success: true, user });
+			} catch (error) {
+				res.status(500).json({
+					success: false,
+				});
 			}
 			break;
 		default:
