@@ -1,10 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import connectDB from "../../../connectDB";
 import User, { IUser } from "../../../models/User";
-import { sendMail } from "@/pages/api/auth/signup/transport";
 import { hashPassword, comparePassword } from "@/validation/passwordHash";
 import { userValidationSchema } from "@/validation/userValidation";
-import { sendEmail } from "@/validation/verificationEmail";
+import { sendMail } from "@/validation/verificationEmail";
 
 type Data = {
 	success: boolean;
@@ -42,7 +41,7 @@ export default async function handler(
 
 				//save the user
 				await wireUser.save();
-				// await sendEmail(email, name, vCode);
+				await sendMail(email, vCode);
 				res.status(201).json({ success: true, user: wireUser });
 			} catch (error) {
 				res.status(500).json({ success: false });

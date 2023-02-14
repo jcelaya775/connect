@@ -3,7 +3,6 @@ import connectDB from "../../../connectDB";
 import User, { IUser } from "../../../models/User";
 import { hashPassword, comparePassword } from "@/validation/passwordHash";
 import { userValidationSchema } from "@/validation/userValidation";
-import { sendEmail } from "@/validation/verificationEmail";
 
 type Data = {
   name?: string;
@@ -79,7 +78,6 @@ export default async function handler(
         await wireUser.save();
 
         //send the verification email and success status
-        sendEmail(email, name, vCode);
         res.status(201).json({ success: true });
       } catch (error) {
         res.status(400).json({ success: false });
