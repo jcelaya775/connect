@@ -59,9 +59,7 @@ const SignUpBox = () => {
 					placeholder="Password"
 					pattern="^(?=.[0-9])(?=.[a-z])(?=.[A-Z])(?=.[*.!@$%^&(){}[]:;<>,.?/~_+-=|]).{8,32}$"
 					required
-					onChange={(e) => {
-						setPassword(e.target.value);
-					}}
+					onChange={(e) => setPassword(e.target.value)}
 				/>
 				<br />
 				<input
@@ -69,9 +67,7 @@ const SignUpBox = () => {
 					type="password"
 					placeholder="Confirm Password"
 					required
-					onChange={(e) => {
-						setConfirmPassword(e.target.value);
-					}}
+					onChange={(e) => setConfirmPassword(e.target.value)}
 				/>
 				<p className={loginstyle.message}>
 					Already have an account?&nbsp;
