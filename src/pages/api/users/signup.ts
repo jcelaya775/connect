@@ -46,7 +46,7 @@ res: NextApiResponse<Data>){
 				//save the user
 				await wireUser.save();
 				await sendVerificationEmail(username, vCode);
-				res.status(201).json({ success: true });
+				res.status(201).json({ success: true, data: wireUser });
 			}
 			catch (error) {
 				res.status(404).json({ success: false });
