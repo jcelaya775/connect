@@ -1,5 +1,5 @@
-import SignUpBox from "@/components/SignupBox";
-import Header from "@/components/Header";
+import SignUpBox from "@/components/signup-box";
+import Header from "@/components/header";
 
 export default function Login() {
 	return (
