@@ -13,7 +13,9 @@ const AboutSchema: Schema = new Schema<IAbout>({
 	works_at: String,
 	lives_in: String,
 	is_from: String,
-	schools_attended: [],
+	schools_attended: [
+		{ name: String, city: String, degree: String, gpa: Number },
+	],
 	bithday: Date,
 });
 

@@ -19,7 +19,7 @@ const PostSchema = new Schema<IPost>({
 	likes: Number,
 	views: Number,
 	content: String,
-	comments: [],
+	comments: [{ likes: Number, content: String, username: String }],
 });
 
 export default models.Post || mongoose.model("Post", PostSchema);
