@@ -20,8 +20,10 @@ export default async function handler(
 		case "PUT":
 			try {
 				// Get the user ID and verification code from the request body
-				const { _id, code } = req.body;
-				const user = await User.findOne({ _id });
+				const { email, code } = req.body;
+				const user = await User.findOne({ email });
+
+				console.log(user);
 
 				// User not found
 				if (!user) res.status(404).json({ success: false });
