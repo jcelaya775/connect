@@ -4,8 +4,6 @@ import User, { IUser } from "../../../models/User";
 import { sendVerificationEmail } from "../auth/signup/transport";
 import { hashPassword, comparePassword } from "@/validation/passwordHash";
 import { userValidationSchema } from "@/validation/userValidation";
-import { hasSubscribers } from "diagnostics_channel";
-import { log } from "console";
 import { sendEmail } from "@/validation/verificationEmail";
 
 type Data = {
@@ -19,13 +17,6 @@ export default async function handler(
 	const { method } = req;
 	await connectDB();
 	switch (method) {
-		case "GET":
-			const { _id } = req.body;
-			const user = await User.findById(_id);
-			if (!user) {
-				return res.status(404).json({ success: false });
-			}
-			return res.status(200).json({ success: true, user });
 		case "POST":
 			try {
 				const { name, email, password, username } = req.body;
@@ -51,7 +42,7 @@ export default async function handler(
 
 				//save the user
 				await wireUser.save();
-				sendEmail(email, name, vCode);
+				// await sendEmail(email, name, vCode);
 				res.status(201).json({ success: true, user: wireUser });
 			} catch (error) {
 				res.status(500).json({ success: false });
