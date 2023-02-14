@@ -22,7 +22,7 @@ export default async function handler(
 
 				//make sure email follows conventions
 				const validationResult = userValidationSchema.validate(req.body);
-				// console.log(validationResult);
+
 				if (validationResult.error) {
 					return res.status(400).json({ success: false });
 				}
@@ -39,9 +39,12 @@ export default async function handler(
 					code: vCode,
 				});
 
+				console.log(wireUser);
+
 				//save the user
-				await wireUser.save();
 				await sendMail(email, vCode);
+				await wireUser.save();
+
 				res.status(201).json({ success: true, user: wireUser });
 			} catch (error) {
 				res.status(500).json({ success: false });

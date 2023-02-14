@@ -12,11 +12,11 @@ export interface IUser {
 }
 
 const UserSchema = new Schema<IUser>({
-	username: { type: String, required: true, unique: true },
+	username: { type: String, unique: true },
 	password: { type: String, required: true },
 	name: String,
 	email: { type: String, required: true, unique: true },
-	is_verified: { type: Boolean, default: false },
+	is_verified: { type: Boolean, required: true, default: false },
 	code: Number,
 	bio_id: SchemaTypes.ObjectId,
 });
