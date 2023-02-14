@@ -1,6 +1,7 @@
 import nodemailer from "nodemailer";
+const nodemailer = require("nodemailer");
 
-const transporter = nodemailer.createTransport({
+let transporter = nodemailer.createTransport({
 	host: "smtp.gmail.com",
 	port: 587,
 	secure: false,
@@ -10,12 +11,13 @@ const transporter = nodemailer.createTransport({
 	},
 });
 
-export async function sendVerificationEmail(to, token) {
+export async function sendMail(to, token) {
 	const mailOptions = {
 		from: "connectsocialmediahub@gmail.com",
 		to,
 		subject: "Verify your email address",
 		text: `your verification code is: ${token}`,
+		html: `<p>your verification code is: ${token}</p>`,
 	};
 	await transporter.sendMail(mailOptions);
 }
