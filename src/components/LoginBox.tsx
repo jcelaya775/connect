@@ -28,9 +28,9 @@ const LoginBox = () => (
 				</a>
 			</p>
 			<button className={loginstyle.button}>Login</button>
-			<a href="/signup">
+			<Link href="/signup">
 				<button className={loginstyle.button}>Sign Up</button>
-			</a>
+			</Link>
 		</form>
 	</div>
 );
