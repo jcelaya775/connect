@@ -1,0 +1,92 @@
+.column {
+    float: left;
+    margin-top: 50px;
+    height: 100vh;
+    padding-top: 10px;
+    padding-left: 15px;
+    box-sizing: border-box;
+
+}
+  
+  .left, .right {
+    width: 20%;
+    margin-top: 45px;
+    background-color: #E8E8E8;
+    box-sizing: border-box;
+
+  }
+
+  .centered {
+    text-align: center;
+  }
+  
+  .center {
+    width: 60%;
+    box-sizing: border-box;
+
+  }
+
+  .container {
+    width: 100%;
+  }
+  
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+  .social_icon {
+    height: 35px;
+    width: 35px;
+    padding-left: 10px;
+  }
+
+  .fb_on, .fb_off, .insta_on, .insta_off, .tik_on, .tik_off, .twit_on, .twit_off {
+    background-repeat: no-repeat;
+    background-size: 35px;
+    display: inline-block;
+  }
+
+  .fb_on {
+    background-image: url('../images/fb_icon_on.svg');
+  }
+
+  .fb_off {
+    background-image: url('../images/fb_icon_off.svg');
+  }
+
+  .insta_on {
+    background-image: url('../images/insta_icon_on.svg');
+  }
+
+  .insta_off {
+    background-image: url('../images/insta_icon_off.svg');
+  }
+
+  .tik_on {
+    background-image: url('../images/tiktok_icon_on.svg');
+  }
+
+  .tik_off {
+    background-image: url('../images/tiktok_icon_off.svg');
+  }
+
+  .twit_on {
+    background-image: url('../images/twitter_icon_on.svg');
+  }
+
+  .twit_off {
+    background-image: url('../images/twitter_icon_off.svg');
+  }
+
+  .button {
+    border: none;
+    background-color: #E8E8E8;
+    padding:0;
+    margin:0;
+  }
+
+  .button:hover {
+    cursor: pointer;
+  }

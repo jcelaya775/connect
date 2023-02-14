@@ -1,12 +1,11 @@
-import LoginBox from '@/components/LoginBox'
-import Header from '@/components/Header'
+import LoginBox from "@/components/login-box";
+import Header from "@/components/header";
 
-
-export default function Login () {
-    return (
-        <>
-            <Header />
-            <LoginBox />
-        </>
-    )
+export default function Login() {
+	return (
+		<>
+			<Header />
+			<LoginBox />
+		</>
+	);
 }

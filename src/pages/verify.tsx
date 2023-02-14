@@ -1,12 +1,11 @@
-import VerifyBox from '@/components/VerifyBox'
-import Header from '@/components/Header'
+import VerifyBox from "@/components/verify-box";
+import Header from "@/components/header";
 
-
-export default function Verify () {
-    return (
-        <>
-            <Header />
-            <VerifyBox />
-        </>
-    )
+export default function Verify() {
+	return (
+		<>
+			<Header />
+			<VerifyBox />
+		</>
+	);
 }

@@ -3,6 +3,7 @@ import mongoose, { Schema, SchemaTypes, models } from "mongoose";
 export interface IUser {
 	username: string;
 	name: string;
+	password: string;
 	is_verified: boolean;
 	email: string;
 	pass: string;
@@ -11,9 +12,12 @@ export interface IUser {
 }
 
 const UserSchema = new Schema<IUser>({
-	username: String,
+	username: { type: String, required: true, unique: true },
+	password: { type: String, required: true },
 	name: String,
-	email: String,
+	email: { type: String, required: true, unique: true },
+	is_verified: { type: Boolean, default: false },
+	code: Number,
 	bio_id: SchemaTypes.ObjectId,
 });
 
