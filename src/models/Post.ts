@@ -12,14 +12,14 @@ export interface IPost extends Document {
 	bio_id?: string;
 }
 
-const PostSchema: Schema = new Schema<IPost>({
+const PostSchema = new Schema<IPost>({
 	username: String,
 	name: String,
 	shared_with: Number,
 	likes: Number,
 	views: Number,
 	content: String,
-	comments: [],
+	comments: [{ likes: Number, content: String, username: String }],
 });
 
 export default models.Post || mongoose.model("Post", PostSchema);

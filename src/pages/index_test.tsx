@@ -4,7 +4,7 @@ import style from "@/styles/FormBox.module.css";
 import logo from "@/images/link_icon_content.svg";
 import Link from "next/link";
 import { useState } from "react";
-import Feed from "@/components/feed";
+import Feed from "@/components/Feed";
 
 export default function Home() {
 	const [home, setHome] = useState(false);
