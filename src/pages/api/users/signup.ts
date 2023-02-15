@@ -33,6 +33,7 @@ export default async function handler(
 						error: validationResult.error.message,
 						httpStatus: 400,
 					});
+					break;
 				}
 				//store the data into const's
 				const hashedPassword = await hashPassword(password);
@@ -54,6 +55,7 @@ export default async function handler(
 					res
 						.status(500)
 						.json({ success: false, error: error.message, httpStatus: 500 });
+					break;
 				}
 
 				// Upload the user
@@ -63,6 +65,7 @@ export default async function handler(
 					res
 						.status(500)
 						.json({ success: false, error: error.message, httpStatus: 500 });
+					break;
 				}
 
 				res.status(201).json({ success: true, httpStatus: 201 });

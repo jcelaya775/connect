@@ -29,6 +29,7 @@ const SignUpBox = () => {
 
 	const signup = async (event: React.MouseEvent<HTMLButtonElement>) => {
 		event.preventDefault();
+		console.log("Signing up...");
 		if (!passwordsMatch) {
 			window.alert("Your passwords don't match!");
 			return;
