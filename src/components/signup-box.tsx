@@ -30,6 +30,7 @@ const SignUpBox = () => {
 	const signup = async (event: React.MouseEvent<HTMLButtonElement>) => {
 		event.preventDefault();
 		if (!passwordsMatch) {
+			window.alert("Your passwords don't match!");
 			return;
 		}
 
@@ -53,8 +54,18 @@ const SignUpBox = () => {
 		console.log(data);
 
 		if (data.success) router.push("/verify");
+		else {
+			switch (data.error) {
+				case "User already exists":
+					window.alert("User already exists");
+					break;
+				default:
+					window.alert("An error occurred");
+			}
+		}
 	};
 
+	// TODO: Allow for username or email login
 	return (
 		<div className={loginstyle.container}>
 			<form action="#" method="post">
@@ -85,6 +96,7 @@ const SignUpBox = () => {
 					className={loginstyle.forminput}
 					type="text"
 					placeholder="Username"
+					// TODO: Add validation for username
 					required
 					onChange={(e) => setUsername(e.target.value)}
 				/>
@@ -107,6 +119,7 @@ const SignUpBox = () => {
 					onChange={(e) => setPassword(e.target.value)}
 				/>
 				<br />
+				{/* TODO: Give user feedback on password strength */}
 				<input
 					className={loginstyle.forminput}
 					type="password"

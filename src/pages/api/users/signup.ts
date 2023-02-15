@@ -1,20 +1,24 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import connectDB from "../../../connectDB";
 import User, { IUser } from "../../../models/User";
-import { hashPassword, comparePassword } from "@/validation/passwordHash";
+import { hashPassword } from "@/validation/passwordHash";
 import { userValidationSchema } from "@/validation/userValidation";
 import { sendMail } from "@/validation/verificationEmail";
 
 type Data = {
 	success: boolean;
 	user?: IUser;
+	error?: string;
+	httpStatus?: number;
 };
 export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse<Data>
 ) {
 	const { method } = req;
+
 	await connectDB();
+
 	switch (method) {
 		case "POST":
 			try {
@@ -24,7 +28,11 @@ export default async function handler(
 				const validationResult = userValidationSchema.validate(req.body);
 
 				if (validationResult.error) {
-					return res.status(400).json({ success: false });
+					return res.status(400).json({
+						success: false,
+						error: validationResult.error.message,
+						httpStatus: 400,
+					});
 				}
 				//store the data into const's
 				const hashedPassword = await hashPassword(password);
@@ -39,19 +47,34 @@ export default async function handler(
 					code: vCode,
 				});
 
-				console.log(wireUser);
+				// Send verification email
+				try {
+					await sendMail(email, vCode);
+				} catch (error: any) {
+					res
+						.status(500)
+						.json({ success: false, error: error.message, httpStatus: 500 });
+				}
 
-				//save the user
-				await sendMail(email, vCode);
-				await wireUser.save();
+				// Upload the user
+				try {
+					await wireUser.save();
+				} catch (error: any) {
+					res
+						.status(500)
+						.json({ success: false, error: error.message, httpStatus: 500 });
+				}
 
-				res.status(201).json({ success: true });
-			} catch (error) {
-				console.log(error);
-				res.status(500).json({ success: false });
+				res.status(201).json({ success: true, httpStatus: 201 });
+			} catch (error: any) {
+				res
+					.status(500)
+					.json({ success: false, error: error.message, httpStatus: 500 });
 			}
 			break;
 		default:
-			res.status(404).json({ success: false });
+			res
+				.status(405)
+				.json({ success: false, error: "Method not allowed", httpStatus: 405 });
 	}
 }
