@@ -9,6 +9,7 @@ const SignUpBox = () => {
 	const router = useRouter();
 	const [firstName, setFirstName] = useState<string>("");
 	const [lastName, setLastName] = useState<string>("");
+	const [username, setUsername] = useState<string>("");
 	const [email, setEmail] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
 	const [confirmPassword, setConfirmPassword] = useState<string>("");
@@ -26,7 +27,8 @@ const SignUpBox = () => {
 		}
 	};
 
-	const signup = async () => {
+	const signup = async (event: React.MouseEvent<HTMLButtonElement>) => {
+		event.preventDefault();
 		if (!passwordsMatch) {
 			return;
 		}
@@ -39,6 +41,7 @@ const SignUpBox = () => {
 			},
 			body: JSON.stringify({
 				name,
+				username,
 				email,
 				password,
 			}),
@@ -46,6 +49,8 @@ const SignUpBox = () => {
 
 		const res = await fetch("api/users/signup", options);
 		const data = await res.json();
+
+		console.log(data);
 
 		if (data.success) router.push("/verify");
 	};
@@ -62,7 +67,7 @@ const SignUpBox = () => {
 					className={loginstyle.forminput}
 					type="text"
 					placeholder="First Name"
-					// pattern="^[a-z '-]{1,30}+$/i"
+					pattern="^[a-z '-]{1,30}+$/i"
 					required
 					onChange={(e) => setFirstName(e.target.value)}
 				/>
@@ -71,7 +76,7 @@ const SignUpBox = () => {
 					className={loginstyle.forminput}
 					type="text"
 					placeholder="Last Name"
-					// pattern="^[a-z '-]{1,30}+$/i"
+					pattern="^[a-z '-]{1,30}+$/i"
 					required
 					onChange={(e) => setLastName(e.target.value)}
 				/>
@@ -81,13 +86,14 @@ const SignUpBox = () => {
 					type="text"
 					placeholder="Username"
 					required
+					onChange={(e) => setUsername(e.target.value)}
 				/>
 				<br />
 				<input
 					className={loginstyle.forminput}
 					type="email"
 					placeholder="Email Address"
-					// pattern="^[\w-.]+@([\w-]+.)+[\w-]{2,4}$"
+					pattern="^[\w-.]+@([\w-]+.)+[\w-]{2,4}$"
 					required
 					onChange={(e) => setEmail(e.target.value)}
 				/>
@@ -96,7 +102,7 @@ const SignUpBox = () => {
 					className={loginstyle.forminput}
 					type="password"
 					placeholder="Password"
-					// pattern="^(?=.[0-9])(?=.[a-z])(?=.[A-Z])(?=.[*.!@$%^&(){}[]:;<>,.?/~_+-=|]).{8,32}$"
+					pattern="^(?=.[0-9])(?=.[a-z])(?=.[A-Z])(?=.[*.!@$%^&(){}[]:;<>,.?/~_+-=|]).{8,32}$"
 					required
 					onChange={(e) => setPassword(e.target.value)}
 				/>

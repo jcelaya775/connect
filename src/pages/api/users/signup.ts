@@ -45,8 +45,9 @@ export default async function handler(
 				await sendMail(email, vCode);
 				await wireUser.save();
 
-				res.status(201).json({ success: true, user: wireUser });
+				res.status(201).json({ success: true });
 			} catch (error) {
+				console.log(error);
 				res.status(500).json({ success: false });
 			}
 			break;

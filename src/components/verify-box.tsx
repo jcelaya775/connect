@@ -4,12 +4,15 @@ import logo from "@/images/link_icon_content.svg";
 import { useState } from "react";
 import { useRouter } from "next/router";
 
+// TODO: Give feedback to uesr if email or verification code is incorrect
 const VerifyBox = () => {
 	const router = useRouter();
 	const [email, setEmail] = useState<string>("");
 	const [verificationCode, setVerificationCode] = useState<string>("");
 
-	const verify = async () => {
+	const verify = async (event: React.MouseEvent<HTMLButtonElement>) => {
+		event.preventDefault();
+
 		const options = {
 			method: "PUT",
 			headers: {
@@ -24,9 +27,12 @@ const VerifyBox = () => {
 		const res = await fetch("api/users/verify", options);
 		const data = await res.json();
 
+		console.log(data);
+
 		if (data.success) router.push("/index_test");
 	};
 
+	// TODO: Add input validation
 	return (
 		<div className={loginstyle.container}>
 			<form action="#" method="post">
@@ -41,7 +47,7 @@ const VerifyBox = () => {
 				</p>
 				<input
 					className={loginstyle.forminput}
-					type="text"
+					type="email"
 					placeholder="Email Address"
 					onChange={(e) => setEmail(e.target.value)}
 				/>
@@ -53,7 +59,9 @@ const VerifyBox = () => {
 					onChange={(e) => setVerificationCode(e.target.value)}
 				/>
 				<br />
-				<button className={loginstyle.button}>Verify Account</button>
+				<button className={loginstyle.button} onClick={verify}>
+					Verify Account
+				</button>
 			</form>
 		</div>
 	);
