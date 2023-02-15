@@ -47,6 +47,13 @@ const SignUpBox = () => {
 				<br />
 				<input
 					className={loginstyle.forminput}
+					type="text"
+					placeholder="Username"
+					required
+				/>
+				<br />
+				<input
+					className={loginstyle.forminput}
 					type="email"
 					placeholder="Email Address"
 					pattern="^[\w-.]+@([\w-]+.)+[\w-]{2,4}$"
