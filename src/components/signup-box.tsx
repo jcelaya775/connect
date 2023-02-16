@@ -120,7 +120,7 @@ const SignUpBox = () => {
 					className={loginstyle.forminput}
 					type="email"
 					placeholder="Email Address"
-					pattern="^[\w-.]+@([\w-]+.)+[\w-]{2,4}$"
+					pattern="^[\w.]+@([\w-]+.)+[\w-]{2,4}$"
 					required
 					onChange={(e) => setEmail(e.target.value)}
 				/>
