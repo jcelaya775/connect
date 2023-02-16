@@ -3,8 +3,7 @@ import connectDB from "../../../connectDB";
 import User, { IUser } from "../../../models/User";
 import { hashPassword } from "@/validation/passwordHash";
 import { userValidationSchema } from "@/validation/userValidation";
-import { sendMail } from "@/validation/verificationEmail";
-import { findAncestor } from "typescript";
+import { sendVerificationEmail } from "@/validation/verificationEmail";
 
 type Data = {
 	success: boolean;
@@ -65,7 +64,7 @@ export default async function handler(
 
 				// Send verification email
 				try {
-					await sendMail(email, vCode);
+					await sendVerificationEmail(email, vCode);
 				} catch (error: any) {
 					res
 						.status(500)
