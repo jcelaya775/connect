@@ -13,6 +13,11 @@ const VerifyBox = () => {
 	const verify = async (event: React.MouseEvent<HTMLButtonElement>) => {
 		event.preventDefault();
 
+		if (!email || !verificationCode) {
+			window.alert("Please fill out all fields");
+			return;
+		}
+
 		const options = {
 			method: "PUT",
 			headers: {
@@ -29,7 +34,23 @@ const VerifyBox = () => {
 
 		console.log(data);
 
-		if (data.success) router.push("/index_test");
+		if (data.success) {
+			router.push("/index_test");
+		} else {
+			switch (data.error) {
+				case "User is already verified":
+					window.alert("User is already verified");
+					break;
+				case "User does not exist":
+					window.alert("User does not exist");
+					break;
+				case "Verification code is incorrect":
+					window.alert("Verification code is incorrect");
+					break;
+				default:
+					window.alert("Something went wrong");
+			}
+		}
 	};
 
 	// TODO: Add input validation

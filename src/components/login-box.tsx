@@ -13,6 +13,11 @@ const LoginBox = () => {
 	const login = async (event: React.MouseEvent<HTMLButtonElement>) => {
 		event.preventDefault();
 
+		if (!email || !password) {
+			window.alert("Please fill out all fields");
+			return;
+		}
+
 		const options = {
 			method: "POST",
 			headers: {
@@ -35,8 +40,12 @@ const LoginBox = () => {
 				case "User is not yet verified":
 					window.alert("User is not verified");
 					break;
-				default:
+				case "User not found":
+				case "Incorrect password":
 					window.alert("Username or email is incorrect");
+					break;
+				default:
+					window.alert("Something went wrong");
 			}
 		}
 	};

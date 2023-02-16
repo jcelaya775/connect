@@ -75,7 +75,7 @@ const SignUpBox = () => {
 					window.alert("That username is already taken");
 					break;
 				default:
-					window.alert("An error occurred");
+					window.alert("Something went wrong");
 			}
 		}
 	};
