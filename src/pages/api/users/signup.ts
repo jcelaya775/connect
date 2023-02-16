@@ -4,6 +4,7 @@ import User, { IUser } from "../../../models/User";
 import { hashPassword } from "@/validation/passwordHash";
 import { userValidationSchema } from "@/validation/userValidation";
 import { sendMail } from "@/validation/verificationEmail";
+import { findAncestor } from "typescript";
 
 type Data = {
 	success: boolean;
@@ -28,7 +29,7 @@ export default async function handler(
 				const validationResult = userValidationSchema.validate(req.body);
 
 				if (validationResult.error) {
-					return res.status(400).json({
+					res.status(400).json({
 						success: false,
 						error: validationResult.error.message,
 						httpStatus: 400,
@@ -38,6 +39,20 @@ export default async function handler(
 				//store the data into const's
 				const hashedPassword = await hashPassword(password);
 				const vCode = Math.round(Math.random() * (99999 - 11111) + 11111);
+
+				if (await User.findOne({ username })) {
+					res
+						.status(400)
+						.json({ success: false, error: "That username is already taken" });
+					break;
+				}
+
+				if (await User.findOne({ email })) {
+					res
+						.status(400)
+						.json({ success: false, error: "That email is already taken" });
+					break;
+				}
 
 				//create the wire frame user
 				const wireUser = new User({

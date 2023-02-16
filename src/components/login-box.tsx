@@ -32,17 +32,11 @@ const LoginBox = () => {
 		if (data.success) router.push("/index_test");
 		else {
 			switch (data.error) {
-				case "User not found":
-					window.alert("User not found");
-					break;
-				case "User is not verified":
+				case "User is not yet verified":
 					window.alert("User is not verified");
 					break;
-				case "Incorrect password":
-					window.alert("Incorrect password");
-					break;
 				default:
-					window.alert("An error occurred");
+					window.alert("Username or email is incorrect");
 			}
 		}
 	};

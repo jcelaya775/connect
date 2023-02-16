@@ -29,7 +29,18 @@ const SignUpBox = () => {
 
 	const signup = async (event: React.MouseEvent<HTMLButtonElement>) => {
 		event.preventDefault();
-		console.log("Signing up...");
+
+		if (
+			!firstName ||
+			!lastName ||
+			!username ||
+			!email ||
+			!password ||
+			!confirmPassword
+		) {
+			window.alert("Please fill out all fields");
+			return;
+		}
 		if (!passwordsMatch) {
 			window.alert("Your passwords don't match!");
 			return;
@@ -57,8 +68,11 @@ const SignUpBox = () => {
 		if (data.success) router.push("/verify");
 		else {
 			switch (data.error) {
-				case "User already exists":
-					window.alert("User already exists");
+				case "That email is already taken":
+					window.alert("That email is already taken");
+					break;
+				case "That username is already taken":
+					window.alert("That username is already taken");
 					break;
 				default:
 					window.alert("An error occurred");
