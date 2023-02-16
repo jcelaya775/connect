@@ -23,13 +23,17 @@ export default async function handler(
 				const { email, code } = req.body;
 				const user = await User.findOne({ email });
 
-				console.log(user);
-
 				// User not found
-				if (!user) res.status(404).json({ success: false });
+				if (!user) {
+					res.status(404).json({ success: false });
+					break;
+				}
 
 				// Verify the user's code
-				if (user.code !== code) res.status(403).json({ success: false });
+				if (user.code !== parseInt(code)) {
+					res.status(403).json({ success: false });
+					break;
+				}
 
 				// Update fields
 				user.is_verified = true;
@@ -37,8 +41,9 @@ export default async function handler(
 
 				await user.save();
 
-				res.status(200).json({ success: true, user });
+				res.status(200).json({ success: true });
 			} catch (error) {
+				console.log(error);
 				res.status(500).json({
 					success: false,
 				});

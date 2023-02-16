@@ -1,20 +1,25 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import connectDB from "../../../connectDB";
 import User, { IUser } from "../../../models/User";
-import { hashPassword, comparePassword } from "@/validation/passwordHash";
+import { hashPassword } from "@/validation/passwordHash";
 import { userValidationSchema } from "@/validation/userValidation";
 import { sendMail } from "@/validation/verificationEmail";
+import { findAncestor } from "typescript";
 
 type Data = {
 	success: boolean;
 	user?: IUser;
+	error?: string;
+	httpStatus?: number;
 };
 export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse<Data>
 ) {
 	const { method } = req;
+
 	await connectDB();
+
 	switch (method) {
 		case "POST":
 			try {
@@ -22,13 +27,32 @@ export default async function handler(
 
 				//make sure email follows conventions
 				const validationResult = userValidationSchema.validate(req.body);
-				// console.log(validationResult);
+
 				if (validationResult.error) {
-					return res.status(400).json({ success: false });
+					res.status(400).json({
+						success: false,
+						error: validationResult.error.message,
+						httpStatus: 400,
+					});
+					break;
 				}
 				//store the data into const's
 				const hashedPassword = await hashPassword(password);
 				const vCode = Math.round(Math.random() * (99999 - 11111) + 11111);
+
+				if (await User.findOne({ username })) {
+					res
+						.status(400)
+						.json({ success: false, error: "That username is already taken" });
+					break;
+				}
+
+				if (await User.findOne({ email })) {
+					res
+						.status(400)
+						.json({ success: false, error: "That email is already taken" });
+					break;
+				}
 
 				//create the wire frame user
 				const wireUser = new User({
@@ -39,15 +63,36 @@ export default async function handler(
 					code: vCode,
 				});
 
-				//save the user
-				await wireUser.save();
-				await sendMail(email, vCode);
-				res.status(201).json({ success: true, user: wireUser });
-			} catch (error) {
-				res.status(500).json({ success: false });
+				// Send verification email
+				try {
+					await sendMail(email, vCode);
+				} catch (error: any) {
+					res
+						.status(500)
+						.json({ success: false, error: error.message, httpStatus: 500 });
+					break;
+				}
+
+				// Upload the user
+				try {
+					await wireUser.save();
+				} catch (error: any) {
+					res
+						.status(500)
+						.json({ success: false, error: error.message, httpStatus: 500 });
+					break;
+				}
+
+				res.status(201).json({ success: true, httpStatus: 201 });
+			} catch (error: any) {
+				res
+					.status(500)
+					.json({ success: false, error: error.message, httpStatus: 500 });
 			}
 			break;
 		default:
-			res.status(404).json({ success: false });
+			res
+				.status(405)
+				.json({ success: false, error: "Method not allowed", httpStatus: 405 });
 	}
 }
