@@ -10,13 +10,13 @@ let transporter = nodemailer.createTransport({
 	},
 });
 
-export async function sendVerificationEmail(to: any, token: any) {
+export async function sendPasswordResetEmail(to: any) {
 	const mailOptions = {
 		from: "connectsocialmediahub@gmail.com",
 		to,
-		subject: "Verify your email address",
-		text: `your verification code is: ${token}`,
-		html: `<p>your verification code is: ${token}</p>`,
+		subject: "Reset your password",
+		text: `Click this link to reset your password: `,
+		html: `<a href="http://localhost:3000/password-reset">Reset password</a>`,
 	};
 	await transporter.sendMail(mailOptions);
 }
