@@ -8,6 +8,7 @@ import Feed from "@/components/Feed";
 
 export default function Home() {
 	const [home, setHome] = useState(false);
+	// TODO: Check if the user is logged via an API and redirect to the feed if they are
 
 	return (
 		<>
