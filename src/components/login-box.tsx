@@ -10,13 +10,10 @@ const LoginBox = () => {
 	const [email, setEmail] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
 
+	const formComplete: boolean = email !== "" && password !== "";
+
 	const login = async (event: React.MouseEvent<HTMLButtonElement>) => {
 		event.preventDefault();
-
-		if (!email || !password) {
-			window.alert("Please fill out all fields");
-			return;
-		}
 
 		const options = {
 			method: "POST",
@@ -80,7 +77,11 @@ const LoginBox = () => {
 						Forgot Password
 					</a>
 				</p>
-				<button className={loginstyle.button} onClick={login}>
+				<button
+					className={loginstyle.button}
+					onClick={login}
+					disabled={!formComplete}
+				>
 					Login
 				</button>
 				<Link href="/signup">
