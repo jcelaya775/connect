@@ -13,38 +13,19 @@ const SignUpBox = () => {
 	const [email, setEmail] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
 	const [confirmPassword, setConfirmPassword] = useState<string>("");
-	const [passwordsMatch, setPasswordsMatch] = useState<boolean>(false);
 
-	useEffect(() => {
-		comparePasswords();
-	}, [password, confirmPassword]);
+	const formComplete: boolean =
+		firstName !== "" &&
+		lastName !== "" &&
+		username !== "" &&
+		email !== "" &&
+		password !== "" &&
+		confirmPassword !== "";
 
-	const comparePasswords = () => {
-		if (password === confirmPassword) {
-			setPasswordsMatch(true);
-		} else {
-			setPasswordsMatch(false);
-		}
-	};
+	const passwordsMatch = password === confirmPassword;
 
 	const signup = async (event: React.MouseEvent<HTMLButtonElement>) => {
 		event.preventDefault();
-
-		if (
-			!firstName ||
-			!lastName ||
-			!username ||
-			!email ||
-			!password ||
-			!confirmPassword
-		) {
-			window.alert("Please fill out all fields");
-			return;
-		}
-		if (!passwordsMatch) {
-			window.alert("Your passwords don't match!");
-			return;
-		}
 
 		const name = firstName + " " + lastName;
 		const options = {
@@ -126,7 +107,10 @@ const SignUpBox = () => {
 				/>
 				<br />
 				<input
-					className={loginstyle.forminput}
+					className={`${loginstyle.forminput} ${
+						formComplete &&
+						(passwordsMatch ? loginstyle.valid : loginstyle.invalid)
+					}`}
 					type="password"
 					placeholder="Password"
 					pattern="^(?=.[0-9])(?=.[a-z])(?=.[A-Z])(?=.[*.!@$%^&(){}[]:;<>,.?/~_+-=|]).{8,32}$"
@@ -136,7 +120,10 @@ const SignUpBox = () => {
 				<br />
 				{/* TODO: Give user feedback on password strength */}
 				<input
-					className={loginstyle.forminput}
+					className={`${loginstyle.forminput} ${
+						formComplete &&
+						(passwordsMatch ? loginstyle.valid : loginstyle.invalid)
+					}`}
 					type="password"
 					placeholder="Confirm Password"
 					required
@@ -149,7 +136,11 @@ const SignUpBox = () => {
 					</strong>
 				</p>
 				<Link href="#">
-					<button className={loginstyle.button} onClick={signup}>
+					<button
+						className={loginstyle.button}
+						onClick={signup}
+						disabled={!formComplete || !passwordsMatch}
+					>
 						Sign Up
 					</button>
 				</Link>

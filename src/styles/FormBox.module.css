@@ -64,3 +64,21 @@
     background-color: #BBBFCA;
     color: #495464;
 }
+
+.button:hover {
+	background-color: #bbbfca;
+	color: #495464;
+}
+
+.button:disabled {
+	background-color: #bbbfca;
+	color: #495464;
+}
+
+.valid {
+	border: medium solid #54ad0a;
+}
+
+.invalid {
+	border: medium solid #f18787;
+}
