@@ -6,7 +6,7 @@ let transporter = nodemailer.createTransport({
 	secure: false,
 	auth: {
 		user: "connectsocialmediahub@gmail.com",
-		pass: process.env.EMAIL_PASSWORD,
+		pass: process.env.ZACH_LINUX_APP_PASS,
 	},
 });
 

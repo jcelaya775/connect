@@ -1,5 +1,5 @@
 import style from "@/styles/Feed.module.css";
-import classNames from "classNames";
+import classNames from "../../node_modules/classnames";
 import { useState } from "react";
 import { useFacebook, Page, Comments } from "react-facebook";
 
