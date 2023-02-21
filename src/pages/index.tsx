@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Header from "@/components/header";
+import Header from "@/components/Header";
 import style from "@/styles/FormBox.module.css";
 import logo from "@/images/link_icon_content.svg";
 import Link from "next/link";
