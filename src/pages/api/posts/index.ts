@@ -1,9 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import connectDB from "../../../lib/connectDB";
-import Post, { IPost } from "../../../models/Post";
+import connectDB from "@/lib/connectDB";
+import Post, { IPost } from "@/models/Post";
+import User, { IUser } from "@/models/User";
 
 type GetData = {
 	success: boolean;
+	error?: string;
 	data?: IPost[];
 	error?: string;
 	httpStatus?: number;
@@ -96,7 +98,7 @@ export default async function handler(
 		case "PUT":
 			break;
 		default:
-			res.status(400).json({ success: false });
+			res.status(400).json({ success: false, error: "could not contact the database" });
 			break;
 	}
 }
