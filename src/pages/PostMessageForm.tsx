@@ -60,19 +60,23 @@ function PostMessageForm() {
   };
 
   return (
-    // Render a form with an input field for the message and a submit button
-    <form onSubmit={handleSubmit} className="post-message-form">
-      <label htmlFor="message">Post Message:</label>
+    <form onSubmit={handleSubmit} style={{ marginBottom: 20 }}>
+      <label htmlFor="message" style={{ display: 'block', marginBottom: 10 }}>
+        Post Message:
+      </label>
       <textarea
         id="message"
         value={message}
         onChange={(e) => setMessage(e.target.value)}
-        className="post-message-textarea"
+        style={{ display: 'block', marginBottom: 10, width: '100%', padding: 10, borderRadius: 4, border: '1px solid #ccc' }}
       />
-      <br />
-      <button type="submit" className="post-message-button">Post</button>
+      <button type="submit" style={{ background: 'blue', color: '#fff', border: 'none', borderRadius: 4, padding: '10px 20px' }}>
+        Post
+      </button>
     </form>
   );
+
 }
 
 export default PostMessageForm;
+
