@@ -7,7 +7,6 @@ export interface IUser {
 	password: string;
 	is_verified: boolean;
 	email: string;
-	pass: string;
 	code: Number;
 	bio_id?: string;
 }
