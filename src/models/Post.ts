@@ -1,25 +1,41 @@
 import mongoose, { Schema, SchemaTypes, models, Document } from "mongoose";
-import Comment, { IComment } from "../models/Comment";
+import Comment, { CommentSchema, IComment } from "../models/Comment";
 
 export interface IPost extends Document {
-	username: string;
-	name: string;
-	shared_with: Number /* 1:public, 2: friends, 3: private*/;
+	title: string;
+	user_id: string;
+	// email: string;
+	timestamp: Date;
+	author: string;
+	shared_with: Number /* 1: public, 2: friends, 3: private */;
 	likes: Number;
 	views: Number;
-	comments: IComment[];
-	content: string;
-	bio_id?: string;
+	community: string;
+	comments?: IComment[];
+	content: {
+		body: string;
+		image: string;
+		link: string;
+		[x: string | number | symbol]: any;
+	};
 }
 
 const PostSchema = new Schema<IPost>({
-	username: String,
-	name: String,
-	shared_with: Number,
-	likes: Number,
-	views: Number,
-	content: String,
-	comments: [{ likes: Number, content: String, username: String }],
+	user_id: SchemaTypes.ObjectId,
+	// email: { type: String, required: true, trim: true },
+	author: { type: String, required: true, trim: true },
+	title: { type: String, required: true, trim: true },
+	community: { type: String, trim: true },
+	content: {
+		body: { type: String, trim: true },
+		image: { type: String, trim: true },
+		link: { type: String, trim: true },
+	},
+	comments: [CommentSchema],
+	likes: { type: Number, default: 0 },
+	views: { type: Number, default: 0 },
+	shared_with: { type: [{ type: String, required: true, trim: true }] },
+	timestamp: { type: Date, default: Date.now },
 });
 
 export default models.Post || mongoose.model("Post", PostSchema);

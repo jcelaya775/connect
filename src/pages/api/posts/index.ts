@@ -2,15 +2,21 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import connectDB from "../../../lib/connectDB";
 import Post, { IPost } from "../../../models/Post";
 
-//response to client
-type Data = {
+type GetData = {
 	success: boolean;
 	data?: IPost[];
+	error?: string;
+	httpStatus?: number;
+};
+
+type PostData = {
+	success: boolean;
+	data?: IPost;
 };
 
 export default async function handler(
 	req: NextApiRequest,
-	res: NextApiResponse<Data>
+	res: NextApiResponse<GetData | PostData>
 ) {
 	const { method } = req;
 
@@ -22,6 +28,7 @@ export default async function handler(
 
 	switch (method) {
 		case "GET":
+			// TODO: return only posts relevant to the user
 			try {
 				const email: string = session.user!.email!;
 				console.log(`session.user.email: ${email}`);
@@ -29,12 +36,62 @@ export default async function handler(
 				res.status(200).json({
 					success: true,
 					data: posts,
+					httpStatus: 200,
 				});
 			} catch (error) {
 				res.status(400).json({ success: false });
 			}
+
 			break;
 		case "POST":
+			// TODO: add authentication for posting
+			const {
+				email,
+				views,
+				shared_with,
+				title,
+				author,
+				community,
+				password,
+				jwt,
+				content,
+				comments,
+				likes,
+			} = req.body;
+
+			const post: IPost = await Post.create({
+				email,
+				views,
+				shared_with,
+				title,
+				author,
+				community,
+				password,
+				jwt,
+				content,
+				comments,
+				likes,
+			});
+
+			if (!post) {
+				res.status(400).json({
+					success: false,
+					error: "Could not create post. Request body is invalid.",
+					httpStatus: 400,
+				});
+				break;
+			}
+
+			try {
+				await post.save();
+			} catch (error: any) {
+				res
+					.status(500)
+					.json({ success: false, error: error.message, httpStatus: 500 });
+				break;
+			}
+
+			res.status(201).json({ success: true, data: post, httpStatus: 201 });
 			break;
 		case "PUT":
 			break;
