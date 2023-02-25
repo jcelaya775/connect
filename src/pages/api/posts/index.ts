@@ -20,7 +20,7 @@ export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse<GetData | PostData>
 ) {
-	const { method } = req;
+  const { method } = req;
 
 	// TODO: Fix decryption error in getServerSession
 	const session = await getServerSession(req, res, authOptions);
