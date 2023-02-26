@@ -34,7 +34,7 @@ export default async function handler(
         }
 
         //hash the attempted password
-        let attemptedPassHash = await hashPassword(req.body.password);
+        let attemptedPassHash = await hashPassword(password);
         let userPassHash = user.password;
 
         //compare the hashes
@@ -57,66 +57,45 @@ export default async function handler(
       break;
     case "PUT":
       try {
-        const { _email, password, _username } = req.body;
-        const { query } = req.query;
+        const { _id, _email, password, _username } = req.body;
         //if they're changing their username, check against password
-        if (query === "username") {
-          const user = await User.findOne({ _email });
+        const user = await User.findOne({ _id });
+        if (!user) {
+          res.status(404).json({ success: false, status: "Not Found" });
+          break;
+        }
 
-          //User not found
-          if (!user) {
-            res.status(404).json({ success: false, status: "Not Found" });
-            break;
-          }
+        //hash and compare passwords
+        const pass_attempt = await hashPassword(password);
+        const isMatch = await comparePassword(pass_attempt, user.password);
+        if (!isMatch) {
+          res.status(403).json({ success: false, status: "Forbidden" });
+          break;
+        }
 
-          //hash and compare passwords
-          const pass_attempt = await hashPassword(password);
-          const isMatch = await comparePassword(pass_attempt, user.password);
-          if (!isMatch) {
-            res.status(403).json({ success: false, status: "Forbidden" });
-            break;
-          }
-
+        if (_username) {
           //change the username
           user.username = _username;
-          await user.save();
-          //return OK status if password is correct
-          res.status(200).json({ success: true, status: "OK" });
-        } else if (query === "email") {
-        /*
-					if they want to change their email, check against username
-					this is because the data in req.body.email will be the 
-					new email to be updated and vice versa
-				*/
-          const user = await User.findOne({ _username });
-          if (!user) {
-            res.status(404).json({ success: false, status: "Not Found" });
-            break;
-          }
+        }
 
-          //hash and compare passwords
-          const pass_attempt = await hashPassword(password);
-          const isMatch = await comparePassword(pass_attempt, user.password);
-          if (!isMatch) {
-            res.status(403).json({ success: false, status: "Forbidden" });
-            break;
-          }
-
+        //TODO: validate new email address
+        if (_email) {
           //change the email
           user.email = _email;
-          user.save();
-          res.status(200).json({ success: true, status: "OK" });
         }
+        user.save();
+        res.status(200).json({ success: true, status: "OK" });
+        break;
       } catch (error) {
         res.status(404).json({ success: false, status: "Not Found" });
       }
     case "DELETE":
       try {
         //parse the email and password attempt
-        const { email, password } = req.body;
+        const { _id, password } = req.body;
 
         //grab the user
-        const user: IUser | null = await User.findOne({ email });
+        const user: IUser | null = await User.findOne({ _id });
         if (!user) {
           //not found
           res.status(404).json({ success: false, status: "Not Found" });
@@ -131,7 +110,7 @@ export default async function handler(
           break;
         }
         //delete user after checks
-        User.deleteOne(email);
+        User.deleteOne(_id);
         res.status(200).json({ success: true, status: "OK" });
       } catch (error) {
         res.status(404).json({ success: false, status: "Not Found" });
