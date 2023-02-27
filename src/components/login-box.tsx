@@ -26,13 +26,19 @@ const LoginBox = () => {
 			}),
 		};
 
-		const res = await fetch("api/users/login", options);
+		const res = await fetch("api/auth/login", options);
 		const data = await res.json();
 
 		console.log(data);
 
-		if (data.success) router.push("/index_test");
-		else {
+		if (data.success) {
+			const accessTokenCookie: string = res.headers.get("Authorization")!;
+			console.log(accessTokenCookie);
+
+			document.cookie = accessTokenCookie;
+
+			router.push("/index_test");
+		} else {
 			switch (data.error) {
 				case "User is not yet verified":
 					window.alert("User is not verified");

@@ -29,7 +29,7 @@ const VerifyBox = () => {
 			}),
 		};
 
-		const res = await fetch("api/users/verify", options);
+		const res = await fetch("api/auth/verify", options);
 		const data = await res.json();
 
 		console.log(data);

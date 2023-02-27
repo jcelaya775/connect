@@ -41,7 +41,7 @@ const SignUpBox = () => {
 			}),
 		};
 
-		const res = await fetch("api/users/signup", options);
+		const res = await fetch("api/auth/signup", options);
 		const data = await res.json();
 
 		console.log(data);
