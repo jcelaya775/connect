@@ -7,7 +7,7 @@ export interface IComment extends Document {
 	likes: Number;
 }
 
-const ReplySchema: Schema = new Schema<IComment>({
+export const CommentSchema: Schema = new Schema<IComment | null>({
 	user_id: SchemaTypes.ObjectId,
 	content: {
 		type: String,
@@ -18,25 +18,16 @@ const ReplySchema: Schema = new Schema<IComment>({
 		type: Number,
 		default: 0,
 	},
-});
-
-models.Reply = mongoose.model("Reply", ReplySchema);
-
-export const CommentSchema: Schema = new Schema<IComment>({
-	user_id: SchemaTypes.ObjectId,
-	content: {
-		type: String,
-		required: true,
-		trim: true,
+	parentComment: {
+		type: SchemaTypes.ObjectId,
+		ref: "Comment",
 	},
-	likes: {
-		type: Number,
-		default: 0,
-	},
-	// replies: [ReplySchema], // TODO: Fix this
+	replies: [
+		{
+			type: SchemaTypes.ObjectId,
+			ref: "Comment",
+		},
+	],
 });
-
-// This may potentially be useful for above
-// [x: string | number | symbol]: any;
 
 export default models.Comment || mongoose.model("Comment", CommentSchema);

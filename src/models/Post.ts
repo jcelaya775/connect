@@ -1,5 +1,5 @@
 import mongoose, { Schema, SchemaTypes, models, Document } from "mongoose";
-import Comment, { CommentSchema, IComment } from "../models/Comment";
+import { CommentSchema, IComment } from "../models/Comment";
 
 export interface IPost extends Document {
 	title: string;
@@ -7,15 +7,15 @@ export interface IPost extends Document {
 	// email: string;
 	timestamp: Date;
 	author: string;
-	shared_with: Number /* 1: public, 2: friends, 3: private */;
+	visibility: Number /* 1: public-post, 2: friends, 3: private-post */;
 	likes: Number;
 	views: Number;
 	community: string;
 	comments?: IComment[];
 	content: {
-		body: string;
-		image: string;
-		link: string;
+		body?: string;
+		image?: string;
+		link?: string;
 		[x: string | number | symbol]: any;
 	};
 }
@@ -34,7 +34,7 @@ const PostSchema = new Schema<IPost>({
 	comments: [CommentSchema],
 	likes: { type: Number, default: 0 },
 	views: { type: Number, default: 0 },
-	shared_with: { type: [{ type: String, required: true, trim: true }] },
+	visibility: { type: Number, required: true, default: 1 },
 	timestamp: { type: Date, default: Date.now },
 });
 

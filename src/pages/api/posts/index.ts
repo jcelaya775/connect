@@ -61,6 +61,8 @@ export default async function handler(
 				likes,
 			} = req.body;
 
+			console.log(comments);
+
 			const post: IPost = await Post.create({
 				email,
 				views,

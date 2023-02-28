@@ -22,6 +22,10 @@ export default async function handler(
     case "GET":
       try {
         //find user with username matching req
+        // const { _id, email, username } = req.query;
+
+        // let identifier = _id || email || username;
+
         let email = req.body.email;
         const user: IUser | null = await User.findOne({ email });
         if (!user) {
