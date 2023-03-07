@@ -4,10 +4,12 @@ import axios from 'axios';
 interface MessageData {
   id: string;
   message: string;
+  title: string;
 }
 
 interface PostMessageRequest {
   message: string;
+  title: string;
 }
 
 // Define a custom hook for posting a message

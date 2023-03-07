@@ -1,11 +1,15 @@
-import mongoose, { Schema, SchemaTypes, models, Document } from "mongoose";
+// models/Temp.ts
 
-export interface IMessageData {
-	message: string;
+import mongoose, { Document, Schema } from "mongoose";
+
+interface ITemp extends Document {
+  title: string;
+  message: string;
 }
 
-const TempSchema: Schema = new Schema<IMessageData>({
-	message: String,
+const TempSchema: Schema = new Schema({
+  title: { type: String, required: true },
+  message: { type: String, required: true },
 });
 
-export default models.Temp || mongoose.model("Temp", TempSchema);
+export default mongoose.models.Temp || mongoose.model<ITemp>("Temp", TempSchema);

@@ -1,3 +1,5 @@
+// pages/api/temp.ts
+
 import type { NextApiRequest, NextApiResponse } from "next";
 import connectDB from "@/connectDB";
 import Temp from "@/models/Temp";
@@ -37,10 +39,10 @@ export default async function handler(
 			break;
 		case "POST":
 			try {
-				const { message } = req.body;
+				const { title, message } = req.body;
 				console.log(`Got request to post message: ${message}`);
 
-				const temp = await Temp.create({ message });
+				const temp = await Temp.create({ title, message });
 
 				// Invalid request
 				if (!temp) {
