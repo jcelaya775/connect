@@ -40,3 +40,11 @@ export default async function handler(
 			break;
 	}
 }
+
+// export const config = {
+// 	api: {
+// 		bodyParser: false,
+// 		externalResolver: true,
+// 		middlewares: [serverAuth],
+// 	},
+// };

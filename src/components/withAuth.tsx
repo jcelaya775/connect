@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { ReactElement } from "react";
 
+// For frontend
 export const withAuth = (WrappedComponent: ReactElement) => {
 	const Wrapper = (props: any) => {
 		useEffect(() => {

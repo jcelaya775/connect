@@ -4,7 +4,6 @@ import User, { IUser } from "../../../models/User";
 import { comparePassword } from "@/validation/passwordHash";
 import jwt from "jsonwebtoken";
 import cookie from "cookie";
-// const cookie = require("cookie-parser")
 
 type Data = {
 	success: boolean;
@@ -74,23 +73,6 @@ export default async function handler(
 					}
 				);
 
-				// Send jwt token to client header
-				// res.setHeader;
-				// cookie.serialize("Authorization", `Bearer ${newAccessToken}`, {
-				// 	secure: process.env.NODE_ENV !== "development",
-				// 	sameSite: "strict",
-				// 	maxAge: 3600,
-				// 	path: "/",
-				// });
-				console.log(
-					cookie.serialize("Authorization", `Bearer ${newAccessToken}`, {
-						secure: process.env.NODE_ENV !== "development",
-						sameSite: "strict",
-						maxAge: 3600,
-						path: "/",
-					})
-				);
-
 				res.setHeader(
 					"Set-Cookie",
 					cookie.serialize("Authorization", `Bearer ${newAccessToken}`, {
@@ -100,8 +82,6 @@ export default async function handler(
 						path: "/",
 					})
 				);
-
-				// res.setHeader("Authorization", `Bearer ${newAccessToken}`);
 
 				// TODO: Send public user info to client
 				res.status(200).json({ success: true, httpStatus: 201 });

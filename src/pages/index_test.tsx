@@ -5,6 +5,35 @@ import logo from "@/images/link_icon_content.svg";
 import Link from "next/link";
 import { useState } from "react";
 import Feed from "@/components/Feed";
+import { NextPageContext } from "next";
+import axios, { AxiosResponse } from "axios";
+import { IUser } from "@/models/User";
+
+export const getServerSideProps = async (context: NextPageContext) => {
+	const { req } = context;
+	const token: string | undefined = req?.headers.cookie
+		?.split("=")[1]
+		?.split("%20")[1];
+
+	if (!token) {
+		return {
+			redirect: {
+				destination: "/login",
+				permanent: false,
+			},
+		};
+	}
+
+	const data = await axios.post("http://localhost:3000/api/auth", {
+		token,
+	});
+
+	console.log(data?.data?.user);
+
+	return {
+		props: {},
+	};
+};
 
 export default function Home() {
 	const [home, setHome] = useState(false);

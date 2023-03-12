@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { NextApiRequest, NextApiResponse } from "next";
 
-export function withAuth(
+export default function authMiddleware(
 	handler: (req: NextApiRequest, res: NextApiResponse) => void
 ) {
 	return async (req: NextApiRequest, res: NextApiResponse) => {
