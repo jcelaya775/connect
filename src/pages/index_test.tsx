@@ -3,7 +3,7 @@ import Header from "@/components/header";
 import style from "@/styles/FormBox.module.css";
 import logo from "@/images/link_icon_content.svg";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Feed from "@/components/Feed";
 import { NextPageContext } from "next";
 import axios, { AxiosResponse } from "axios";
@@ -28,16 +28,29 @@ export const getServerSideProps = async (context: NextPageContext) => {
 		token,
 	});
 
-	console.log(data?.data?.user);
+	const user = data?.data?.user;
+
+	if (!user) {
+		return {
+			redirect: {
+				destination: "/login",
+				permanent: false,
+			},
+		};
+	}
 
 	return {
-		props: {},
+		props: { user },
 	};
 };
 
-export default function Home() {
+export default function Home({ user }: { user: IUser }) {
 	const [home, setHome] = useState(false);
 	// TODO: Check if the user is logged via an API and redirect to the feed if they are
+
+	useEffect(() => {
+		console.log(user);
+	}, []);
 
 	return (
 		<>
