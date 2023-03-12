@@ -4,14 +4,14 @@ import { CommentSchema, IComment } from "../models/Comment";
 
 export interface IPost extends Document {
 	user_id: string;
-	// email: string;
+	email: string;
 	timestamp: Date;
 	author: string;
 	visibility: Number /* 1: public-post, 2: friends, 3: private-post */;
 	likes: Number;
 	views: Number;
 	community: string;
-	comments?: IComment[];
+	// comments?: IComment[];
 	content: {
 		body?: string;
 		image?: string;
@@ -22,16 +22,17 @@ export interface IPost extends Document {
 
 const PostSchema = new Schema<IPost>({
 	user_id: SchemaTypes.ObjectId,
-	// email: { type: String, required: true, trim: true },
+	email: { type: String, required: true, trim: true },
 	author: { type: String, required: true, trim: true },
 	title: { type: String, required: true, trim: true },
 	community: { type: String, trim: true },
+	// TODO: Fix content and comment
 	content: {
 		body: { type: String, trim: true },
 		image: { type: String, trim: true },
 		link: { type: String, trim: true },
 	},
-	comments: [CommentSchema],
+	// comments: [CommentSchema],
 	likes: { type: Number, default: 0 },
 	views: { type: Number, default: 0 },
 	visibility: { type: Number, required: true, default: 1 },

@@ -27,6 +27,7 @@ const PostsList = () => {
 					{posts.map((post) => (
 						<li key={post._id}>
 							<h4>{post.title}</h4>
+							<h4>{post.author}</h4>
 						</li>
 					))}
 				</ul>
