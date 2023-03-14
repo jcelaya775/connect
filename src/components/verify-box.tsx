@@ -3,6 +3,7 @@ import Image from "next/image";
 import logo from "@/images/link_icon_content.svg";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import withAuth from "./withAuth";
 
 // TODO: Give feedback to uesr if email or verification code is incorrect
 const VerifyBox = () => {
@@ -89,3 +90,4 @@ const VerifyBox = () => {
 };
 
 export default VerifyBox;
+// export default withAuth(VerifyBox);
