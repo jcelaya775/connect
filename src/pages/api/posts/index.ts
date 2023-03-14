@@ -14,17 +14,22 @@ export default async function handler(
 ) {
 	const { method } = req;
 
+	// TODO: Fix decryption error in getServerSession
+	const session = await getServerSession(req, res, authOptions);
+	if (!session) return res.status(401).json({ success: false });
+
 	await connectDB();
 
 	switch (method) {
 		case "GET":
 			try {
+				const email: string = session.user!.email!;
+				console.log(`session.user.email: ${email}`);
 				const posts: IPost[] = await Post.find();
 				res.status(200).json({
 					success: true,
 					data: posts,
 				});
-				console.log(posts);
 			} catch (error) {
 				res.status(400).json({ success: false });
 			}
@@ -32,8 +37,6 @@ export default async function handler(
 		case "POST":
 			break;
 		case "PUT":
-			break;
-		case "DELETE":
 			break;
 		default:
 			res.status(400).json({ success: false });

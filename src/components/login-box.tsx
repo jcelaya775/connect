@@ -4,6 +4,7 @@ import logo from "@/images/link_icon_content.svg";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import { signIn } from "next-auth/react";
 
 const LoginBox = () => {
 	const router = useRouter();
@@ -85,7 +86,12 @@ const LoginBox = () => {
 				</p>
 				<button
 					className={loginstyle.button}
-					onClick={login}
+					onClick={(e) => {
+						e.preventDefault();
+						signIn("github", {
+							callbackUrl: "/",
+						});
+					}}
 					disabled={!formComplete}
 				>
 					Login

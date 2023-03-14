@@ -1,39 +1,66 @@
-import Head from "next/head";
 import Image from "next/image";
 import Header from "@/components/header";
 import style from "@/styles/FormBox.module.css";
 import logo from "@/images/link_icon_content.svg";
 import Link from "next/link";
+import { useEffect } from "react";
+import Feed from "@/components/Feed";
+import { getServerSession } from "next-auth/next";
+import { GetServerSidePropsContext } from "next";
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
+import { useSession } from "next-auth/react";
 
 export default function Home() {
-	return (
-		<>
-			<Head>
-				<title>Connect</title>
-				<meta
-					name="description"
-					content="Social media hub that is the home to all of your social media needs."
-				/>
-				<meta name="viewport" content="width=device-width, initial-scale=1" />
-				<link rel="icon" href="/favicon.ico" />
-			</Head>
-			<Header />
+	const { data: session, status } = useSession();
 
-			<div className={style.container}>
-				<div>
-					<h1>
-						Connect
-						<Image className={style.icon} src={logo} alt="Connect Logo"></Image>
-					</h1>
-					<h3 className={style.tagline}>The Social Media Hub</h3>
-					<Link href="/login">
-						<button className={style.button}>Login</button>
-					</Link>
-					<Link href="/signup">
-						<button className={style.button}>Sign Up</button>
-					</Link>
+	useEffect(() => {
+		console.log(status);
+		console.log(session);
+	}, [status]);
+
+	if (!session) {
+		return (
+			<>
+				<Header />
+				<div className={style.container}>
+					<div>
+						<h1>
+							Connect
+							<Image
+								className={style.icon}
+								src={logo}
+								alt="Connect Logo"
+							></Image>
+						</h1>
+
+						<h3 className={style.tagline}>The Social Media Hub</h3>
+
+						<Link href="/login">
+							<button className={style.button}>Login</button>
+						</Link>
+
+						<Link href="/signup">
+							<button className={style.button}>Sign Up</button>
+						</Link>
+					</div>
 				</div>
-			</div>
-		</>
+			</>
+		);
+	}
+
+	return (
+		<div>
+			<Header />
+			<Feed />
+		</div>
 	);
+}
+
+// TODO: Fix decryption error in getServerSession
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+	return {
+		props: {
+			session: await getServerSession(context.req, context.res, authOptions),
+		},
+	};
 }

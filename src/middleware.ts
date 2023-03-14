@@ -1,3 +1,5 @@
+// export { default } from "next-auth";
+
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { RequestCookie } from "next/dist/server/web/spec-extension/cookies";
