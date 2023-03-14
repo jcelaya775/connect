@@ -1,10 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import connectDB from "../../../lib/mongodb";
+import connectDB from "@/lib/mongodb";
 import User, { IUser } from "../../../models/User";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./[...nextauth]";
 
 type Data = {
-	name?: string;
 	success: boolean;
 	user?: IUser;
 };
@@ -15,34 +15,19 @@ export default async function handler(
 ) {
 	const { method } = req;
 
+	const session = await getServerSession(req, res, authOptions);
+	if (!session) return res.status(401).json({ success: false });
+
 	await connectDB();
 
 	switch (method) {
-		case "POST":
+		case "GET":
 			try {
-				// const authHeader = req.headers.cookie;
-				// console.log(authHeader);
-
-				// if (!authHeader) return res.status(401).json({ success: false });
-
-				// const token: string = authHeader && authHeader?.split(" ")[1];
-				const { token } = req.body;
-
-				let email;
-				try {
-					const decoded: JwtPayload = jwt.verify(
-						token,
-						process.env.ACCESS_TOKEN_SECRET!
-					) as JwtPayload;
-					email = decoded.email;
-				} catch (error) {
-					return res.status(403).json({ success: false });
-				}
-
-				const user: IUser | null = await User.findOne({ email });
+				const email = session.user!.email!;
+				const user = await User.findOne<IUser>({ email });
 				if (!user) return res.status(404).json({ success: false });
 
-				res.status(201).json({ success: true, user });
+				res.status(200).json({ success: true, user });
 			} catch (error) {
 				res.status(400).json({ success: false });
 			}

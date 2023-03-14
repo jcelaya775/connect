@@ -2,6 +2,10 @@ import style from "@/styles/Feed.module.css";
 import classNames from "../../node_modules/classnames";
 import { useState } from "react";
 import { useFacebook, Page, Comments } from "react-facebook";
+import { GetServerSidePropsContext } from "next";
+import { getServerSession } from "next-auth/next";
+import { useSession } from "next-auth/react";
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
 export default function Feed() {
 	const [facebookStatus, setFacebookStatus] = useState(false);
@@ -79,4 +83,23 @@ export default function Feed() {
 			</div>
 		</>
 	);
+}
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+	const session = await getServerSession(context.req, context.res, authOptions);
+
+	if (!session) {
+		return {
+			redirect: {
+				destination: "/",
+				permanent: false,
+			},
+		};
+	}
+
+	return {
+		props: {
+			session,
+		},
+	};
 }

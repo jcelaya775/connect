@@ -61,8 +61,6 @@ export default async function handler(
 				likes,
 			} = req.body;
 
-			console.log(comments);
-
 			const post: IPost = await Post.create({
 				email,
 				views,
@@ -81,7 +79,6 @@ export default async function handler(
 				res.status(400).json({
 					success: false,
 					error: "Could not create post. Request body is invalid.",
-					httpStatus: 400,
 				});
 				break;
 			}
@@ -89,13 +86,11 @@ export default async function handler(
 			try {
 				await post.save();
 			} catch (error: any) {
-				res
-					.status(500)
-					.json({ success: false, error: error.message, httpStatus: 500 });
+				res.status(500).json({ success: false, error: error.message });
 				break;
 			}
 
-			res.status(201).json({ success: true, data: post, httpStatus: 201 });
+			res.status(201).json({ success: true, data: post });
 			break;
 		case "PUT":
 			break;

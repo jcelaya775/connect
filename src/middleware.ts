@@ -1,20 +1,29 @@
-// export { default } from "next-auth";
-
-import { NextResponse } from "next/server";
+import { withAuth } from "next-auth/middleware";
 import type { NextRequest } from "next/server";
-import { RequestCookie } from "next/dist/server/web/spec-extension/cookies";
-import jwt from "jsonwebtoken";
+import { authOptions } from "./pages/api/auth/[...nextauth]";
 
-export default function middleware(req: NextRequest) {
-	// const { pathname } = req.nextUrl;
-	// console.log("in middleware");
-	// const authHeader: RequestCookie | undefined =
-	// 	req.cookies.get("Authorization") || req.cookies.get("authorization");
-	// const token = authHeader?.value?.split(" ")[1];
-	// if (token && userAuth(token)) return NextResponse.next();
-	// else return NextResponse.redirect(new URL("/login", req.url));
-}
+// export default withAuth({
+// 	function middleware(req) {
+//     console.log(req.nextauth.token)
+//   },
+// 	callbacks: {
+// 		authorized: ({ token }) => !!token,
+// 	},
+// });
 
-// export const config = {
-// 	matcher: "/*",
-// };
+export default withAuth(
+	// `withAuth` augments your `Request` with the user's token.
+	function middleware(req) {
+		console.log("in middleware");
+		console.log(req.nextauth.token);
+	}
+	// {
+	// 	callbacks: {
+	// 		authorized: ({ token }) => !!token,
+	// 	},
+	// }
+);
+
+export const config = {
+	matcher: "/verify-email",
+};

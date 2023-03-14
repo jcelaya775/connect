@@ -46,7 +46,7 @@ const SignUpBox = () => {
 
 		console.log(data);
 
-		if (data.success) router.push("/verify");
+		if (data.success) router.push("/verify-email");
 		else {
 			switch (data.error) {
 				case "That email is already taken":
