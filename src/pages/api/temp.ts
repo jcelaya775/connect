@@ -1,7 +1,7 @@
 // pages/api/temp.ts
 
 import type { NextApiRequest, NextApiResponse } from "next";
-import connectDB from "@/connectDB";
+import connectDB from "@/lib/mongodb";
 import Temp from "@/models/Temp";
 
 type Data = {
