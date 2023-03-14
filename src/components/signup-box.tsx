@@ -27,7 +27,7 @@ const SignUpBox = () => {
 	const signup = async (event: React.MouseEvent<HTMLButtonElement>) => {
 		event.preventDefault();
 
-		const name = firstName + " " + lastName;
+		const name = firstName.trim() + " " + lastName.trim();
 		const options = {
 			method: "POST",
 			headers: {
