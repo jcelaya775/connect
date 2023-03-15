@@ -27,9 +27,6 @@ export default function Feed() {
 		FB.api("profile/111371718524969", function (response: any) {
 			console.log(response);
 		});
-
-		const fbPosts = axios.get("api/platforms/facebook/posts");
-		console.log(fbPosts);
 	}
 
 	return (
