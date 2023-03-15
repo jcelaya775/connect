@@ -1,4 +1,3 @@
-import connectDB from "@/lib/mongodb";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import type { NextApiRequest, NextApiResponse } from "next";
@@ -18,8 +17,6 @@ export default async function getAuthUser(
 		const user: IUser | null = await User.findOne<IUser>({
 			email: session.user!.email!,
 		});
-
-		console.log(`In getUser() => user: ${user}`);
 
 		if (!user) return res.status(404).json({ success: false });
 
