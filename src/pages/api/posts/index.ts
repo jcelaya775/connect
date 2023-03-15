@@ -22,15 +22,10 @@ export default async function handler(
 ) {
   const { method } = req;
 
-	// TODO: Fix decryption error in getServerSession
-	const session = await getServerSession(req, res, authOptions);
-	if (!session) return res.status(401).json({ success: false });
-
 	await connectDB();
 
 	switch (method) {
-		case "GET":
-			// TODO: return only posts relevant to the user
+		case "GET": // authenticated endpoint
 			try {
 				const email: string = session.user!.email!;
 				console.log(`session.user.email: ${email}`);
@@ -40,39 +35,29 @@ export default async function handler(
 					data: posts,
 					httpStatus: 200,
 				});
-			} catch (error) {
-				res.status(400).json({ success: false });
+			} catch (error: any) {
+				res.status(400).json({ success: false, error: error.message });
 			}
 
 			break;
-		case "POST":
-			// TODO: add authentication for posting
-			const {
-				email,
-				views,
-				shared_with,
-				title,
-				author,
-				community,
-				password,
-				jwt,
-				content,
-				comments,
-				likes,
-			} = req.body;
+		case "POST": // authenticated endpoint
+			const user = await getAuthUser(req, res);
+			const { _id: user_id, username, email, name } = user!;
+
+			// Params
+			const { visibility, title, community, content } = req.body;
 
 			const post: IPost = await Post.create({
+				user_id,
+				username,
 				email,
-				views,
-				shared_with,
+				author: name,
 				title,
-				author,
 				community,
-				password,
-				jwt,
+				//content,
+				//comments,
+				visibility,
 				content,
-				comments,
-				likes,
 			});
 
 			if (!post) {
@@ -99,11 +84,3 @@ export default async function handler(
 			break;
 	}
 }
-
-// export const config = {
-// 	api: {
-// 		bodyParser: false,
-// 		externalResolver: true,
-// 		middlewares: [serverAuth],
-// 	},
-// };

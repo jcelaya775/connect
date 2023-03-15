@@ -1,15 +1,15 @@
 import mongoose, { Schema, models, SchemaTypes } from "mongoose";
 
 export interface ICollection {
+	user_id: number;
 	name: string;
 	icon: string; // TODO: determine image storage solution
-	user_id: number;
 }
 
 const CollectionSchema = new Schema<ICollection>({
+	user_id: SchemaTypes.ObjectId,
 	name: String,
 	icon: String,
-	user_id: SchemaTypes.ObjectId,
 });
 
 export default models.Collection ||

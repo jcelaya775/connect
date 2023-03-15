@@ -2,7 +2,6 @@ import mongoose, { Schema, SchemaTypes, models, Document } from "mongoose";
 import { CommentSchema, IComment } from "../models/Comment";
 
 export interface IPost extends Document {
-	title: string;
 	user_id: string;
 	// email: string;
 	timestamp: Date;

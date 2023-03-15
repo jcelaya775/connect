@@ -1,6 +1,7 @@
 import mongoose, { Schema, SchemaTypes, models, Document } from "mongoose";
 
 export interface ISchool extends Document {
+	user_id: string;
 	name: string;
 	city: string;
 	degree: string;
@@ -8,6 +9,7 @@ export interface ISchool extends Document {
 }
 
 const schoolSchema: Schema = new Schema<ISchool>({
+	user_id: SchemaTypes.ObjectId,
 	name: {
 		type: String,
 		required: true,
@@ -21,4 +23,4 @@ const schoolSchema: Schema = new Schema<ISchool>({
 		required: true,
 	},
 });
- export default models.School || mongoose.model("School", schoolSchema);
+export default models.School || mongoose.model("School", schoolSchema);

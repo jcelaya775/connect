@@ -11,7 +11,7 @@ import { getServerSession } from "next-auth/next";
 import { useSession } from "next-auth/react";
 
 export default function Home() {
-	const { data: session, status } = useSession();
+	const { data: session } = useSession();
 
 	if (!session) {
 		return (

@@ -1,24 +1,23 @@
 import mongoose, { Schema, SchemaTypes, models } from "mongoose";
 
 export interface IUser {
-	_id: string;
+	_id: number;
+	email: string;
+	password: string;
 	username: string;
 	name: string;
-	password: string;
 	is_verified: boolean;
-	email: string;
 	code: Number;
-	bio_id?: string;
 }
 
 const UserSchema = new Schema<IUser>({
-	username: { type: String, trim: true, required: true, unique: true },
-	password: { type: String, trim: true, required: true },
-	name: { type: String, trim: true, required: true },
+	_id: SchemaTypes.ObjectId,
 	email: { type: String, trim: true, required: true, unique: true },
+	password: { type: String, trim: true, required: true },
+	username: { type: String, trim: true, required: true, unique: true },
+	name: { type: String, trim: true, required: true },
 	is_verified: { type: Boolean, default: false },
 	code: Number,
-	bio_id: SchemaTypes.ObjectId,
 });
 
 export default models.User || mongoose.model("User", UserSchema);

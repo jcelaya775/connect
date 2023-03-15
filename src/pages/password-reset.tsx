@@ -1,11 +1,13 @@
-import ResetBox from '@/components/Reset'
-import Header from '@/components/header'
+import ResetBox from "@/components/Reset";
+import Header from "@/components/header";
 
-export default function Reset() {
-    return (
-        <>
-            <Header />
-            <ResetBox />
-        </>
-    )
-}
+const Reset = () => {
+	return (
+		<>
+			<Header />
+			<ResetBox />
+		</>
+	);
+};
+
+export default Reset;

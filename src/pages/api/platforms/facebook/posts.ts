@@ -19,6 +19,7 @@ export default async function handler(
 
 	await connectDB();
 
+	// TODO: add authentication
 	switch (method) {
 		case "GET":
 			try {
