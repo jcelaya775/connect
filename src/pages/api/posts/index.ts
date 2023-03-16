@@ -12,17 +12,17 @@ type GetData = {
 };
 
 type PostData = {
-	success: boolean;
-	data?: IPost;
+  success: boolean;
+  data?: IPost;
 };
 
 export default async function handler(
-	req: NextApiRequest,
-	res: NextApiResponse<GetData | PostData>
+  req: NextApiRequest,
+  res: NextApiResponse<GetData | PostData>
 ) {
   const { method } = req;
 
-	await connectDB();
+  await connectDB();
 
 	switch (method) {
 		case "GET": // authenticated endpoint
@@ -39,34 +39,56 @@ export default async function handler(
 				res.status(400).json({ success: false, error: error.message });
 			}
 
-			break;
-		case "POST": // authenticated endpoint
-			const user = await getAuthUser(req, res);
-			const { _id: user_id, username, email, name } = user!;
+      break;
+    case "POST": // authenticated endpoint
+      const user = await getAuthUser(req, res);
+      const { _id: user_id, username, email, name } = user!;
 
-			// Params
-			const { visibility, title, community, content } = req.body;
+      // Params
+      const { visibility, title, community, content } = req.body;
+      if (content.body) {
+        const post: IPost = await Post.create({
+          user_id,
+          username,
+          email,
+          author: name,
+          title,
+          community,
+          content: {
+            body: content.body,
+          },
+          visibility,
+        });
+        await post.save();
+      } else if (content.image) {
+        //TODO: allow for processing of images
+      }
+      const post: IPost = await Post.create({
+        user_id,
+        username,
+        email,
+        author: name,
+        title,
+        community,
+        //content,
+        //comments,
+        visibility,
+      });
 
-			const post: IPost = await Post.create({
-				user_id,
-				username,
-				email,
-				author: name,
-				title,
-				community,
-				//content,
-				//comments,
-				visibility,
-				content,
-			});
+      if (!post) {
+        res.status(400).json({
+          success: false,
+          error: "Could not create post. Request body is invalid.",
+        });
+        break;
+      }
 
-			if (!post) {
-				res.status(400).json({
-					success: false,
-					error: "Could not create post. Request body is invalid.",
-				});
-				break;
-			}
+      try {
+        await post.save();
+      } catch (error: any) {
+        res.status(500).json({ success: false, error: error.message });
+        break;
+      }
 
 			try {
 				await post.save();
