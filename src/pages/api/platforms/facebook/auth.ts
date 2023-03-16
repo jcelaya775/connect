@@ -3,6 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import connectDB from "@/lib/mongodb";
 import User, { IUser } from "../../../../models/User";
 import axios from "axios";
+import getAuthUser from "@/lib/getAuthUser";
 
 type Data = {
   success: boolean;
