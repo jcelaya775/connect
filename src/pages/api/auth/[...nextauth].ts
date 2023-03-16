@@ -11,7 +11,7 @@ export const authOptions = {
 			clientSecret: process.env.GITHUB_SECRET!,
 		}),
 	],
-	//TODO: add db adapter
+	//TODO: add db adapter to add users to db on signup
 	pages: {
 		signIn: "/login",
 	},
