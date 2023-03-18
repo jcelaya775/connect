@@ -1,3 +1,4 @@
+import { File } from "aws-sdk/clients/codecommit";
 import mongoose, { Schema, SchemaTypes, models, Document } from "mongoose";
 import { CommentSchema, IComment } from "../models/Comment";
 

@@ -41,12 +41,15 @@ export default async function handler(
 
       break;
     case "POST": // authenticated endpoint
+      //authenticate the user
       const user = await getAuthUser(req, res);
       const { _id: user_id, username, email, name } = user!;
 
       // Params
       const { visibility, title, community, content } = req.body;
+      //if its just a text post
       if (content.body) {
+        //make the post based off of the body as content
         const post: IPost = await Post.create({
           user_id,
           username,
@@ -59,7 +62,25 @@ export default async function handler(
           },
           visibility,
         });
-        await post.save();
+        //throw if the post cannot be created
+        if (!post) {
+          res.status(400).json({
+            success: false,
+            error: "Could not create post. Request body is invalid.",
+          });
+          break;
+        }
+        //try to save the post, throw if unable
+        try {
+          await post.save();
+        } catch (error: any) {
+          res.status(500).json({ success: false, error: error.message });
+          break;
+        }
+        res.status(201).json({ success: true, data: post });
+        break;
+
+        //if there is an image to upload
       } else if (content.image) {
         //TODO: allow for processing of images
       }
@@ -80,6 +101,56 @@ export default async function handler(
           success: false,
           error: "Could not create post. Request body is invalid.",
         });
+        if (!post) {
+          res.status(400).json({
+            success: false,
+            error: "Could not create post. Request body is invalid.",
+          });
+          break;
+        }
+        try {
+          await post.save();
+        } catch (error: any) {
+          res.status(500).json({ success: false, error: error.message });
+          break;
+        }
+        res.status(201).json({ success: true, data: post });
+        break;
+      } else if (content.video) {
+        //attempt to upload the video to the amazon s3 server bucket
+        const result = await uploadImageToS3(content.video);
+
+        //if accepted, create a post, logging the bucket, key, and location
+        const post: IPost = await Post.create({
+          user_id,
+          username,
+          email,
+          author: name,
+          title,
+          community,
+          content: {
+            video: {
+              bucket: "connect-social-media-bucket",
+              key: result.Key,
+              location: result.Location,
+            },
+          },
+          visibility,
+        });
+        if (!post) {
+          res.status(400).json({
+            success: false,
+            error: "Could not create post. Request body is invalid.",
+          });
+          break;
+        }
+        try {
+          await post.save();
+        } catch (error: any) {
+          res.status(500).json({ success: false, error: error.message });
+          break;
+        }
+        res.status(201).json({ success: true, data: post });
         break;
       }
 
