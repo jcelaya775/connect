@@ -36,7 +36,7 @@ const VerifyBox = () => {
 		console.log(data);
 
 		if (data.success) {
-			router.push("/index_test");
+			router.push("/");
 		} else {
 			switch (data.error) {
 				case "User is already verified":
