@@ -13,6 +13,10 @@ import { useSession } from "next-auth/react";
 export default function Home() {
 	const { data: session } = useSession();
 
+	useEffect(() => {
+		axios.get("api/posts").then((res) => console.log(res.data));
+	});
+
 	if (!session) {
 		return (
 			<div>
