@@ -3,6 +3,7 @@ import connectDB from "@/lib/mongodb";
 import User, { IUser } from "../../../models/User";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./[...nextauth]";
+import getAuthUser from "@/lib/getAuthUser";
 
 type Data = {
 	success: boolean;
@@ -15,14 +16,15 @@ export default async function handler(
 ) {
 	const { method } = req;
 
-	const session = await getServerSession(req, res, authOptions);
-	if (!session) return res.status(401).json({ success: false });
+	const user = getAuthUser(req, res);
+	if (!user) return res.status(401).json({ success: false });
 
 	await connectDB();
 
 	switch (method) {
 		case "GET":
 			try {
+				const { email } = user!;
 				const email = session.user!.email!;
 				const user = await User.findOne<IUser>({ email });
 				if (!user) return res.status(404).json({ success: false });

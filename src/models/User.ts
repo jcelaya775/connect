@@ -1,7 +1,6 @@
 import mongoose, { Document, Schema, SchemaTypes, models } from "mongoose";
 
 export interface IUser extends Document {
-	_id: number;
 	username: string;
 	name: string;
 	password: string;
@@ -12,11 +11,9 @@ export interface IUser extends Document {
 	long_token_expires: string;
 	page_token_expires: string;
 	code: Number;
-	bio_id?: string;
 }
 
 const UserSchema = new Schema<IUser>({
-	_id: SchemaTypes.ObjectId,
 	username: { type: String, trim: true, required: true, unique: true },
 	name: String,
 	password: { type: String, trim: true, required: true },
@@ -27,7 +24,6 @@ const UserSchema = new Schema<IUser>({
 	long_token_expires: { type: String, trim: true, required: false },
 	page_token_expires: { type: String, trim: true, required: false },
 	code: { type: Number, default: 0, trim: true, required: false },
-	bio_id: SchemaTypes.ObjectId,
 });
 
 export default models.User || mongoose.model("User", UserSchema);
