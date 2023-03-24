@@ -1,7 +1,7 @@
 import connectDB from "@/lib/connectDB";
 import { NextApiRequest, NextApiResponse } from "next";
 import Collection, { ICollection } from "@/models/Collection";
-import getAuthUser from "@/lib/getAuthUser";
+import { getAuthUser } from "@/lib/auth";
 
 type Data = {
 	success: boolean;

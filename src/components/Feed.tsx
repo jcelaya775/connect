@@ -1,5 +1,5 @@
 import style from "@/styles/Feed.module.css";
-import classNames from "../../node_modules/classnames";
+import classNames from "classnames";
 import { useState } from "react";
 import { useFacebook } from "react-facebook";
 import axios from "axios";

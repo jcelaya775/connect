@@ -4,7 +4,7 @@ import logo from "@/images/link_icon_content.svg";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
-const Reset = () => {
+const ResetBox = () => {
 	const router = useRouter();
 	const [email, setEmail] = useState<string>("");
 	const [verificationCode, setVerificationCode] = useState<string>("");
@@ -74,4 +74,4 @@ const Reset = () => {
 	);
 };
 
-export default Reset;
+export default ResetBox;

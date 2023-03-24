@@ -9,7 +9,7 @@ const Header = () => (
 			<Link className={style.home_link} href="/">
 				<h2 className={style.logo}>
 					Connect
-					<Image className={style.logo_icon} src={logo} alt=""></Image>
+					<Image className={style.logo_icon} src={logo} alt="" />
 				</h2>
 			</Link>
 		</div>

@@ -1,7 +1,7 @@
-import ResetBox from "@/components/Reset";
+import ResetBox from "@/components/reset";
 import Header from "@/components/header";
 
-const Reset = () => {
+const PasswordReset = () => {
 	return (
 		<>
 			<Header />
@@ -10,4 +10,4 @@ const Reset = () => {
 	);
 };
 
-export default Reset;
+export default PasswordReset;

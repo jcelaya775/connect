@@ -1,4 +1,4 @@
-import getAuthUser from "@/lib/getAuthUser";
+import { getAuthUser } from "@/lib/auth";
 import type { NextApiRequest, NextApiResponse } from "next";
 import connectDB from "../../../lib/connectDB";
 import About, { IAbout } from "../../../models/About";
