@@ -16,19 +16,13 @@ export default async function handler(
 ) {
 	const { method } = req;
 
-	const user = getAuthUser(req, res);
+	const user = await getAuthUser(req, res);
 	if (!user) return res.status(401).json({ success: false });
-
 	await connectDB();
 
 	switch (method) {
 		case "GET":
 			try {
-				const { email } = user!;
-				const email = session.user!.email!;
-				const user = await User.findOne<IUser>({ email });
-				if (!user) return res.status(404).json({ success: false });
-
 				res.status(200).json({ success: true, user });
 			} catch (error) {
 				res.status(400).json({ success: false });
