@@ -25,8 +25,8 @@ export default async function handler(
     case "GET":
       try {
         const user = await getAuthUser(req, res);
-        const { long_token } = user!;
-        console.log(long_token);
+        if (!user) return res.status(401).json({ success: false });
+        const { long_token } = user;
         const data = await axios.get(
           `https://graph.facebook.com/me/feed?access_token=${long_token}`
         );

@@ -43,7 +43,8 @@ export default async function handler(
     case "POST": // authenticated endpoint
       //authenticate the user
       const user = await getAuthUser(req, res);
-      const { _id: user_id, username, email, name } = user!;
+      if (!user) return res.status(401).json({ success: false });
+      const { _id: user_id, username, email, name } = user;
 
       // Params
       const { visibility, title, community, content } = req.body;

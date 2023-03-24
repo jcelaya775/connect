@@ -1,8 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import connectDB from "@/lib/mongodb";
-import User, { IUser } from "../../../models/User";
-import { getServerSession } from "next-auth";
-import { authOptions } from "./[...nextauth]";
+import { IUser } from "../../../models/User";
 import getAuthUser from "@/lib/getAuthUser";
 
 type Data = {
@@ -23,6 +21,7 @@ export default async function handler(
 	switch (method) {
 		case "GET":
 			try {
+				const { email } = user;
 				res.status(200).json({ success: true, user });
 			} catch (error) {
 				res.status(400).json({ success: false });

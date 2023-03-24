@@ -16,11 +16,12 @@ export default async function handler(
 
 	await connectDB();
 	const user = await getAuthUser(req, res);
+	if (!user) return res.status(401).json({ success: false });
 
 	switch (method) {
 		case "GET":
 			try {
-				const { _id: user_id } = user!;
+				const { _id: user_id } = user;
 				const about: IAbout[] = await About.find({ user_id });
 				res.status(200).json({
 					success: true,
