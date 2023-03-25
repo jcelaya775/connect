@@ -41,15 +41,18 @@ export default async function handler(
 
       break;
     case "POST":
-      const user = await getAuthUser(req, res);
-      if (!user) return res.status(401).json({ success: false });
-      const { _id: user_id, username, email, name } = user;
+      // const user = await getAuthUser(req, res);
+      // if (!user) return res.status(401).json({ success: false });
+      // const { _id: user_id, username, email, name } = user;
 
       // Params
       const { visibility, community, content } = req.body;
       console.log(`Posts:`);
       console.log(content);
       //if its just a text post
+      console.log(
+        `content: ${content.body} username: ${username} email: ${email}`
+      );
       if (content.body) {
         //make the post based off of the body as content
         const post: IPost = await Post.create({
