@@ -1,4 +1,4 @@
-import Joi from 'joi';
+import Joi from "joi";
 //joi is a schema description language for data validation.
 export const userValidationSchema = Joi.object({
   username: Joi.string().alphanum().min(1).max(30),

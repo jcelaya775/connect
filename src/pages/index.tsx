@@ -16,9 +16,9 @@ import { MyPage } from "../components/types";
 const Home: MyPage = () => {
 	const { data: session } = useSession();
 
-	useEffect(() => {
-		session && axios.get("api/posts").then((res) => console.log(res.data));
-	});
+  useEffect(() => {
+    session && axios.get("api/posts").then((res) => console.log(res.data));
+  });
 
 	if (!session) {
 		return (
@@ -43,9 +43,9 @@ const Home: MyPage = () => {
 
 // TODO: Fix decryption error in getServerSession
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-	return {
-		props: {
-			session: await getServerSession(context.req, context.res, authOptions),
-		},
-	};
+  return {
+    props: {
+      session: await getServerSession(context.req, context.res, authOptions),
+    },
+  };
 }

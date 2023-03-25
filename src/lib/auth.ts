@@ -16,7 +16,7 @@ export default async function getAuthUser(
 			email: session.user!.email!,
 		});
 
-		if (!user) return res.status(404).json({ success: false });
+    if (!user) return res.status(404).json({ success: false });
 
 		return user;
 	} catch (error) {

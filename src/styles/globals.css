@@ -6,15 +6,15 @@
   background: #F4F4F2;
   margin: 0;
   padding: 0;
-  font-family: 'Sofia Sans Extra Condensed', sans-serif;
+  font-family: "Sofia Sans Extra Condensed", sans-serif;
   color: #495464;
   box-sizing: border-box;
 }
 
 a {
-	color: #495464;
-    font-size: 14px;
-    font-weight: bold;
+  color: #495464;
+  font-size: 14px;
+  font-weight: bold;
 }
 
 a:hover{

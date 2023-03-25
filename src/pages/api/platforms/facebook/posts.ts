@@ -6,19 +6,19 @@ import axios from "axios";
 import { getAuthUser } from "@/lib/auth";
 
 type Data = {
-	success: boolean;
-	data?: any;
-	error?: string;
-	httpStatus?: number;
+  success: boolean;
+  data?: any;
+  error?: string;
+  httpStatus?: number;
 };
 
 export default async function handler(
-	req: NextApiRequest,
-	res: NextApiResponse<Data>
+  req: NextApiRequest,
+  res: NextApiResponse<Data>
 ) {
-	const { method } = req;
+  const { method } = req;
 
-	await connectDB();
+  await connectDB();
 
   // TODO: add authentication
   switch (method) {

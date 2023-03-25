@@ -1,84 +1,84 @@
-.container{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    min-height: 100vh;
-    /*font-size: 14px;*/
-    color: #495464;
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 100vh;
+  /*font-size: 14px;*/
+  color: #495464;
 }
 
-.container h1{
-    display: block;
-    /*color: #495464;*/
-    margin-bottom: 0px;
+.container h1 {
+  display: block;
+  /*color: #495464;*/
+  margin-bottom: 0px;
 }
 
-.icon{
-    width: 35px;
-    height: 35px;
-    margin:0px;
-    padding:0px;
+.icon {
+  width: 35px;
+  height: 35px;
+  margin: 0px;
+  padding: 0px;
 }
 
 .tagline {
-    margin-top: 0px;
-    /*color: #495464;*/
-    font-style: italic;
+  margin-top: 0px;
+  /*color: #495464;*/
+  font-style: italic;
 }
 
 .forminput {
-    width: 350px;
-    box-sizing: border-box;
-    border: 2px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
-    background-color: white;
-    padding: 12px 20px 12px 20px;
-    margin-bottom: 10px;
+  width: 350px;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: white;
+  padding: 12px 20px 12px 20px;
+  margin-bottom: 10px;
 }
 
 .message {
-    font-size: 14px;
-    margin-top: 0px;
+  font-size: 14px;
+  margin-top: 0px;
 }
 
 .button {
-    background-color: #495464;
-    border: none;
-    color: white;
-    padding: 5px 35px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 15px;
-    cursor: pointer;
-    -webkit-transition-duration: 0.4s; /* Safari */
-    transition-duration: 0.4s;
-    border-radius: 8px;
-    box-shadow: 0 8px 10px 0 rgba(0,0,0,0.2), 0 2px 5px 0 rgba(0,0,0,0.19);
-}
-
-.button:hover{
-    background-color: #BBBFCA;
-    color: #495464;
+  background-color: #495464;
+  border: none;
+  color: white;
+  padding: 5px 35px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 15px;
+  cursor: pointer;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+  border-radius: 8px;
+  box-shadow: 0 8px 10px 0 rgba(0, 0, 0, 0.2), 0 2px 5px 0 rgba(0, 0, 0, 0.19);
 }
 
 .button:hover {
-	background-color: #bbbfca;
-	color: #495464;
+  background-color: #bbbfca;
+  color: #495464;
+}
+
+.button:hover {
+  background-color: #bbbfca;
+  color: #495464;
 }
 
 .button:disabled {
-	background-color: #bbbfca;
-	color: #495464;
+  background-color: #bbbfca;
+  color: #495464;
 }
 
 .valid {
-	border: medium solid #54ad0a;
+  border: medium solid #54ad0a;
 }
 
 .invalid {
-	border: medium solid #f18787;
+  border: medium solid #f18787;
 }
