@@ -44,7 +44,7 @@ export default async function handler(
 
         // Params
         const { pid } = req.query;
-        const { visibility, title, community_id, content } = req.body;
+        const { title, community_id, content, visibility } = req.body;
 
         // Authorize user to edit post
         const post: IPost | null = await Post.findOne<IPost>({ _id: pid });
@@ -58,10 +58,10 @@ export default async function handler(
             _id: pid,
           },
           {
-            visibility,
             title,
             community_id,
             content,
+            visibility,
           },
           {
             new: true,

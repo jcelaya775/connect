@@ -27,14 +27,13 @@ export default async function handler(
   switch (method) {
     case "GET":
       try {
-        
       } catch (error: any) {
         res.status(400).json({ success: false, error: error.message });
       }
       break;
     case "POST":
       try {
-				// const user = await getAuthUser(req, res);
+        // const user = await getAuthUser(req, res);
         // if (!user) return res.status(401).json({ success: false });
         // const { _id: user_id, username, email, name } = user;
         const { comment, userID, postID } = req.body;
@@ -47,7 +46,7 @@ export default async function handler(
           content: comment,
         });
         thisPost!.comments!.push(thisComment);
-				await thisPost!.save();
+        await thisPost!.save();
         res.status(200).json({ success: true, data: thisPost! });
       } catch (error: any) {
         res.status(400).json({ success: false, error: error.message });
