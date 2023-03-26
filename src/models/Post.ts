@@ -38,4 +38,18 @@ const PostSchema = new Schema<IPost>({
 	timestamp: { type: Date, default: Date.now },
 });
 
+PostSchema.virtual("allComments", {
+  ref: "Comment",
+  localField: "comments",
+  foreignField: "_id",
+  justOne: false,
+});
+
+PostSchema.set("toJSON", {
+  virtuals: true,
+});
+PostSchema.set("toObject", {
+  virtuals: true,
+});
+
 export default models.Post || mongoose.model("Post", PostSchema);

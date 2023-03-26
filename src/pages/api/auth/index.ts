@@ -12,11 +12,11 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
+  await connectDB();
   const { method } = req;
 
   const user = await getAuthUser(req, res);
   if (!user) return res.status(401).json({ success: false });
-  await connectDB();
 
   switch (method) {
     case "GET":

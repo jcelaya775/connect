@@ -20,8 +20,12 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<GetData | PostData>
 ) {
-  const { method } = req;
   await connectDB();
+  const { method } = req;
+
+  // Authenticate user
+  const user = await getAuthUser(req, res);
+  if (!user) return res.status(401).json({ success: false });
 
 	switch (method) {
 		case "GET": // authenticated endpoint
@@ -39,6 +43,15 @@ export default async function handler(
 			}
 
       break;
+    /**
+     * @route   POST api/posts
+     * @desc    Create a post
+     * @access  Private
+     * @body    title: string (required)
+     * @body    community_id: string (required)
+     * @body    content: string (required)
+     * @body    visibility: string (required)
+     **/
     case "POST":
       // Authenticate user
       const user = await getAuthUser(req, res);

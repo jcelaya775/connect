@@ -13,10 +13,16 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  const { method } = req;
   await connectDB();
+  const { method } = req;
 
   switch (method) {
+    /**
+     * @route   GET api/posts/:pid
+     * @desc    Get a post by id
+     * @access  Public
+     * @params  pid: string (required)
+     **/
     case "GET":
       // NOTE: This method is not authenticated
       try {
@@ -35,6 +41,16 @@ export default async function handler(
       }
 
       break;
+    /**
+     * @route   PUT api/posts/:pid
+     * @desc    Update a post
+     * @access  Private
+     * @params  pid: string (required)
+     * @body    title: string (optional)
+     * @body    community_id: string (optional)
+     * @body    content: string (optional)
+     * @body    visibility: string (optional)
+     **/
     case "PUT":
       try {
         // Authenticate user
@@ -76,6 +92,12 @@ export default async function handler(
       }
 
       break;
+    /**
+     * @route   DELETE api/posts/:pid
+     * @desc    Delete a post
+     * @access  Private
+     * @params  pid: string (required)
+     **/
     case "DELETE":
       try {
         // Authenticate user

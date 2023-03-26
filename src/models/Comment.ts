@@ -8,6 +8,15 @@ export interface IComment extends Document {
 }
 
 export const CommentSchema: Schema = new Schema<IComment | null>({
+  post_id: {
+    type: SchemaTypes.ObjectId,
+    ref: "Post",
+    required: true,
+  },
+  parent_id: {
+    type: SchemaTypes.ObjectId,
+    ref: "Comment",
+  },
   user_id: SchemaTypes.ObjectId,
   content: {
     type: String,
@@ -17,10 +26,6 @@ export const CommentSchema: Schema = new Schema<IComment | null>({
   likes: {
     type: Number,
     default: 0,
-  },
-  parentComment: {
-    type: SchemaTypes.ObjectId,
-    ref: "Comment",
   },
   replies: [
     {
