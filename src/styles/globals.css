@@ -1,4 +1,8 @@
-body {
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* body {
   background: #F4F4F2;
   margin: 0;
   padding: 0;
@@ -15,4 +19,20 @@ a {
 
 a:hover{
 	color: #BBBFCA;
+} */
+@layer components {
+	.btn {
+		@apply bg-blue-800 border-none hover:bg-[#626161];
+		color: white;
+		text-align: center;
+		text-decoration: none;
+		/* display: inline-block; */
+		font-size: 16px;
+		/* margin: 4px 15px; */
+		cursor: pointer;
+		-webkit-transition-duration: 0.4s;
+		transition-duration: 0.4s;
+		border-radius: 8px;
+		box-shadow: 0 8px 10px 0 rgba(0, 0, 0, 0.2), 0 2px 5px 0 rgba(0, 0, 0, 0.19);
+	}
 }

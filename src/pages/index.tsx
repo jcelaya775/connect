@@ -10,7 +10,10 @@ import { GetServerSidePropsContext } from "next";
 import { getServerSession } from "next-auth/next";
 import { useSession } from "next-auth/react";
 
-export default function Home() {
+import React from "react";
+import { MyPage } from "../components/types";
+
+const Home: MyPage = () => {
 	const { data: session } = useSession();
 
 	useEffect(() => {
@@ -19,12 +22,11 @@ export default function Home() {
 
 	if (!session) {
 		return (
-			<div>
-				<Header />
-				<LandingPage />
-			</div>
+			<>
+				<LandingPage/>
+			</>
 		);
-	}
+	};
 
 	useEffect(() => {
 		// User is authenticated at this point
@@ -33,10 +35,9 @@ export default function Home() {
 	}, [status]);
 
 	return (
-		<div>
-			<Header />
+		<>
 			<Feed />
-		</div>
+		</>
 	);
 }
 
