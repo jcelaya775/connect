@@ -1,4 +1,3 @@
-import { File } from "aws-sdk/clients/codecommit";
 import mongoose, { Schema, SchemaTypes, models, Document } from "mongoose";
 import { CommentSchema, IComment } from "../models/Comment";
 
@@ -31,6 +30,7 @@ const PostSchema = new Schema<IPost>({
 		image: { type: String, trim: true },
 		link: { type: String, trim: true },
 	},
+	
 	//comments: [CommentSchema],
 	likes: { type: Number, default: 0 },
 	views: { type: Number, default: 0 },

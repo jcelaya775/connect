@@ -1,8 +1,6 @@
-// models/Temp.ts
-
 import mongoose, { Document, Schema } from "mongoose";
 
-interface ITemp extends Document {
+export interface ITemp extends Document {
   title: string;
   message: string;
 }
