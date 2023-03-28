@@ -2,6 +2,7 @@ import React from "react";
 import { MyPage } from "../components/types";
 import { signIn } from "next-auth/react";
 import Router from "next/router";
+import Link from "next/link";
 
 export const LandingPage = () => {
   const signUp = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -35,7 +36,7 @@ export const LandingPage = () => {
                 className="btn bg-primary hover:bg-secondary"
                 onClick={signUp}
               >
-                Sign-up Now!
+                <Link href="/">Sign-up Now!</Link>
               </button>
             </div>
             <div className="divider divider-vertical lg:hidden">OR Login</div>

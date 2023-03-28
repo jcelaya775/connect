@@ -1,9 +1,11 @@
 import React from "react";
+import Link from "next/link";
+
 const LoggedInNav = () => (
   <>
     <div className="navbar bg-base-100 drop-shadow-md fixed z-10">
       <div className="flex-1">
-        <a href="/" className="normal-case text-2xl cursor-pointer">
+        <Link href="/" className="normal-case text-2xl cursor-pointer">
           Connect
           <svg
             viewBox="0 0 20 20"
@@ -12,7 +14,7 @@ const LoggedInNav = () => (
           >
             <path d="M9.26 13a2 2 0 0 1 .01-2.01A3 3 0 0 0 9 5H5a3 3 0 0 0 0 6h.08a6.06 6.06 0 0 0 0 2H5A5 5 0 0 1 5 3h4a5 5 0 0 1 .26 10zm1.48-6a2 2 0 0 1-.01 2.01A3 3 0 0 0 11 15h4a3 3 0 0 0 0-6h-.08a6.06 6.06 0 0 0 0-2H15a5 5 0 0 1 0 10h-4a5 5 0 0 1-.26-10z"></path>
           </svg>
-        </a>
+        </Link>
       </div>
       <div className="flex-none gap-2">
         <div className="form-control">
@@ -38,7 +40,7 @@ const LoggedInNav = () => (
               className="mt-10 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52 z-10"
             >
               <li>
-                <a>
+                <Link href="#">
                   <svg
                     viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg"
@@ -51,10 +53,10 @@ const LoggedInNav = () => (
                     />
                   </svg>
                   Settings
-                </a>
+                </Link>
               </li>
               <li>
-                <a>
+                <Link href="#">
                   <svg
                     viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg"
@@ -66,7 +68,7 @@ const LoggedInNav = () => (
                     </g>
                   </svg>
                   Logout
-                </a>
+                </Link>
               </li>
             </ul>
           </label>
