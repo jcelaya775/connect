@@ -1,16 +1,15 @@
-import React from 'react'
-import ProfilePage from '@/components/profile-page'
+import React from 'react';
+import ProfilePage from '@/components/profile-page';
 import { MyPage } from "../components/types";
 import exp from 'constants';
 
 
-const Profile: MyPage = () => {
+export default function Profile() {
   return (
     <>
       <ProfilePage />
     </>
-  )
+  );
 };
 
-export default Profile;
-Profile.Layout = "LoggedIn"
+Profile.Layout = "LoggedIn";

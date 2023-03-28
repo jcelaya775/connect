@@ -32,4 +32,3 @@ function App({ Component, pageProps: { session, ...pageProps } }: MyAppProps) {
     </SessionProvider>
   );
 }
-export default App;

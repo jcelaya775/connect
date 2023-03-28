@@ -3,9 +3,8 @@ import Header from "@/components/Header";
 
 export default function Verify() {
   return (
-    <>
-      <Header />
-      <VerifyBox />
-    </>
+    <VerifyBox />
   );
 }
+
+Verify.Layout = "LoggedOut";

@@ -3,9 +3,8 @@ import Header from "@/components/Header";
 
 export default function Login() {
   return (
-    <>
-      <Header />
-      <LoginBox />
-    </>
+    <LoginBox />
   );
 }
+
+Login.Layout = "LoggedOut";

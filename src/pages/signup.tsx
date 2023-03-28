@@ -1,11 +1,10 @@
 import SignUpBox from "@/components/signup-box";
 import Header from "@/components/Header";
 
-export default function Login() {
+export default function SignUp() {
   return (
-    <>
-      <Header />
-      <SignUpBox />
-    </>
+    <SignUpBox />
   );
 }
+
+SignUp.Layout = "LoggedOut";

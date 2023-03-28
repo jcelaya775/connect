@@ -1,13 +1,10 @@
 import ResetBox from "@/components/reset";
 import Header from "@/components/header";
 
-const PasswordReset = () => {
+export default function PasswordReset() {
   return (
-    <>
-      <Header />
-      <ResetBox />
-    </>
+    <ResetBox />
   );
 };
 
-export default PasswordReset;
+PasswordReset.Layout = "LoggedOut";

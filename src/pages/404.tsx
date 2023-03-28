@@ -6,7 +6,6 @@ import logo from '@/images/link_icon_content.svg';
 export default function NotFound() {
   return (
     <>
-      <Header />
       <div className={style.container}>
         <h1>Connect
           <Image className={style.icon} src={logo} alt=""></Image>
@@ -16,3 +15,5 @@ export default function NotFound() {
     </>
   );
 }
+
+NotFound.Layout = 'LoggedOut';

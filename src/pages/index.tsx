@@ -13,20 +13,20 @@ import { useSession } from "next-auth/react";
 import React from "react";
 import { MyPage } from "../components/types";
 
-const Home: MyPage = () => {
-	const { data: session } = useSession();
+export default function Home() {
+  const { data: session } = useSession();
 
   useEffect(() => {
     session && axios.get("api/posts").then((res) => console.log(res.data));
   });
 
-	if (!session) {
-		return (
-			<>
-				<LandingPage/>
-			</>
-		);
-	};
+  if (!session) {
+    return (
+      <>
+        <LandingPage />
+      </>
+    );
+  };
 
 	useEffect(() => {
 		// User is authenticated at this point
