@@ -107,9 +107,10 @@ const SignUpBox = () => {
         />
         <br />
         <input
-          className={`${loginstyle.forminput} ${formComplete &&
+          className={`${loginstyle.forminput} ${
+            formComplete &&
             (passwordsMatch ? loginstyle.valid : loginstyle.invalid)
-            }`}
+          }`}
           type="password"
           placeholder="Password"
           pattern="^(?=.[0-9])(?=.[a-z])(?=.[A-Z])(?=.[*.!@$%^&(){}[]:;<>,.?/~_+-=|]).{8,32}$"
@@ -119,9 +120,10 @@ const SignUpBox = () => {
         <br />
         {/* TODO: Give user feedback on password strength */}
         <input
-          className={`${loginstyle.forminput} ${formComplete &&
+          className={`${loginstyle.forminput} ${
+            formComplete &&
             (passwordsMatch ? loginstyle.valid : loginstyle.invalid)
-            }`}
+          }`}
           type="password"
           placeholder="Confirm Password"
           required

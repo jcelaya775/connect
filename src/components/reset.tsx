@@ -47,8 +47,9 @@ const ResetBox = () => {
         />
         <br />
         <input
-          className={`${style.forminput} ${formComplete && (passwordsMatch ? style.valid : style.invalid)
-            }`}
+          className={`${style.forminput} ${
+            formComplete && (passwordsMatch ? style.valid : style.invalid)
+          }`}
           type="password"
           placeholder="Password"
           pattern="^(?=.[0-9])(?=.[a-z])(?=.[A-Z])(?=.[*.!@$%^&(){}[]:;<>,.?/~_+-=|]).{8,32}$"
@@ -58,8 +59,9 @@ const ResetBox = () => {
         <br />
         {/* TODO: Give user feedback on password strength */}
         <input
-          className={`${style.forminput} ${formComplete && (passwordsMatch ? style.valid : style.invalid)
-            }`}
+          className={`${style.forminput} ${
+            formComplete && (passwordsMatch ? style.valid : style.invalid)
+          }`}
           type="password"
           placeholder="Confirm Password"
           required

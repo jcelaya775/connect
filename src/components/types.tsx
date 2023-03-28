@@ -8,5 +8,5 @@ export type MyPage<P = {}, IP = P> = NextPage<P, IP> & {
 export type MyAppProps = AppProps & {
   Component: NextComponentType<NextPageContext, any, any> & {
     Layout: LayoutKeys;
-};
+  };
 };

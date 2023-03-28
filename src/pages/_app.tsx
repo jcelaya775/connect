@@ -28,7 +28,7 @@ function App({ Component, pageProps: { session, ...pageProps } }: MyAppProps) {
         <Layout>
           <Component {...pageProps} />
         </Layout>
-      </FacebookProvider>
+	 	  </FacebookProvider>
     </SessionProvider>
   );
 }

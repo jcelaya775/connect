@@ -1,8 +1,15 @@
 import React from "react";
 import { MyPage } from "../components/types";
 import { signIn } from "next-auth/react";
+import Router from "next/router";
 
 export const LandingPage = () => {
+  const signUp = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    Router.push("/signup");
+  };
+
   return (
     <>
       <div data-theme="corporate">
@@ -24,7 +31,10 @@ export const LandingPage = () => {
                 and businesses to engage with their audiences across multiple
                 social media platforms.
               </p>
-              <button className="btn bg-primary hover:bg-secondary">
+              <button
+                className="btn bg-primary hover:bg-secondary"
+                onClick={signUp}
+              >
                 Sign-up Now!
               </button>
             </div>

@@ -26,7 +26,7 @@ export default function Home() {
         <LandingPage />
       </>
     );
-  };
+  }
 
 	useEffect(() => {
 		// User is authenticated at this point
