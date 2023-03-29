@@ -43,19 +43,9 @@ export default function Home() {
 
 // TODO: Fix decryption error in getServerSession
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const session = await getServerSession(context.req, context.res, authOptions);
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
-
   return {
     props: {
-      session,
+      session: await getServerSession(context.req, context.res, authOptions),
     },
   };
 }
