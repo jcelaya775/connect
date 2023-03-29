@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useMutation } from "react-query";
-
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "./api/auth/[...nextauth]";
+import { GetServerSidePropsContext } from "next/types";
 type CreatePostProps = {
   onSuccess: () => void;
 };
@@ -67,5 +69,21 @@ const CreatePost: React.FC<CreatePostProps> = ({ onSuccess }) => {
     </form>
   );
 };
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getServerSession(context.req, context.res, authOptions);
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
 
+  return {
+    props: {
+      session,
+    },
+  };
+}
 export default CreatePost;

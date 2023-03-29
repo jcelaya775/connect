@@ -1,7 +1,9 @@
 import React from "react";
 import { useQuery } from "react-query";
 import { IPost } from "@/models/Post";
-
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "./api/auth/[...nextauth]";
+import { GetServerSidePropsContext } from "next/types";
 type Props = {};
 
 const AllPostsPage: React.FC<Props> = () => {
@@ -44,5 +46,21 @@ const AllPostsPage: React.FC<Props> = () => {
     </div>
   );
 };
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getServerSession(context.req, context.res, authOptions);
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
 
+  return {
+    props: {
+      session,
+    },
+  };
+}
 export default AllPostsPage;
