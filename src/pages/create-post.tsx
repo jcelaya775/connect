@@ -49,7 +49,7 @@ export default function CreatePost({ onSuccess }: CreatePostProps) {
   };
 
   return (
-    <div>
+    <div className="pt-64">
       <form onSubmit={handleSubmit}>
         <label>
           Visibility:
