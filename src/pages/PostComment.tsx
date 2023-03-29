@@ -39,11 +39,41 @@ const PostComment: React.FC<Props> = ({ postId }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ backgroundColor: "#f0f0f0", padding: "1rem", borderRadius: "0.5rem" }}>
-      <label htmlFor="comment" style={{ display: "block", marginBottom: "0.5rem" }}>Comment:</label>
-      <textarea name="comment" value={formData.comment} onChange={handleChange} style={{ marginBottom: "1rem", padding: "0.5rem", width: "100%" }} required />
+    <form
+      onSubmit={handleSubmit}
+      style={{
+        backgroundColor: "#f0f0f0",
+        padding: "1rem",
+        borderRadius: "0.5rem",
+      }}
+    >
+      <label
+        htmlFor="comment"
+        style={{ display: "block", marginBottom: "0.5rem" }}
+      >
+        Comment:
+      </label>
+      <textarea
+        name="comment"
+        value={formData.comment}
+        onChange={handleChange}
+        style={{ marginBottom: "1rem", padding: "0.5rem", width: "100%" }}
+        required
+      />
 
-      <button type="submit" style={{ backgroundColor: "#008080", color: "white", padding: "0.5rem", borderRadius: "0.5rem", border: "none", cursor: "pointer" }}>Post Comment</button>
+      <button
+        type="submit"
+        style={{
+          backgroundColor: "#008080",
+          color: "white",
+          padding: "0.5rem",
+          borderRadius: "0.5rem",
+          border: "none",
+          cursor: "pointer",
+        }}
+      >
+        Post Comment
+      </button>
     </form>
   );
 };
