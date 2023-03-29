@@ -5,7 +5,9 @@ import { useLikeStore } from "./like";
 import PostComment from "./PostComment";
 import { useQuery } from "react-query";
 import { FaThumbsUp } from "react-icons/fa";
-
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "./api/auth/[...nextauth]";
+import { GetServerSidePropsContext } from "next/types";
 const PostsList = () => {
 	const { likes, incrementLike } = useLikeStore();
 
@@ -126,3 +128,20 @@ const PostsList = () => {
 };
 
 export default PostsList;
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+	const session = await getServerSession(context.req, context.res, authOptions);
+	if (!session) {
+	  return {
+		redirect: {
+		  destination: "/",
+		  permanent: false,
+		},
+	  };
+	}
+  
+	return {
+	  props: {
+		session,
+	  },
+	};
+  }

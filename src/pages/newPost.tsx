@@ -4,6 +4,7 @@ import { IPost } from "@/models/Post";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { GetServerSidePropsContext } from "next/types";
+
 type Props = {};
 
 const AllPostsPage: React.FC<Props> = () => {
@@ -33,8 +34,7 @@ const AllPostsPage: React.FC<Props> = () => {
           <h2>{post.title}</h2>
           <p>{post.author}</p>
           {post.content.body && <p>{post.content.body}</p>}
-          {post.content.image && typeof post.content.image !== "string" && (
-            // Add a type guard for the image content property
+          {post.content.image && !("children" in post.content.image) && (
             <img
               src={post.content.image.location}
               alt={post.title}
@@ -46,6 +46,9 @@ const AllPostsPage: React.FC<Props> = () => {
     </div>
   );
 };
+
+AllPostsPage.Layout = "LoggedIn";
+
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getServerSession(context.req, context.res, authOptions);
   if (!session) {
@@ -63,4 +66,5 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     },
   };
 }
+
 export default AllPostsPage;
