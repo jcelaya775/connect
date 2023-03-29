@@ -168,6 +168,10 @@ export default async function handler(
         res.status(201).json({ success: true, data: post });
         break;
       }
+      else{
+        console.log("nothing was grabbed");
+        res.status(404).json({ success: false, error: "bad request" });
+      }
     case "PUT":
       break;
     default:
