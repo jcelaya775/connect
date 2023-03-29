@@ -11,7 +11,7 @@ interface CommentFormData {
   comment: string;
 }
 
-const PostComment: React.FC<Props> = ({ postId }) => {
+const PostComment = ({ postId }: { postId: string }) => {
   const [formData, setFormData] = useState<CommentFormData>({
     postId: postId,
     comment: "",
@@ -44,6 +44,7 @@ const PostComment: React.FC<Props> = ({ postId }) => {
       style={{
         backgroundColor: "#f0f0f0",
         padding: "1rem",
+        paddingTop: "400px",
         borderRadius: "0.5rem",
       }}
     >
@@ -78,4 +79,5 @@ const PostComment: React.FC<Props> = ({ postId }) => {
   );
 };
 
+PostComment.Layout = "LoggedIn";
 export default PostComment;

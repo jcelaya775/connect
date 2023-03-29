@@ -1,10 +1,10 @@
 import React from "react";
+import Image from "next/image";
 import { useQuery } from "react-query";
 import { IPost } from "@/models/Post";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { GetServerSidePropsContext } from "next/types";
-import Image from "next/image";
 
 type Props = {};
 
