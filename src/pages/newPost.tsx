@@ -4,10 +4,11 @@ import { IPost } from "@/models/Post";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { GetServerSidePropsContext } from "next/types";
+import Image from "next/image";
 
 type Props = {};
 
-const AllPostsPage: React.FC<Props> = () => {
+const AllPostsPage = () => {
   const { isLoading, error, data } = useQuery("posts", async () => {
     const response = await fetch("/api/posts");
     const data = await response.json();
@@ -35,8 +36,8 @@ const AllPostsPage: React.FC<Props> = () => {
           <p>{post.author}</p>
           {post.content.body && <p>{post.content.body}</p>}
           {post.content.image && !("children" in post.content.image) && (
-            <img
-              src={post.content.image.location}
+            <Image
+              src={post.content.image.location!}
               alt={post.title}
               width="200"
             />
