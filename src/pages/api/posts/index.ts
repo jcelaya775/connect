@@ -1,4 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import multiparty from 'multiparty';
+import { createReadStream } from 'fs';
+import AWS from 'aws-sdk';
 import connectDB from "@/lib/mongodb";
 import Post, { IPost } from "@/models/Post";
 import { getAuthUser } from "@/lib/auth";
@@ -10,6 +13,12 @@ type GetData = {
   error?: string;
   email?: string;
 };
+
+interface FormDataFields {
+  user_id: string[];
+  text: string[];
+  image: multiparty.File[];
+}
 
 type PostData = {
   success: boolean;
@@ -95,6 +104,25 @@ export default async function handler(
 
         //if there is an image to upload
       } else if (image) {
+        const form = new multiparty.Form();
+
+        form.parse(req, async (err, fields: FormDataFields) => {
+          if (err) {
+            console.error(err);
+            return res.status(500).json({ success: false, error: 'Error parsing form data' });
+          }
+
+          const user_id = fields.user_id[0];
+          const text = fields.text[0];
+          const imageFile = fields.image[0];
+
+          // Upload the image to S3
+          const s3params = {
+            Bucket: process.env.AWS_S3_BUCKET_NAME,
+            Key: `${user_id}/${imageFile.originalFilename}`,
+            Body: createReadStream(imageFile.path),
+          };
+        });
         console.log("We are inside image only area");
         //attempt to upload the image to amazon S3
         const result = await uploadImageToS3(content.image);
