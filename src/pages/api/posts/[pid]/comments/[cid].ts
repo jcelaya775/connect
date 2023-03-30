@@ -66,10 +66,15 @@ export default async function handler(
         const { pid, cid } = req.query;
         const { content } = req.body;
 
-        const comment: IComment | null = await Comment.findOne<IComment>({
-          _id: cid,
-        });
-        if (!comment) return res.status(404).json({ success: false });
+        // const comment: IComment | null = await Comment.findOne<IComment>({
+        //   _id: cid,
+        // });
+        // if (!comment) return res.status(404).json({ success: false });
+
+        const post: IPost | null = await Post.findOne<IPost>({ _id: pid });
+        if (!post) return res.status(404).json({ success: false });
+
+        const comment = post.comments?.find((c) => c._id == cid);
 
         const reply: IComment = await Comment.create<IComment>({
           post_id: pid,
@@ -108,17 +113,11 @@ export default async function handler(
         });
         if (!comment) return res.status(404).json({ success: false });
 
-        const reply: IComment = await Comment.create<IComment>({
-          post_id: pid,
-          user_id,
-          content,
-          parentComment: cid,
-        });
+        comment.content = content;
 
-        await reply.save();
+        await comment.save();
 
-        console.log(reply);
-        res.status(200).json({ success: true, data: reply });
+        res.status(200).json({ success: true, data: comment });
       } catch (error: any) {
         res.status(400).json({ success: false, error: error.message });
       }
