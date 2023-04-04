@@ -7,7 +7,7 @@ const SideNav = () => {
     <>
       <div className="flex-none min-h-screen w-min bg-base-100 pt-2 fixed">
         <ul className="menu bg-base-100 p-2 rounded-box">
-          <li>
+          <li className="hover-bordered">
             <Link href="/">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -26,7 +26,7 @@ const SideNav = () => {
               <span className="hidden lg:block">Home</span>
             </Link>
           </li>
-          <li>
+          <li className="hover-bordered">
             <Link href="/profile">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -45,7 +45,7 @@ const SideNav = () => {
               <span className="hidden lg:block">Profile</span>
             </Link>
           </li>
-          <li>
+          <li className="hover-bordered">
             <Link href="#">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -64,7 +64,7 @@ const SideNav = () => {
               <span className="hidden lg:block">Dashboard</span>
             </Link>
           </li>
-          <li>
+          <li className="hover-bordered">
             <Link href="#">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -83,7 +83,7 @@ const SideNav = () => {
               <span className="hidden lg:block">Friends</span>
             </Link>
           </li>
-          <li>
+          <li className="hover-bordered">
             <Link href="#">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -102,7 +102,7 @@ const SideNav = () => {
               <span className="hidden lg:block">Favorites</span>
             </Link>
           </li>
-          <li className="xl:hidden">
+          <li className="xl:hidden hover-bordered">
             <Link href="#">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -122,10 +122,10 @@ const SideNav = () => {
             </Link>
           </li>
         </ul>
-        <div className="absolute bottom-20 left-0">
+        <div className="absolute bottom-20 left-0 horz:hidden">
           <ul className="menu bg-base-100 p-2 rounded-box">
-            <li>
-              <Link href="#">
+            <li className="hover-bordered">
+              <Link href="/settings">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -143,7 +143,7 @@ const SideNav = () => {
                 <span className="hidden lg:block">Settings</span>
               </Link>
             </li>
-            <li>
+            <li className="hover-bordered">
               <Link href="#">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

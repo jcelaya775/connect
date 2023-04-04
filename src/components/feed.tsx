@@ -1,9 +1,12 @@
-import React from "react";
+import * as React from "react";
 import SideNav from "./SideNav";
 import ConnectPost from "./ConnectPost";
 import SocialPost from "./SocialPost";
+import PostModal from './post-modal'
+import BtmNav from "./bottom-nav";
 
 export const Feed = () => {
+  
   return (
     <>
       <div className={style.container}>
@@ -57,3 +60,7 @@ export const Feed = () => {
 }
 
 export default Feed;
+function displayFile(selectorFiles: any, FileList: { new(): FileList; prototype: FileList; }) {
+  throw new Error("Function not implemented.");
+}
+

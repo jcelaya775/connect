@@ -2,13 +2,17 @@ import React from "react";
 import SideNav from "./SideNav";
 import ConnectPost from "./ConnectPost";
 import SocialPost from "./SocialPost";
+import BtmNav from "./bottom-nav";
 
 export const ProfilePage = () => {
   return (
     <>
       <div className="min-h-screen min-w-full bg-base-200 pt-16 pb-8">
-        <span className="hidden sm:block">
+      <span className="hidden sm:block horz:hidden">
           <SideNav />
+        </span>
+        <span className="sm:hidden horz:block">
+          <BtmNav />
         </span>
         {/* Main Content Area */}
         <div className="flex-1 bg-base-200 min-h-screen pr-8 pt-6 pl-8 sm:pl-24 w-full lg:pl-48 xl:pr-0">
