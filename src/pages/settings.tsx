@@ -5,6 +5,9 @@ import Image from 'next/image';
 import FB from '../images/fb_logo.png'
 import IG from '../images/IG_logo.png'
 import TikTok from '../images/TikTok_logo.png'
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "./api/auth/[...nextauth]";
+import { GetServerSidePropsContext } from "next/types";
 
 export default function Setting() {
   return (
@@ -151,3 +154,21 @@ export default function Setting() {
 }
 
 Setting.Layout = "LoggedIn"
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getServerSession(context.req, context.res, authOptions);
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      session,
+    },
+  };
+}
