@@ -23,17 +23,25 @@ export default function CreatePost({ onSuccess }: CreatePostProps) {
         },
         body: JSON.stringify(postData),
       });
-
+  
       if (!response.ok) {
         throw new Error("Error creating post");
       }
     },
     {
       onSuccess: () => {
+        // Clear the input fields
+        setVisibility("public");
+        setTitle("");
+        setCommunity("");
+        setContent("");
+  
+        // Call the onSuccess function passed as a prop
         onSuccess();
       },
     }
   );
+  
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
