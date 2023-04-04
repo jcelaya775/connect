@@ -8,6 +8,7 @@ import { FaThumbsUp } from "react-icons/fa";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { GetServerSidePropsContext } from "next/types";
+import CreatePost from "./create-post";
 const PostsList = () => {
 	const { likes, incrementLike } = useLikeStore();
 
@@ -126,7 +127,7 @@ const PostsList = () => {
 		</div>
 	);
 };
-
+CreatePost.Layout = "LoggedIn";
 export default PostsList;
 export async function getServerSideProps(context: GetServerSidePropsContext) {
 	const session = await getServerSession(context.req, context.res, authOptions);

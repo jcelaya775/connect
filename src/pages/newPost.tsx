@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React from "react";
 import Image from "next/image";
 import { useQuery } from "react-query";
@@ -27,7 +28,7 @@ const AllPostsPage = () => {
   }
 
   return (
-    <div>
+    <div style={{ paddingTop: "90px" }}>
       <h1>All Posts</h1>
       {data.length === 0 && <p>No posts found.</p>}
       {data.map((post: IPost) => (
@@ -41,7 +42,7 @@ const AllPostsPage = () => {
               alt={post.title}
               width="200"
             />
-          )}
+          )} */}
         </div>
       ))}
     </div>

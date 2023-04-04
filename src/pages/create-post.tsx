@@ -37,9 +37,11 @@ export default function CreatePost({ onSuccess }: CreatePostProps) {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+  
+    const visibilityValue = visibility === "public" ? 1 : 2;
+  
     createPostMutation.mutate({
-      visibility,
+      visibility: visibilityValue,
       title,
       community,
       content: {
@@ -47,6 +49,7 @@ export default function CreatePost({ onSuccess }: CreatePostProps) {
       },
     });
   };
+  
 
   return (
     <div className="pt-64">
