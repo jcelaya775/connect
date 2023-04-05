@@ -4,7 +4,7 @@ import { Readable } from "stream";
 import fs from "fs";
 
 const s3 = new aws.S3({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  accessKeyId: process.env.AMAZON_S3_KEY,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 });
 
