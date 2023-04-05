@@ -1,29 +1,35 @@
-import aws from "aws-sdk";
+import axios from "axios";
+import FormData from "form-data";
 import { S3 } from "aws-sdk";
-import { Readable } from "stream";
-import fs from "fs";
 
-const s3 = new aws.S3({
-  accessKeyId: process.env.AMAZON_S3_KEY,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-});
+interface CustomNextApiRequest {
+  body: any;
+}
 
-export const uploadVideoToS3 = (file: any) => {
-  const params: S3.Types.PutObjectRequest = {
-    Bucket: "connect-social-media-bucket",
-    Key: `connectVideos/${file.originalname}`,
-    Body: Readable.from(file.buffer),
-  };
+interface S3UploadResponse {
+  key: string;
+  location: string;
+}
 
-  return s3.upload(params).promise();
-};
+export const uploadHandler = async (
+  req: CustomNextApiRequest
+): Promise<S3UploadResponse> => {
+  const s3 = new S3({
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  });
 
-export const uploadImageToS3 = (file: any) => {
-  const params: S3.Types.PutObjectRequest = {
-    Bucket: "connect-social-media-bucket",
-    Key: `connectImages/${file.originalname}`,
-    Body: fs.createReadStream(file.path),
-  };
+  const form = new FormData();
+  form.append("file", req.body.file);
 
-  return s3.upload(params).promise();
+  const { Location, Key } = await s3
+    .upload({
+      Bucket: process.env.AWS_BUCKET_NAME || "default bucket name",
+      Body: form,
+      ContentType: "image/jpeg",
+      Key: `${Date.now()}.jpg`,
+    })
+    .promise();
+
+  return { key: Key, location: Location };
 };
