@@ -8,8 +8,7 @@ interface S3UploadResponse {
 }
 
 export const uploadHandler = async (
-  req: NextApiRequest
-): Promise<S3UploadResponse> => {
+  file: any): Promise<S3UploadResponse> => {
   const s3 = new S3({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
@@ -17,7 +16,7 @@ export const uploadHandler = async (
 
   const form = new FormData();
   console.log("We have created the form object");
-  form.append("file", req.body.file);
+  form.append("file", file);
   console.log("The file has been appended to the form object");
   try{
     const { Key } = await s3
