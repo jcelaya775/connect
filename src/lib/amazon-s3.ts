@@ -7,18 +7,18 @@ const s3 = new S3({
   region: process.env.AWS_REGION,
 });
 
-export async function uploadFileToS3(file: File): Promise<string> {
+export async function uploadFileToS3(file: any): Promise<string> {
   try {
     // Read the contents of the file into a buffer
     console.log("Uploading file");
-    const fileContent = await file.arrayBuffer();
-
+    const blob = new Blob([file]);
+    const buffer = Buffer.from(await blob.arrayBuffer());
     // Upload the file to S3
     await s3
       .upload({
         Bucket: process.env.AWS_BUCKET_NAME || "default",
         Key: process.env.AWS_ACCESS_KEY_ID || "default",
-        Body: fileContent,
+        Body: buffer,
       })
       .promise();
 
