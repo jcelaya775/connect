@@ -13,9 +13,9 @@ const PostModal = () => {
   const [facebookChecked, setFacebookChecked] = React.useState(false);
   const [connectChecked, setConnectChecked] = React.useState(true);
 
-  const [instagramAudience, setInstagramAudience] = React.useState(true);
-  const [facebookAudience, setFacebookAudience] = React.useState(true);
-  const [connectAudience, setConnectAudience] = React.useState(true);
+  const [instagramAudience, setInstagramAudience] = React.useState('');
+  const [facebookAudience, setFacebookAudience] = React.useState('');
+  const [connectAudience, setConnectAudience] = React.useState('');
 
   const toggleInstagram = () => setInstagramChecked(!instagramChecked)
   const toggleFacebook = () => setFacebookChecked(!facebookChecked)
@@ -27,9 +27,9 @@ const PostModal = () => {
     setInstagramChecked(false);
     setFacebookChecked(false);
     setConnectChecked(true);
-    setInstagramAudience(true);
-    setFacebookAudience(true);
-    setConnectAudience(true);
+    setInstagramAudience('');
+    setFacebookAudience('');
+    setConnectAudience('');
   };
 
   return (
@@ -76,30 +76,33 @@ const PostModal = () => {
             <input type="checkbox" onClick={toggleFacebook} checked={facebookChecked} className="toggle toggle-sm toggle-primary rounded-full inline-block align-middle" />
             <Image src={Facebook} alt="Facebook" className="w-7 h-7 inline-block align-middle m-1"></Image>
             Facebook
-            <select onClick={() => setFacebookAudience(false)} className="select select-xs border-gray-400 w-1/2 max-w-xs rounded-full ml-2 sm:ml-5">
-              <option disabled selected={facebookAudience}>-- Choose Audience --</option>
-              <option>Public</option>
-              <option>Friends Only</option>
+            <select value={facebookAudience} onChange={(e) => setFacebookAudience(e.target.value)} className="select select-xs border-gray-400 w-1/2 max-w-xs rounded-full ml-2 sm:ml-5">
+              <option disabled value=''>-- Choose Audience --</option>
+              <option value='public'>Public</option>
+              <option value='friends'>Friends Only</option>
+              <option value='private'>Private</option>
             </select>
           </div>
           <div>
             <input type="checkbox" onClick={toggleInstagram} checked={instagramChecked} className="toggle toggle-sm toggle-primary rounded-full inline-block align-middle" />
             <Image src={Insta} alt="Insta" className="w-7 h-7 inline-block align-middle m-1"></Image>
             Instagram
-            <select onClick={() => setInstagramAudience(false)} className="select select-xs border-gray-400 w-1/2 max-w-xs rounded-full ml-1 sm:ml-5">
-              <option disabled selected={instagramAudience}>-- Choose Audience --</option>
-              <option>Public</option>
-              <option>Friends Only</option>
+            <select value={instagramAudience} onChange={(e) => setInstagramAudience(e.target.value)} className="select select-xs border-gray-400 w-1/2 max-w-xs rounded-full ml-1 sm:ml-5">
+              <option disabled value=''>-- Choose Audience --</option>
+              <option value='public'>Public</option>
+              <option value='friends'>Friends Only</option>
+              <option value='private'>Private</option>
             </select>
           </div>
           <div className="pt-1">
             <input type="checkbox" onClick={toggleConnect} checked={connectChecked} className="toggle toggle-sm toggle-primary rounded-full inline-block align-middle" />
             <Image src={Connect} alt="Connect" className="w-5 h-5 inline-block align-middle ml-2 mr-2"></Image>
             Connect
-            <select onClick={() => setConnectAudience(false)} className="select select-xs border-gray-400 w-1/2 max-w-xs rounded-full ml-4 sm:ml-7">
-              <option disabled selected={connectAudience}>-- Choose Audience --</option>
-              <option>Public</option>
-              <option>Private</option>
+            <select value={connectAudience} onChange={(e) => setConnectAudience(e.target.value)} className="select select-xs border-gray-400 w-1/2 max-w-xs rounded-full ml-4 sm:ml-7">
+              <option disabled value=''>-- Choose Audience --</option>
+              <option value='public'>Public</option>
+              <option value='friends'>Friends Only</option>
+              <option value='private'>Private</option>
             </select>
           </div>
 
