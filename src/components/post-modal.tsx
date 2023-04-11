@@ -1,34 +1,33 @@
-import * as React from "react";
-import Image from 'next/image'
-import Insta from '../images/insta_logo.svg'
-import Facebook from '../images/facebook_logo.svg'
-import Connect from '../images/connect_logo.svg'
-import { useState } from 'react';
-import { useMutation } from 'react-query';
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/pages/api/auth/[...nextauth]";
-import { GetServerSidePropsContext } from "next/types";
+import { useState, useRef } from "react";
+import Image from "next/image";
+import Insta from "../images/insta_logo.svg";
+import Facebook from "../images/facebook_logo.svg";
+import Connect from "../images/connect_logo.svg";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 
 const PostModal = () => {
-  const inputRef = React.useRef() as React.MutableRefObject<HTMLInputElement>;
-  const [description, setDescription] = React.useState('')
-  const [upload, setUpload] = React.useState('no file uploaded');
+  const queryClient = useQueryClient();
 
-  const [instagramChecked, setInstagramChecked] = React.useState(false);
-  const [facebookChecked, setFacebookChecked] = React.useState(false);
-  const [connectChecked, setConnectChecked] = React.useState(true);
+  const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
+  const [description, setDescription] = useState("");
+  const [upload, setUpload] = useState("no file uploaded");
 
   const [instagramAudience, setInstagramAudience] = React.useState('');
   const [facebookAudience, setFacebookAudience] = React.useState('');
   const [connectAudience, setConnectAudience] = React.useState('');
 
-  const toggleInstagram = () => setInstagramChecked(!instagramChecked)
-  const toggleFacebook = () => setFacebookChecked(!facebookChecked)
-  const toggleConnect = () => setConnectChecked(!connectChecked)
+  const [instagramAudience, setInstagramAudience] = useState(true);
+  const [facebookAudience, setFacebookAudience] = useState(true);
+  const [connectAudience, setConnectAudience] = useState<string>("public");
+
+  const toggleInstagram = () => setInstagramChecked(!instagramChecked);
+  const toggleFacebook = () => setFacebookChecked(!facebookChecked);
+  const toggleConnect = () => setConnectChecked(!connectChecked);
 
   function resetPost() {
-    setDescription('');
-    setUpload('no file uploaded');
+    setDescription("");
+    setUpload("no file uploaded");
     setInstagramChecked(false);
     setFacebookChecked(false);
     setConnectChecked(true);
@@ -39,46 +38,45 @@ const PostModal = () => {
 
   const createPostMutation = useMutation(
     async (postData: any) => {
-      const response = await fetch('/api/posts', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(postData),
-      });
-  
-      if (!response.ok) {
-        throw new Error('Error creating post');
+      const res = await axios.post("/api/posts", postData);
+
+      if (res.data.success === false) {
+        throw new Error("Error creating post");
       }
+
+      console.log(res.data);
+      return res.data;
     },
     {
       onSuccess: () => {
         // Clear the input fields
+        queryClient.invalidateQueries(["connectPosts"]);
         resetPost();
       },
     }
   );
 
- const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-  // Define postData object based on your form inputs
-  const postData = {
-    visibility: connectAudience ? 'public' : 'private',
-    title: description ? 'Your title here' : 'Default Title',
-    community: description ? 'Your community here' : 'Default Community',
-    content: {
-      body: description,
-    },
+    // Define postData object based on your form inputs
+    const postData = {
+      visibility: connectAudience,
+      // TODO: Add community
+      // community: description ?? "Default Community",
+      content: {
+        body: description,
+      },
+    };
+
+    // Call the createPostMutation hook
+    createPostMutation.mutate(postData);
   };
 
-  // Call the createPostMutation hook
-  createPostMutation.mutate(postData);
-};
   return (
     <>
       <input type="checkbox" id="create-post" className="modal-toggle" />
-  
+
       <div className="modal">
         <div className="modal-box rounded-lg">
           <h3 className="py-0 my-0 font-bold text-lg">Create Post</h3>
@@ -178,40 +176,72 @@ const PostModal = () => {
                 stroke="currentColor"
                 className="w-6 h-6"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
+                <option disabled selected={instagramAudience}>
+                  -- Choose Audience --
+                </option>
+                <option>Public</option>
+                <option>Friends Only</option>
+              </select>
+            </div>
+            <div className="pt-1">
+              <input
+                type="checkbox"
+                onClick={toggleConnect}
+                checked={connectChecked}
+                className="toggle toggle-sm toggle-primary rounded-full inline-block align-middle"
+              />
+              <Image
+                src={Connect}
+                alt="Connect"
+                className="w-5 h-5 inline-block align-middle ml-2 mr-2"
+              />
+              Connect
+              <select
+                onClick={() => setConnectAudience(false)}
+                className="select select-xs border-gray-400 w-1/2 max-w-xs rounded-full ml-4 sm:ml-7"
+              >
+                <option disabled selected={connectAudience}>
+                  -- Choose Audience --
+                </option>
+                <option>Public</option>
+                <option>Private</option>
+              </select>
+            </div>
 
-              Post
-            </button>
-          </div>
-        </form>
+            <div className="modal-action">
+              <label
+                htmlFor="create-post"
+                className="btn btn-sm btn-ghost bg-gray-200 gap-2 py-0 px-5 normal-case"
+                onClick={() => resetPost()}
+              >
+                Cancel
+              </label>
+              <button
+                type="submit"
+                className="btn btn-sm btn-primary gap-2 py-0 px-5 normal-case"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                Post
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
-  </>
-);
-                };
-  
-                PostModal.Layout = "LoggedIn";
+    </>
+  );
+};
+
 export default PostModal;
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const session = await getServerSession(context.req, context.res, authOptions);
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {
-      session,
-    },
-  };
-}

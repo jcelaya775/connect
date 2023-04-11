@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { GetServerSidePropsContext } from "next/types";
@@ -23,7 +23,7 @@ export default function CreatePost({ onSuccess }: CreatePostProps) {
         },
         body: JSON.stringify(postData),
       });
-  
+
       if (!response.ok) {
         throw new Error("Error creating post");
       }
@@ -35,19 +35,18 @@ export default function CreatePost({ onSuccess }: CreatePostProps) {
         setTitle("");
         setCommunity("");
         setContent("");
-  
+
         // Call the onSuccess function passed as a prop
         onSuccess();
       },
     }
   );
-  
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  
+
     const visibilityValue = visibility === "public" ? 1 : 2;
-  
+
     createPostMutation.mutate({
       visibility: visibilityValue,
       title,
@@ -57,7 +56,6 @@ export default function CreatePost({ onSuccess }: CreatePostProps) {
       },
     });
   };
-  
 
   return (
     <div className="pt-64">

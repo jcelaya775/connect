@@ -46,7 +46,9 @@ export default async function handler(
       const { _id: user_id, username, email, name } = user;
 
       // Params
-      const { visibility, title, community, content } = req.body;
+      const { visibility, community, content } = req.body;
+      console.log(`Posts:`);
+      console.log(content);
       //if its just a text post
       if (content.body) {
         //make the post based off of the body as content
@@ -55,7 +57,6 @@ export default async function handler(
           username,
           email,
           author: name,
-          title,
           community,
           content: {
             body: content.body,
@@ -126,7 +127,6 @@ export default async function handler(
           username,
           email,
           author: name,
-          title,
           community,
           content: {
             video: {

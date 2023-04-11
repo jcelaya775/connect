@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import React from "react";
 import Image from "next/image";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { IPost } from "@/models/Post";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "./api/auth/[...nextauth]";
