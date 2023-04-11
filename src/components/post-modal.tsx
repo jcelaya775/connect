@@ -3,6 +3,11 @@ import Image from 'next/image'
 import Insta from '../images/insta_logo.svg'
 import Facebook from '../images/facebook_logo.svg'
 import Connect from '../images/connect_logo.svg'
+import { useState } from 'react';
+import { useMutation } from 'react-query';
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
+import { GetServerSidePropsContext } from "next/types";
 
 const PostModal = () => {
   const inputRef = React.useRef() as React.MutableRefObject<HTMLInputElement>;
@@ -32,11 +37,49 @@ const PostModal = () => {
     setConnectAudience('');
   };
 
+  const createPostMutation = useMutation(
+    async (postData: any) => {
+      const response = await fetch('/api/posts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(postData),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Error creating post');
+      }
+    },
+    {
+      onSuccess: () => {
+        // Clear the input fields
+        resetPost();
+      },
+    }
+  );
+
+ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+
+  // Define postData object based on your form inputs
+  const postData = {
+    visibility: connectAudience ? 'public' : 'private',
+    title: description ? 'Your title here' : 'Default Title',
+    community: description ? 'Your community here' : 'Default Community',
+    content: {
+      body: description,
+    },
+  };
+
+  // Call the createPostMutation hook
+  createPostMutation.mutate(postData);
+};
   return (
     <>
       <input type="checkbox" id="create-post" className="modal-toggle" />
-      
-      <div className="modal ">
+  
+      <div className="modal">
         <div className="modal-box rounded-lg">
           <h3 className="py-0 my-0 font-bold text-lg">Create Post</h3>
           <div className="divider pb-3 my-0"></div>
@@ -95,8 +138,17 @@ const PostModal = () => {
             </select>
           </div>
           <div className="pt-1">
-            <input type="checkbox" onClick={toggleConnect} checked={connectChecked} className="toggle toggle-sm toggle-primary rounded-full inline-block align-middle" />
-            <Image src={Connect} alt="Connect" className="w-5 h-5 inline-block align-middle ml-2 mr-2"></Image>
+            <input
+              type="checkbox"
+              onClick={toggleConnect}
+              checked={connectChecked}
+              className="toggle toggle-sm toggle-primary rounded-full inline-block align-middle"
+            />
+            <img
+              src={Connect}
+              alt="Connect"
+              className="w-5 h-5 inline-block align-middle ml-2 mr-2"
+            />
             Connect
             <select value={connectAudience} onChange={(e) => setConnectAudience(e.target.value)} className="select select-xs border-gray-400 w-1/2 max-w-xs rounded-full ml-4 sm:ml-7">
               <option disabled value=''>-- Choose Audience --</option>
@@ -107,29 +159,59 @@ const PostModal = () => {
           </div>
 
           <div className="modal-action">
-            <label htmlFor="create-post" className="btn btn-sm btn-ghost bg-gray-200 gap-2 py-0 px-5 normal-case" onClick={() => resetPost()}>Cancel</label>
-            <label htmlFor="create-post" className="btn btn-sm btn-primary gap-2 py-0 px-5 normal-case">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              className="w-6 h-6"
+            <label
+              htmlFor="create-post"
+              className="btn btn-sm btn-ghost bg-gray-200 gap-2 py-0 px-5 normal-case"
+              onClick={() => resetPost()}
             >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            Post
+              Cancel
             </label>
-          </div>
-        </div>
-      </div>
-    </>
-  );
-}
+            <button
+              type="submit"
+              className="btn btn-sm btn-primary gap-2 py-0 px-5 normal-case"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
 
+              Post
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </>
+);
+                };
+  
+                PostModal.Layout = "LoggedIn";
 export default PostModal;
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getServerSession(context.req, context.res, authOptions);
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      session,
+    },
+  };
+}
