@@ -1,5 +1,6 @@
-import { IncomingForm, File } from "formidable";
 import type { NextApiRequest } from "next";
+import { IncomingForm, File } from "formidable";
+import fs from "fs/promises";
 
 export async function parseFormFile(
   req: NextApiRequest,
@@ -22,6 +23,11 @@ export async function parseFormFile(
       resolve();
     });
   });
-
-  return files[fieldName];
+  const file = files[fieldName];
+  if (file) {
+    const data = await fs.readFile(file.filepath);
+    console.log(`Data: ${data}`);
+  }
+  console.log(`File ${file}`);
+  return file;
 }
