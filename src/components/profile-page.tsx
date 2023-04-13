@@ -4,7 +4,7 @@ import ConnectPost from "./ConnectPost";
 import SocialPost from "./SocialPost";
 import FriendsModal from "./friends-list-modal";
 
-export const UserProfilePage = () => {
+export const ProfilePage = () => {
   return (
     <>
       <div className="min-h-screen min-w-full bg-base-200 pt-16 pb-8">
@@ -13,8 +13,8 @@ export const UserProfilePage = () => {
         </span>
         {/* Main Content Area */}
         <div className="flex-1 bg-base-200 min-h-screen pr-8 pt-6 pl-8 sm:pl-24 w-full lg:pl-48 xl:pr-0">
-          <div className="flex flex-row gap-x-10 mt-5">
-            <div className="flex-initial w-full xl:w-3/4">
+          <div className="flex flex-row gap-x-10">
+            <div className="flex-initial w-full mr-5">
               <div className="flex flex-col w-full gap-5">
                 <div className="container mx-auto my-8">
                     {/*  Profile Card  */}
@@ -37,41 +37,41 @@ export const UserProfilePage = () => {
                             </div>
                         </div>
                     </div>
-
-
-                    <div className="grid grid-cols-2 gap-4 mt-8">
-                          {/* <!-- Friends Card --> */}
-                          <div className="card shadow-md bg-white">
-                            <div className="card-body">
-                                <h2 className="text-lg font-bold text-gray-700 mb-4">Friends</h2>
-                                <label htmlFor="my-modal" className="btn">View Friends List</label>
-                                <FriendsModal/>
-                            </div>
+                    <div className="grid grid-cols-3 gap-4 mt-8">
+                      <div className="col-span-2">
+                        {/* <h2 className="text-xl font-bold text-gray-700 ml-1 mb-0">Posts</h2> */}
+                          <SocialPost />
+                          <ConnectPost />
+                          <ConnectPost />
+                          <SocialPost />
+                          <SocialPost />
+                          <ConnectPost />
+                          <SocialPost />
+                          <ConnectPost />
+                          <SocialPost />
+                          <ConnectPost />
+                      </div>
+                        {/* <!-- Friends Card --> */}
+                        <div className="card shadow-md bg-white col-span-1 h-min">
+                          <div className="card-body">
+                              <h2 className="text-lg font-bold text-gray-700 mb-4">Friends</h2>
+                              <label htmlFor="my-modal" className="btn">View Friends List</label>
+                              <FriendsModal/>
+                          </div>
                         </div>
-                        {/* <!-- Analytics Card --> */}
+                        {/* <!-- Analytics Card -->
                         <div className="card shadow-md bg-white">
                             <div className="card-body">
-                                <h2 className="text-lg font-bold text-gray-700 mb-4">Analytics</h2>
-                                <a href="#" className="btn btn-primary">View Dashboard</a>
+                                <h2 className="text-lg font-bold text-gray-700 mb-4">My Goals</h2>
+                                <a href="#" className="btn btn-primary">View/Edit Goals</a>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
-                <h2 className="text-xl font-bold text-gray-700 ml-1 mb-0">Posts</h2>
-                <SocialPost />
-                <ConnectPost />
-                <ConnectPost />
-                <SocialPost />
-                <SocialPost />
-                <ConnectPost />
-                <SocialPost />
-                <ConnectPost />
-                <SocialPost />
-                <ConnectPost />
               </div>
             </div>
-            <div className=" flex-2 pr-6 w-1/4 hidden xl:block box-border text-center">
-              <div className="card bg-white">
+            {/* <div className=" flex-2 pr-6 w-1/4 hidden xl:block box-border text-center">
+              <div className="card bg-white mt-8">
               <div className="text-3xl card-title justify-center text-gray-900 border-b-2 border-gray-100">Dashboard Preview</div>
               <div className="stats stats-vertical shadow text-center">
                 <div className="stat">
@@ -131,7 +131,7 @@ export const UserProfilePage = () => {
                 </div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -139,4 +139,4 @@ export const UserProfilePage = () => {
   );
 };
 
-export default UserProfilePage;
+export default ProfilePage;

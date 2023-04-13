@@ -1,5 +1,5 @@
 import React from "react";
-import ProfilePage from "@/components/profile-page";
+import UserProfilePage from "@/components/user-profile-page";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { GetServerSidePropsContext } from "next/types";
@@ -7,7 +7,7 @@ import { GetServerSidePropsContext } from "next/types";
 export default function Profile() {
   return (
     <>
-      <ProfilePage />
+      <UserProfilePage />
     </>
   );
 }

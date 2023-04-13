@@ -3,31 +3,34 @@ import SideNav from "./SideNav";
 import ConnectPost from "./ConnectPost";
 import SocialPost from "./SocialPost";
 import FriendsModal from "./friends-list-modal";
+import EditProfileModal from "./edit-profile-modal";
+
 
 export const UserProfilePage = () => {
   return (
     <>
+      <EditProfileModal/>
       <div className="min-h-screen min-w-full bg-base-200 pt-16 pb-8">
         <span className="hidden sm:block">
           <SideNav />
         </span>
         {/* Main Content Area */}
         <div className="flex-1 bg-base-200 min-h-screen pr-8 pt-6 pl-8 sm:pl-24 w-full lg:pl-48 xl:pr-0">
-          <div className="flex flex-row gap-x-10 mt-5">
+          <div className="flex flex-row gap-x-10">
             <div className="flex-initial w-full xl:w-3/4">
               <div className="flex flex-col w-full gap-5">
                 <div className="container mx-auto my-8">
                     {/*  Profile Card  */}
-                    <div className="flex items-center w-full px-4 py-10 bg-cover card bg-[url('https://picsum.photos/id/314/1000/300')]">
+                    <div className="-mt-7 flex items-center w-full px-4 py-10 bg-cover card bg-[url('https://picsum.photos/id/314/1000/300')]">
                         <div className="card glass lg:card-side text-neutral-content">
                             <figure className="p-6 relative">
                                 <img src="https://picsum.photos/200" alt="Profile Picture" className="rounded-full ml-0 mx-auto border-white border-2"></img>
                                     {/* <!-- Edit Profile Picture Button --> */}
-                                    <button className="btn-outline btn-square bg-white absolute bottom-8 right-8 rounded-full w-8 h-8 flex items-center justify-center">
+                                    <label htmlFor="edit-profile-modal" className="btn-outline btn-square bg-white cursor-pointer absolute bottom-8 right-8 rounded-full w-8 h-8 flex items-center justify-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
                                             <path d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32L19.513 8.2z" />
                                         </svg>
-                                    </button>
+                                    </label>
                                     {/* <!-- End Edit Profile Picture Button --> */}
                             </figure>
                             <div className="max-w-md card-body">
@@ -51,8 +54,8 @@ export const UserProfilePage = () => {
                         {/* <!-- Analytics Card --> */}
                         <div className="card shadow-md bg-white">
                             <div className="card-body">
-                                <h2 className="text-lg font-bold text-gray-700 mb-4">Analytics</h2>
-                                <a href="#" className="btn btn-primary">View Dashboard</a>
+                                <h2 className="text-lg font-bold text-gray-700 mb-4">Goals</h2>
+                                <a href="#" className="btn btn-primary">Create/Edit Goals</a>
                             </div>
                         </div>
                     </div>
@@ -72,7 +75,7 @@ export const UserProfilePage = () => {
             </div>
             <div className=" flex-2 pr-6 w-1/4 hidden xl:block box-border text-center">
             <div className="card bg-white">
-              <div className="text-3xl card-title justify-center text-gray-900 border-b-2 border-gray-100">Dashboard Preview</div>
+              <div className="text-3xl card-title justify-center text-gray-900 border-b-2 border-gray-100">My Goals</div>
               <div className="stats stats-vertical shadow text-center">
                 <div className="stat">
                   <div className="stat-figure text-primary">

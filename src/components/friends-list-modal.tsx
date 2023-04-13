@@ -33,8 +33,8 @@ const friends = [
 const FriendsModal = () => {
     const [searchTerm, setSearchTerm] = useState("");
 
-    const handleSearch = (event) => {
-      setSearchTerm(event.target.value);
+    const handleSearch = (e) => {
+      setSearchTerm(e.target.value);
     };
   
     const filteredFriends = friends.filter((friend) =>
