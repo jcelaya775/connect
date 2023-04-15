@@ -1,7 +1,7 @@
 import React from "react";
 import SideNav from "./SideNav";
 import ConnectPost from "./ConnectPost";
-import SocialPost from "./SocialPost";
+import SocialPost from "./Post";
 import FriendsModal from "./friends-list-modal";
 
 export const ProfilePage = () => {
@@ -17,56 +17,71 @@ export const ProfilePage = () => {
             <div className="flex-initial w-full mr-5">
               <div className="flex flex-col w-full gap-5">
                 <div className="container mx-auto my-8">
-                    {/*  Profile Card  */}
-                    <div className="flex items-center w-full px-4 py-10 bg-cover card bg-[url('https://picsum.photos/id/314/1000/300')]">
-                        <div className="card glass lg:card-side text-neutral-content">
-                            <figure className="p-6 relative">
-                                <img src="https://picsum.photos/200" alt="Profile Picture" className="rounded-full ml-0 mx-auto border-white border-2"></img>
-                                    {/* <!-- Edit Profile Picture Button --> */}
-                                    {/* <button className="btn-outline btn-square bg-white absolute bottom-8 right-8 rounded-full w-8 h-8 flex items-center justify-center"> */}
-                                        {/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6"> */}
-                                            {/* <path d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32L19.513 8.2z" /> */}
-                                        {/* </svg> */}
-                                    {/* </button> */}
-                                    {/* <!-- End Edit Profile Picture Button --> */}
-                            </figure>
-                            <div className="max-w-md card-body">
-                            <h2 className="card-title text-3xl font-bold text-gray-900">John Doe</h2>
-                            <p className="text-gray-700">Connect User Since 2023</p>
-                            <p className="text-white-400">Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde laudantium enim ab doloremque quod velit tenetur delectus hic labore aliquam, soluta id magni praesentium facere quos rem facilis numquam dolore. </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="grid grid-cols-3 gap-4 mt-8">
-                      <div className="col-span-2">
-                        {/* <h2 className="text-xl font-bold text-gray-700 ml-1 mb-0">Posts</h2> */}
-                          <SocialPost />
-                          <ConnectPost />
-                          <ConnectPost />
-                          <SocialPost />
-                          <SocialPost />
-                          <ConnectPost />
-                          <SocialPost />
-                          <ConnectPost />
-                          <SocialPost />
-                          <ConnectPost />
+                  {/*  Profile Card  */}
+                  <div className="flex items-center w-full px-4 py-10 bg-cover card bg-[url('https://picsum.photos/id/314/1000/300')]">
+                    <div className="card glass lg:card-side text-neutral-content">
+                      <figure className="p-6 relative">
+                        <img
+                          src="https://picsum.photos/200"
+                          alt="Profile Picture"
+                          className="rounded-full ml-0 mx-auto border-white border-2"
+                        ></img>
+                        {/* <!-- Edit Profile Picture Button --> */}
+                        {/* <button className="btn-outline btn-square bg-white absolute bottom-8 right-8 rounded-full w-8 h-8 flex items-center justify-center"> */}
+                        {/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6"> */}
+                        {/* <path d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32L19.513 8.2z" /> */}
+                        {/* </svg> */}
+                        {/* </button> */}
+                        {/* <!-- End Edit Profile Picture Button --> */}
+                      </figure>
+                      <div className="max-w-md card-body">
+                        <h2 className="card-title text-3xl font-bold text-gray-900">
+                          John Doe
+                        </h2>
+                        <p className="text-gray-700">Connect User Since 2023</p>
+                        <p className="text-white-400">
+                          Lorem ipsum dolor sit amet consectetur adipisicing
+                          elit. Unde laudantium enim ab doloremque quod velit
+                          tenetur delectus hic labore aliquam, soluta id magni
+                          praesentium facere quos rem facilis numquam dolore.{" "}
+                        </p>
                       </div>
-                        {/* <!-- Friends Card --> */}
-                        <div className="card shadow-md bg-white col-span-1 h-min">
-                          <div className="card-body">
-                              <h2 className="text-lg font-bold text-gray-700 mb-4">Friends</h2>
-                              <label htmlFor="my-modal" className="btn">View Friends List</label>
-                              <FriendsModal/>
-                          </div>
-                        </div>
-                        {/* <!-- Analytics Card -->
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-3 gap-4 mt-8">
+                    <div className="col-span-2">
+                      {/* <h2 className="text-xl font-bold text-gray-700 ml-1 mb-0">Posts</h2> */}
+                      <SocialPost />
+                      <ConnectPost />
+                      <ConnectPost />
+                      <SocialPost />
+                      <SocialPost />
+                      <ConnectPost />
+                      <SocialPost />
+                      <ConnectPost />
+                      <SocialPost />
+                      <ConnectPost />
+                    </div>
+                    {/* <!-- Friends Card --> */}
+                    <div className="card shadow-md bg-white col-span-1 h-min">
+                      <div className="card-body">
+                        <h2 className="text-lg font-bold text-gray-700 mb-4">
+                          Friends
+                        </h2>
+                        <label htmlFor="my-modal" className="btn">
+                          View Friends List
+                        </label>
+                        <FriendsModal />
+                      </div>
+                    </div>
+                    {/* <!-- Analytics Card -->
                         <div className="card shadow-md bg-white">
                             <div className="card-body">
                                 <h2 className="text-lg font-bold text-gray-700 mb-4">My Goals</h2>
                                 <a href="#" className="btn btn-primary">View/Edit Goals</a>
                             </div>
                         </div> */}
-                    </div>
+                  </div>
                 </div>
               </div>
             </div>

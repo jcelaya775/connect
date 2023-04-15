@@ -1,12 +1,12 @@
 import * as React from "react";
 import SideNav from "./SideNav";
-import ConnectPost from "./ConnectPost";
-import SocialPost from "./SocialPost";
-import PostModal from './post-modal'
+import Post from "./Post";
+import PostModal from "./post-modal";
 import BtmNav from "./bottom-nav";
+import { platformTypes } from "@/types/platform";
+import cityImage from "../images/cityscape.jpg";
 
 export const Feed = () => {
-  
   return (
     <>
       <div className={style.container}>
@@ -60,7 +60,9 @@ export const Feed = () => {
 }
 
 export default Feed;
-function displayFile(selectorFiles: any, FileList: { new(): FileList; prototype: FileList; }) {
+function displayFile(
+  selectorFiles: any,
+  FileList: { new (): FileList; prototype: FileList }
+) {
   throw new Error("Function not implemented.");
 }
-
