@@ -16,10 +16,6 @@ import { MyPage } from "../components/types";
 export default function Home() {
   const { data: session } = useSession();
 
-  useEffect(() => {
-    session && axios.get("api/posts").then((res) => console.log(res.data));
-  });
-
   if (!session) {
     return (
       <>

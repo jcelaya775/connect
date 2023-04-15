@@ -16,8 +16,11 @@ export default async function handler(
   await connectDB();
 
   const user = await getAuthUser(req, res);
-  if (!user) return res.status(401).json({ success: false });
+  if (!user)
+    return res.status(401).json({ success: false, error: "Not logged in" });
   const { page_token } = user.facebook;
+  if (!page_token)
+    return res.status(401).json({ success: false, error: "No page token" });
 
   const { method } = req;
 
@@ -39,6 +42,19 @@ export default async function handler(
       }
 
       break;
+    case "DELETE":
+      try {
+        const { pid } = req.query;
+
+        const response = await axios.delete(
+          `https://graph.facebook.com/v16.0/${pid}?access_token=${page_token}`
+        );
+        const post = response.data;
+
+        res.status(200).json({ success: true, post });
+      } catch (error: any) {
+        res.status(500).json({ success: false, error: error.message });
+      }
     default:
       res.status(405).json({ success: false, error: "Method not allowed" });
   }

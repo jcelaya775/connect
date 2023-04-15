@@ -18,6 +18,9 @@ export default async function handler(
   const user = await getAuthUser(req, res);
   if (!user) return res.status(401).json({ success: false });
 
+  await connectDB();
+  if (!user) return res.status(401).json({ success: false });
+
   const { method } = req;
 
   switch (method) {

@@ -17,8 +17,11 @@ export default async function handler(
   await connectDB();
 
   const user = await getAuthUser(req, res);
-  if (!user) return res.status(401).json({ success: false });
+  if (!user)
+    return res.status(401).json({ success: false, error: "Not logged in" });
   const { page_token } = user.facebook;
+  if (!page_token)
+    return res.status(401).json({ success: false, error: "No page token" });
 
   const { method } = req;
 
