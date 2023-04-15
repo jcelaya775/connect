@@ -6,6 +6,7 @@ import { getAuthUser } from "@/lib/auth";
 type Data = {
   success: boolean;
   longToken?: any;
+  pageToken?: any;
   error?: string;
   httpStatus?: number;
 };
@@ -23,7 +24,7 @@ export default async function handler(
         console.log(accessToken);
         console.log(req.headers);
 
-        // Long-lived token
+        // Long token
         const longTokenResponse = await axios.get(
           `https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&
           client_id=${process.env.FACEBOOK_CLIENT_ID}&

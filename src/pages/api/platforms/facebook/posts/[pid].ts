@@ -5,7 +5,7 @@ import { getAuthUser } from "@/lib/auth";
 
 type Data = {
   success: boolean;
-  longToken?: any;
+  post?: any;
   error?: string;
 };
 
@@ -17,22 +17,27 @@ export default async function handler(
 
   const user = await getAuthUser(req, res);
   if (!user) return res.status(401).json({ success: false });
+  const { page_token } = user.facebook;
 
   const { method } = req;
 
   switch (method) {
-    case "POST":
+    case "GET":
       try {
-        user.facebook.long_token = undefined;
-        user.facebook.page_token = undefined;
-        user.facebook.long_token_expires = undefined;
-        user.facebook.page_token_expires = undefined;
-        await user.save();
+        const { pid } = req.query;
 
-        res.status(200).json({ success: true });
+        const fields: string =
+          "id, created_time, message, full_picture, admin_creator, shares, story, subscribed, to, updated_time";
+        const response = await axios.get(
+          `https://graph.facebook.com/v16.0/${pid}?fields=${fields}&access_token=${page_token}`
+        );
+        const post = response.data;
+
+        res.status(200).json({ success: true, post });
       } catch (error: any) {
         res.status(500).json({ success: false, error: error.message });
       }
+
       break;
     default:
       res.status(405).json({ success: false, error: "Method not allowed" });
