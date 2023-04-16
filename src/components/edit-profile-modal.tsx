@@ -74,7 +74,7 @@ const EditProfileModal = () => {
                   </svg>
                   <p className="pointer-hand text-gray-500 "><span className="text-sm">Upload</span> cover photo here</p>
                 </div>
-                <input type="file" className="hidden" ref={inputRef} onChange={(e) =>  e.target.value == "" ? ' ' :setCover(inputRef.current.files[0].name)} />
+                <input type="file" className="hidden" ref={inputRef} onChange={(e) => e.target.value == "" ? ' ' :setCover(inputRef.current.files[0].name)} />
               </label>
             </div>
             <p className="test-gray-500 text-sm py-2">File: {cover}</p>
@@ -83,9 +83,11 @@ const EditProfileModal = () => {
 
   
             <div className="modal-action">
-              <label htmlFor="edit-profile-modal" className="btn btn-sm btn-ghost bg-gray-400 gap-2 py-0 px-5 normal-case" onClick={() => resetProfile()}>Reset</label>
+              <label htmlFor="edit-profile-modal" className="btn btn-sm btn-ghost bg-gray-400 gap-2 py-0 px-5 normal-case" onClick={() => resetProfile()}>
+                Reset
+              </label>
               <label htmlFor="edit-profile-modal" className="btn btn-sm btn-primary gap-2 py-0 px-5 normal-case">
-              Save Changes
+                Save Changes
               </label>
             </div>
           </div>

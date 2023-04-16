@@ -1,6 +1,6 @@
 import * as React from "react";
 import SideNav from "./SideNav";
-import Post from "./Post";
+import Post from "./post";
 import PostModal from "./post-modal";
 import BtmNav from "./bottom-nav";
 import { platformTypes } from "@/types/platform";

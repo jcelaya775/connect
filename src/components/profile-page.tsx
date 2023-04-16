@@ -1,7 +1,7 @@
 import React from "react";
 import SideNav from "./SideNav";
 import ConnectPost from "./ConnectPost";
-import SocialPost from "./Post";
+import SocialPost from "./post";
 import FriendsModal from "./friends-list-modal";
 
 export const ProfilePage = () => {
@@ -51,16 +51,6 @@ export const ProfilePage = () => {
                   <div className="grid grid-cols-3 gap-4 mt-8">
                     <div className="col-span-2">
                       {/* <h2 className="text-xl font-bold text-gray-700 ml-1 mb-0">Posts</h2> */}
-                      <SocialPost />
-                      <ConnectPost />
-                      <ConnectPost />
-                      <SocialPost />
-                      <SocialPost />
-                      <ConnectPost />
-                      <SocialPost />
-                      <ConnectPost />
-                      <SocialPost />
-                      <ConnectPost />
                     </div>
                     {/* <!-- Friends Card --> */}
                     <div className="card shadow-md bg-white col-span-1 h-min">

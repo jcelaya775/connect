@@ -2,6 +2,7 @@ import React from "react";
 import Image, { StaticImageData } from "next/image";
 import { platformTypes } from "@/types/platform";
 import PostStatsBar from "./post-stats-bar";
+import OptionsDropdown from "./options-dropdown";
 
 type PostProps = {
   author: string;
@@ -78,6 +79,14 @@ const Post = ({
   return (
     <>
       <div className="card compact side w-full bg-base-100 shadow-xl">
+        <div className="h-4">
+          <div className="relative">
+            <div className="absolute right-3 top-1">
+              <OptionsDropdown />
+            </div>
+          </div>
+        </div>
+
         <div className="card-body p-4 flex-col items-start lg:flex-row lg:items-center lg:space-x-3 space-y-1 flex-wrap">
           <div className="flex-none">
             <div className="flex flex-row space-x-3">
