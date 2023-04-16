@@ -1,33 +1,33 @@
 import type { NextApiRequest } from "next";
-import { IncomingForm, File } from "formidable";
-import fs from "fs/promises";
+import formidable from "formidable";
+import fs from "fs";
 
-export async function parseFormFile(
-  req: NextApiRequest,
-  fieldName: string
-): Promise<File | undefined> {
-  const form = new IncomingForm({ multiples: false });
-  const files: { [key: string]: File } = {};
-
-  form.on("file", (field, file) => {
-    files[field] = file;
-  });
-
-  await new Promise<void>((resolve, reject) => {
-    form.parse(req, (err, fields, _) => {
+export async function parseFormFile(req: NextApiRequest): Promise<Buffer> {
+  return new Promise<Buffer>((resolve, reject) => {
+    const form = new formidable.IncomingForm();
+    console.log("after form file");
+    form.parse(req, (err, fields, files) => {
       if (err) {
-        reject(err);
+        console.error(err);
+        reject(new Error("File upload failed"));
         return;
       }
+      console.log("after parse");
+      const file = files["file"] as formidable.File;
+      if (!file) {
+        reject(new Error("File not found"));
+        return;
+      }
+      console.log(`file: ${file.filepath}`);
+      fs.readFile(file.filepath, (err, data) => {
+        if (err) {
+          console.error(err);
+          reject(new Error("Failed to read file data"));
+          return;
+        }
 
-      resolve();
+        resolve(data);
+      });
     });
   });
-  const file = files[fieldName];
-  if (file) {
-    const data = await fs.readFile(file.filepath);
-    console.log(`Data: ${data}`);
-  }
-  console.log(`File ${file}`);
-  return file;
 }

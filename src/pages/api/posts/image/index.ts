@@ -1,24 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { S3Client } from "@aws-sdk/client-s3";
+import connectDB from "@/lib/mongodb";
+import { getAuthUser } from "@/lib/auth";
 import { parseFormFile } from "@/lib/parse-form-file";
-import AWS from "aws-sdk";
 import { uploadFileToS3 } from "@/lib/amazon-s3";
 
-//s3 instance for getSignedUrl()
-const s3 = new AWS.S3({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  region: process.env.AWS_REGION,
-});
-
-//s3 client to upload using multers3
-const s3Client = new S3Client({
-  region: process.env.AWS_REGION,
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID || "DEFAULT",
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "DEFAULT",
+// IMPORTANT: Prevents next from trying to parse the form
+export const config = {
+  api: {
+    bodyParser: false,
   },
-});
+};
 
 export default async function handler(
   req: NextApiRequest,
@@ -26,17 +17,32 @@ export default async function handler(
 ) {
   const { method } = req;
 
+  await connectDB();
+
   switch (method) {
+    case "GET": {
+      const data = req.query.data;
+      res.status(200).json({ success: true, httpStatus: "200", data: data });
+    }
     case "POST": {
-      const file = await parseFormFile(req, "file");
-      if (file === null) {
-        res.status(400).json({ success: false, httpStatus: "Bad Request" });
+      try {
+        console.log(`pre parse`);
+        const file = await parseFormFile(req);
+        if (!file) {
+          res.status(404).json({ success: false });
+          return;
+        }
+        console.log(`pre upload. file: ${file.buffer}`);
+        const url = await uploadFileToS3(file);
+        if (url) {
+          res.status(200).json({ success: true, url: url });
+          return;
+        }
+        res.status(202).json({ success: true, url: null });
+      } catch (err) {
+        console.log(`Something went wrong: ${err}`);
+        res.status(401).json({ body: "yeahhhh we fucked up" });
       }
-      console.log(file);
-      const url = await uploadFileToS3(file);
-      res
-        .status(201)
-        .json({ success: true, httpStatus: "Accepted", data: url });
     }
   }
 }
