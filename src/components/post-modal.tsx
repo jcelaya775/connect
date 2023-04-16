@@ -5,8 +5,9 @@ import Facebook from "../images/fb_color_logo.png";
 import Connect from "../images/connect_logo.svg";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { platformTypes } from "@/types/platform";
 
-const PostModal = () => {
+const PostModal = ({ newPost }: { newPost: boolean }) => {
   const queryClient = useQueryClient();
 
   const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
@@ -58,15 +59,18 @@ const PostModal = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    let platforms = [];
+    connectChecked && platforms.push(platformTypes.connect);
+    facebookChecked && platforms.push(platformTypes.facebook);
+    instagramChecked && platforms.push(platformTypes.instagram);
 
     // Define postData object based on your form inputs
     const postData = {
-      visibility: connectAudience,
-      // TODO: Add community
-      // community: description ?? "Default Community",
+      platforms,
       content: {
         body: description,
       },
+      // image: inputRef.current.files[0],
     };
 
     // Call the createPostMutation hook
