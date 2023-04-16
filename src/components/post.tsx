@@ -81,7 +81,7 @@ const Post = ({
       <div className="card compact side w-full bg-base-100 shadow-xl">
         <div className="h-4">
           <div className="relative">
-            <div className="absolute left-3 top-1">
+            <div className="absolute right-3 top-1">
               <OptionsDropdown />
             </div>
           </div>
