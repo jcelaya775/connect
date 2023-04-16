@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import connectDB from "@/lib/mongodb";
-import Post, { IPost } from "@/models/Post";
 import Comment, { IComment } from "@/models/Comment";
 import { getAuthUser } from "@/lib/auth";
 
