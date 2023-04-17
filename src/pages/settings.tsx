@@ -23,7 +23,7 @@ export default function Setting() {
           <BtmNav />
         </span>
         {/* Main Content Area */}
-        <div className='grid grid-cols-3 gap-4 sm:pl-20 lg:pl-44'>
+        {/* <div className='grid grid-cols-3 gap-4 sm:pl-20 lg:pl-44'>
           <div className='col-span-3 pt-4 pl-4 pr-6 pb-2'>
             <div className="card w-full bg-base-100 shadow-xl">
               <div className="card-body p-4 flex-row justify-between">
@@ -227,14 +227,14 @@ export default function Setting() {
                 </div>
               </div>
           </div>
-        </div>
+        </div> */}
 
 
 
 
 
 
-        {/* <div className="flex-1 bg-base-200 min-h-screen pr-8 pt-6 pl-8 sm:pl-24 w-full lg:pl-48 xl:pr-0 horz:pl-8">
+       <div className="flex-1 bg-base-200 min-h-screen pr-8 pt-6 pl-8 sm:pl-24 w-full lg:pl-48 xl:pr-0 horz:pl-8">
           <div className="flex flex-row gap-x-10">
             <div className="flex-initial w-full pr-0 xl:pr-8">
               <div className="flex flex-col w-full gap-5">
@@ -259,7 +259,7 @@ export default function Setting() {
                     </div>
                   </div>
                 </div>
-                <div className='w-full flex flex-row gap-x-2 justify-between'>
+                <div className='w-full flex flex-col gap-y-4 justify-between'>
                 <div className="card w-full md:w-3/4 bg-base-100 shadow-xl">
                   <div className="card-body p-4 flex-col justify-between">
                     <div className="card-title pb-0 mb-0">
@@ -271,7 +271,7 @@ export default function Setting() {
                     <div>Password:</div>
                   </div>
                 </div>
-                <div className="card w-full md:w-1/4 bg-base-100 shadow-xl">
+                <div className="card w-3/4 bg-base-100 shadow-xl">
                   <div className="card-body p-4 flex-col justify-between">
                     <div className="card-title pb-0 mb-0">
                       Social Media
@@ -383,16 +383,7 @@ export default function Setting() {
                               className="toggle toggle-sm checked:bg-[#FF0069] mx-2 rounded-full inline-block align-text-bottom"
                             />
                           </div>
-                          <div className="text-white">
-                            Default Audience:
-                            <select className="select select-xs text-black border-gray-400 w-1/2 max-w-xs rounded-full ml-5">
-                              <option disabled selected>
-                                -- Choose Audience --
-                              </option>
-                              <option>Public</option>
-                              <option>Friends Only</option>
-                            </select>
-                          </div>
+                          
                         </div>
                       </div>
                       <div className="card w-full md:w-1/3 bg-black rounded-xl border-2 shadow-xl">
@@ -419,16 +410,6 @@ export default function Setting() {
                               type="checkbox"
                               className="toggle toggle-sm checked:bg-[#00f2ea] mx-2 rounded-full inline-block align-text-bottom"
                             />
-                          </div>
-                          <div className="text-white">
-                            Default Audience:
-                            <select className="select select-xs text-black border-gray-400 w-1/2 max-w-xs rounded-full ml-5">
-                              <option disabled selected>
-                                -- Choose Audience --
-                              </option>
-                              <option>Public</option>
-                              <option>Private</option>
-                            </select>
                           </div>
                         </div>
                       </div>
