@@ -28,11 +28,12 @@ export default async function handler(
       try {
         console.log(`pre parse`);
         const file = await parseFormFile(req);
-        if (!file) {
+        console.log(file.buffer)
+        if (!file || file === undefined) {
           res.status(404).json({ success: false });
           return;
         }
-        console.log(`pre upload. file: ${file.buffer}`);
+        
         const url = await uploadFileToS3(file);
         if (url) {
           res.status(200).json({ success: true, url: url });
@@ -41,7 +42,7 @@ export default async function handler(
         res.status(202).json({ success: true, url: null });
       } catch (err) {
         console.log(`Something went wrong: ${err}`);
-        res.status(401).json({ body: "yeahhhh we fucked up" });
+        res.status(401).json({ body: `${err}` });
       }
     }
   }
