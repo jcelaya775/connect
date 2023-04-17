@@ -60,8 +60,8 @@ export const UserProfilePage = () => {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4 mt-8">
-                    {/* <!-- Friends Card --> */}
+                  <div className="grid grid-cols-2 gap-4">
+                    {/* <!-- Friends Card -->
                     <div className="card shadow-md bg-white">
                       <div className="card-body">
                         <h2 className="text-lg font-bold text-gray-700 mb-4">
@@ -72,18 +72,7 @@ export const UserProfilePage = () => {
                         </label>
                         <FriendsModal />
                       </div>
-                    </div>
-                    {/* <!-- Analytics Card --> */}
-                    <div className="card shadow-md bg-white">
-                      <div className="card-body">
-                        <h2 className="text-lg font-bold text-gray-700 mb-4">
-                          Goals
-                        </h2>
-                        <a href="#" className="btn btn-primary">
-                          Create/Edit Goals
-                        </a>
-                      </div>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
                 <h2 className="text-xl font-bold text-gray-700 ml-1 mb-0">
@@ -181,6 +170,14 @@ export const UserProfilePage = () => {
                     <div className="stat-value">100%</div>
                     <div className="stat-title">Weekly Goals Achieved</div>
                   </div>
+                    {/* <!-- Analytics Card --> */}
+                    <div className="card shadow-md bg-white">
+                      <div className="card-body">
+                        <a href="#" className="btn btn-primary">
+                          Create/Edit Goals
+                        </a>
+                      </div>
+                    </div>
                 </div>
               </div>
             </div>

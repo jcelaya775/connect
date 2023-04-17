@@ -2,7 +2,7 @@ import React from "react";
 import SideNav from "./SideNav";
 import ConnectPost from "./ConnectPost";
 import SocialPost from "./post";
-import FriendsModal from "./friends-list-modal";
+import FriendsModal from "./friends-list";
 
 export const ProfilePage = () => {
   return (
@@ -52,7 +52,7 @@ export const ProfilePage = () => {
                     <div className="col-span-2">
                       {/* <h2 className="text-xl font-bold text-gray-700 ml-1 mb-0">Posts</h2> */}
                     </div>
-                    {/* <!-- Friends Card --> */}
+                    {/* <!-- Friends Card -->
                     <div className="card shadow-md bg-white col-span-1 h-min">
                       <div className="card-body">
                         <h2 className="text-lg font-bold text-gray-700 mb-4">
@@ -63,7 +63,7 @@ export const ProfilePage = () => {
                         </label>
                         <FriendsModal />
                       </div>
-                    </div>
+                    </div> */}
                     {/* <!-- Analytics Card -->
                         <div className="card shadow-md bg-white">
                             <div className="card-body">
