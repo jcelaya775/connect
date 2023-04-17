@@ -1,5 +1,6 @@
 import mongoose, { Schema, SchemaTypes, models, Document } from "mongoose";
 import { CommentSchema, IComment } from "../models/Comment";
+import { ObjectId } from "mongodb";
 
 export interface IPost extends Document {
 	user_id: string;
