@@ -6,13 +6,13 @@ export interface IUser extends Document {
   password: string;
   is_verified: boolean;
   email: string;
-  facebook: {
+  facebook?: {
     page_id?: string;
     page_name?: string;
     page_token?: string;
     page_token_expires?: string;
-    long_token?: string;
-    long_token_expires?: string;
+    user_token?: string;
+    user_token_expires?: string;
   };
   code: Number;
 }
@@ -26,9 +26,9 @@ const UserSchema = new Schema<IUser>({
   facebook: {
     page_id: { type: String, trim: true, required: false },
     page_name: { type: String, trim: true, required: false },
-    long_token: { type: String, trim: true, required: false, unique: true },
+    user_token: { type: String, trim: true, required: false, unique: true },
     page_token: { type: String, trim: true, required: false, unique: true },
-    long_token_expires: { type: String, trim: true, required: false },
+    user_token_expires: { type: String, trim: true, required: false },
     page_token_expires: { type: String, trim: true, required: false },
   },
   code: { type: Number, default: 0, trim: true, required: false },

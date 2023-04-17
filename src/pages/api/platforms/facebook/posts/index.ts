@@ -17,11 +17,9 @@ export default async function handler(
   await connectDB();
 
   const user = await getAuthUser(req, res);
-  if (!user)
+  if (!user || !user.facebook?.page_token)
     return res.status(401).json({ success: false, error: "Not logged in" });
   const { page_token } = user.facebook;
-  if (!page_token)
-    return res.status(401).json({ success: false, error: "No page token" });
 
   const { method } = req;
 
@@ -54,11 +52,10 @@ export default async function handler(
       break;
     case "POST":
       try {
-        const { page_id } = user.facebook;
         const { message } = req.body;
 
         const postResponse = await axios.post(
-          `https://graph.facebook.com/${page_id}/feed`,
+          `https://graph.facebook.com/me/feed`,
           {
             message,
             access_token: page_token,
