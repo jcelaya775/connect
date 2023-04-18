@@ -1,6 +1,28 @@
 import { useState } from "react";
 import Link from 'next/link'
 
+const pendFriends = [
+  {
+    id: 11,
+    name: "Babe Ruth",
+    avatar: "https://randomuser.me/api/portraits/men/9.jpg"
+  },
+  {
+    id: 12,
+    name: "Serena Williams",
+    avatar: "https://randomuser.me/api/portraits/women/3.jpg"
+  },
+  {
+    id: 13,
+    name: "Hillary Clinton",
+    avatar: "https://randomuser.me/api/portraits/women/4.jpg"
+  },
+  {
+    id: 14,
+    name: "Donald Trump",
+    avatar: "https://randomuser.me/api/portraits/men/10.jpg"
+  }
+]
 const friends = [
   {
     id: 1,
@@ -56,12 +78,12 @@ const friends = [
 
 const FriendsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [pendingFriends, setPendingFriends] = useState(friends.slice(0, 0));
+  const [pendingFriends, setPendingFriends] = useState(pendFriends.slice(0, 4));
   const [allFriends, setAllFriends] = useState(friends);
 
   const handleAddFriend = (friend:any) => {
-    const newPendingFriends = [...pendingFriends, friend];
-    const newAllFriends = allFriends.filter((f) => f.id !== friend.id);
+    const newPendingFriends = pendingFriends.filter((f) => f.id !== friend.id);
+    const newAllFriends = [...allFriends, friend];
     setPendingFriends(newPendingFriends);
     setAllFriends(newAllFriends);
   };
@@ -82,7 +104,7 @@ const FriendsPage = () => {
 
   return (
     <div className="max-w-3xl mx-auto">
-      <div className="p-4">
+      <div className="p-4 mt-4">
         <input
           placeholder="Search friends"
           className="w-full rounded-md h-10 pl-5"
@@ -90,7 +112,7 @@ const FriendsPage = () => {
           onChange={handleSearch}
         />
       </div>
-      <div className="p-4">
+      <div className="p-4 mt-8">
         <h2 className="text-xl font-medium mb-4">Pending friends</h2>
         {pendingFriends.length > 0 ? (
           <div className="card bg-white p-4 max-h-72 overflow-y-scroll">
@@ -110,11 +132,19 @@ const FriendsPage = () => {
                       <h3 className="font-medium">{friend.name}</h3>
                       <p className="text-gray-500">Pending approval</p>
                     </div>
-                    <button
-                      className="btn btn-accent"
-                      onClick={() => handleRemoveFriend(friend)}
-                    >
-                      Remove
+                    <button title="Accept" onClick={() => handleAddFriend(friend)}
+                      className="inline-flex items-center px-0 py-0 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </button>
+                    <div className="divider divider-horizontal"></div>
+                    <button title="Decline" onClick={() => handleRemoveFriend(friend)}
+                      className="inline-flex items-center px-0 py-0 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+
                     </button>
                   </div>
                 </li>
