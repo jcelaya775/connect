@@ -1,6 +1,5 @@
 import React from "react";
 import SideNav from "./SideNav";
-import FriendsModal from "./friends-list-modal";
 import EditProfileModal from "./edit-profile-modal";
 import Post from "./Post";
 import { platformTypes } from "@/types/platform";
@@ -28,7 +27,8 @@ export const UserProfilePage = () => {
                           src="https://picsum.photos/200"
                           alt="Profile Picture"
                           className="rounded-full ml-0 mx-auto border-white border-2"
-                        ></img>
+                        >
+                        </img>
                         {/* <!-- Edit Profile Picture Button --> */}
                         <label
                           htmlFor="edit-profile-modal"
