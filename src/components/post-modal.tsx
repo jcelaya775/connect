@@ -7,7 +7,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { platformTypes } from "@/types/platform";
 
-const PostModal = ({ newPost }: { newPost: boolean }) => {
+const PostModal = ({ newPost = true }: { newPost: boolean }) => {
   const queryClient = useQueryClient();
 
   const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
@@ -78,7 +78,7 @@ const PostModal = ({ newPost }: { newPost: boolean }) => {
     {
       onSuccess: () => {
         // Clear the input fields
-        queryClient.invalidateQueries(["connectPosts"]);
+        queryClient.invalidateQueries(["posts"]);
         resetPost();
       },
     }
