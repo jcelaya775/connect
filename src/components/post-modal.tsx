@@ -30,32 +30,59 @@ const PostModal = ({ newPost }: { newPost: boolean }) => {
     setDescription("");
     setUpload("no file uploaded");
     setInstagramChecked(false);
-    setFacebookChecked(false);
+    setFacebookChecked(true);
     setConnectChecked(true);
     setInstagramAudience('');
     setFacebookAudience('');
     setConnectAudience('');
   };
 
-  const createPostMutation = useMutation(
-    async (postData: any) => {
-      const res = await axios.post("/api/posts", postData);
-
-      if (res.data.success === false) {
-        throw new Error("Error creating post");
-      }
-
-      console.log(res.data);
-      return res.data;
-    },
-    {
-      onSuccess: () => {
-        // Clear the input fields
-        queryClient.invalidateQueries(["connectPosts"]);
-        resetPost();
-      },
+  const postToConnect = async (postData: any) => {
+    const res = await axios.post("/api/posts", postData);
+  
+    if (res.data.success === false) {
+      throw new Error("Error posting to Connect");
     }
-  );
+  
+    console.log(res.data);
+    return res.data;
+  };
+
+const postToFacebook = async (postData: any) => {
+  const res = await axios.post("/api/platforms/facebook/posts", postData);
+
+  if (res.data.success === false) {
+    throw new Error("Error posting to Facebook");
+  }
+
+  console.log(res.data);
+  return res.data;
+};
+
+const createPostMutation = useMutation(
+  async (postData: any) => {
+    const results = [];
+
+    if (postData.platforms.includes(platformTypes.connect)) {
+      const connectResult = await postToConnect(postData);
+      results.push(connectResult);
+    }
+
+    if (postData.platforms.includes(platformTypes.facebook)) {
+      const facebookResult = await postToFacebook(postData);
+      results.push(facebookResult);
+    }
+
+    return results;
+  },
+  {
+    onSuccess: () => {
+      // Clear the input fields
+      queryClient.invalidateQueries(["connectPosts"]);
+      resetPost();
+    },
+  }
+);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
