@@ -39,50 +39,50 @@ const PostModal = ({ newPost }: { newPost: boolean }) => {
 
   const postToConnect = async (postData: any) => {
     const res = await axios.post("/api/posts", postData);
-  
+
     if (res.data.success === false) {
       throw new Error("Error posting to Connect");
     }
-  
+
     console.log(res.data);
     return res.data;
   };
 
-const postToFacebook = async (postData: any) => {
-  const res = await axios.post("/api/platforms/facebook/posts", postData);
+  const postToFacebook = async (postData: any) => {
+    const res = await axios.post("/api/platforms/facebook/posts", postData);
 
-  if (res.data.success === false) {
-    throw new Error("Error posting to Facebook");
-  }
-
-  console.log(res.data);
-  return res.data;
-};
-
-const createPostMutation = useMutation(
-  async (postData: any) => {
-    const results = [];
-
-    if (postData.platforms.includes(platformTypes.connect)) {
-      const connectResult = await postToConnect(postData);
-      results.push(connectResult);
+    if (res.data.success === false) {
+      throw new Error("Error posting to Facebook");
     }
 
-    if (postData.platforms.includes(platformTypes.facebook)) {
-      const facebookResult = await postToFacebook(postData);
-      results.push(facebookResult);
-    }
+    console.log(res.data);
+    return res.data;
+  };
 
-    return results;
-  },
-  {
-    onSuccess: () => {
-      // Clear the input fields
-      queryClient.invalidateQueries(["connectPosts"]);
-      resetPost();
+  const createPostMutation = useMutation(
+    async (postData: any) => {
+      const results = [];
+
+      if (postData.connect.platforms.includes(platformTypes.connect)) {
+        const connectResult = await postToConnect(postData.connect);
+        results.push(connectResult);
+      }
+
+      if (postData.connect.platforms.includes(platformTypes.facebook)) {
+        const facebookResult = await postToFacebook(postData.facebook);
+        results.push(facebookResult);
+      }
+
+      return results;
     },
-  }
-);
+    {
+      onSuccess: () => {
+        // Clear the input fields
+        queryClient.invalidateQueries(["connectPosts"]);
+        resetPost();
+      },
+    }
+  );
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -93,11 +93,16 @@ const createPostMutation = useMutation(
 
     // Define postData object based on your form inputs
     const postData = {
-      platforms,
-      content: {
-        body: description,
+      connect: {
+        platforms,
+        content: {
+          body: description,
+        },
+        // image: inputRef.current.files[0],
       },
-      // image: inputRef.current.files[0],
+      facebook: {
+        message: description,
+      },
     };
 
     // Call the createPostMutation hook
