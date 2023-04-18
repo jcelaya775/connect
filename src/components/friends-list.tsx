@@ -104,7 +104,7 @@ const FriendsPage = () => {
 
   return (
     <div className="max-w-3xl mx-auto">
-      <div className="p-4 mt-4">
+      <div className="px-8 sm:px-24 lg:px-10 mt-4">
         <input
           placeholder="Search friends"
           className="w-full rounded-md h-10 pl-5"
@@ -112,11 +112,12 @@ const FriendsPage = () => {
           onChange={handleSearch}
         />
       </div>
-      <div className="p-4 mt-8">
+      {pendingFriends.length > 0 ? (
+      <div className="p-8 sm:px-24 lg:px-10 mt-0">
         <h2 className="text-xl font-medium mb-4">Pending friends</h2>
-        {pendingFriends.length > 0 ? (
-          <div className="card bg-white p-4 max-h-72 overflow-y-scroll">
-            <ul className="grid grid-cols-2 gap-4">
+        
+          <div className="card bg-white p-4 h-max overflow-y-scroll">
+            <ul className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {pendingFriends.map((friend) => (
                 <li
                   key={friend.id}
@@ -132,34 +133,37 @@ const FriendsPage = () => {
                       <h3 className="font-medium">{friend.name}</h3>
                       <p className="text-gray-500">Pending approval</p>
                     </div>
+                    <div className="tooltip tooltip-left" data-tip="Accept">
                     <button title="Accept" onClick={() => handleAddFriend(friend)}
-                      className="inline-flex items-center px-0 py-0 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                      className="inline-flex items-center px-0 py-0 mr-2 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
-                    </button>
-                    <div className="divider divider-horizontal"></div>
+                      </button>
+                      </div>
+                    {/* <div className="md:divider md:divider-horizontal"></div> */}
+                    <div className="tooltip tooltip-left" data-tip="Deny">
                     <button title="Decline" onClick={() => handleRemoveFriend(friend)}
                       className="inline-flex items-center px-0 py-0 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
 
-                    </button>
+                      </button>
+                      </div>
                   </div>
                 </li>
               ))}
             </ul>
           </div>
-        ) : (
-          <p className="text-center">Nothing to see here.</p>
-        )}
+        
       </div>
-      <div className="divider"></div>
-      <div className="p-4">
+        ) : (<></>)}
+      <div className="px-8 sm:px-24 lg:px-10 mt-0 divider"></div>
+      <div className="px-8 sm:px-24 lg:px-10 mt-0">
         <h2 className="text-xl font-medium mb-4">All friends</h2>
-        <div className="card bg-white p-4 max-h-96 overflow-y-scroll">
-        <ul className="grid grid-cols-2 gap-4">
+        <div className="card bg-white p-4 h-max">
+        <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {allFriends.map((friend) => (
         <li
           key={friend.id}
@@ -176,7 +180,7 @@ const FriendsPage = () => {
               <p className="text-gray-500">Friend</p>
             </div>
             <button
-              className="btn btn-primary">
+              className="btn btn-primary btn-sm normal-case">
               <Link href={`/${friend.name.replace(" ","")}`}>View Profile</Link>
             </button>
           </div>
