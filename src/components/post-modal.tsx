@@ -68,7 +68,7 @@ const PostModal = ({ newPost = true }: { newPost: boolean }) => {
         results.push(facebookResult);
       }
 
-      // TODO: If posted to other platforms, store post IDs in Connect post
+      // TODO: If posted to other platforms, store post ID in Connect post
       if (postData.connect.platforms.includes(platformTypes.connect)) {
         const connectResult = await postToConnect(postData.connect);
         results.push(connectResult);

@@ -1,6 +1,7 @@
 import useUser from "@/hooks/useUser";
 import { IPost } from "@/models/Post";
-import { Data } from "@/pages/api/posts/[pid]/likes";
+import { Data as ConnectData } from "@/pages/api/posts/[pid]/likes";
+import { Data as FacebookData } from "@/pages/api/platforms/facebook/posts/[pid]/likes";
 import { platformTypes } from "@/types/platform";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
@@ -14,72 +15,84 @@ export default function LikeButton({ postId, platform }: LikeButtonProps) {
   const queryClient = useQueryClient();
   const { user, isLoading: userLoading } = useUser();
 
-  // const {
-  //   isLoading: fbLoading,
-  //   error: fbError,
-  //   data: fbData,
-  // } = useQuery(["facebook", "posts", postId, "likes"], async () => {
-  //   const { data } = await axios.get(
-  //     `/api/platforms/facebook/posts/${postId}/likes`
-  //   );
+  let queryKey: string[];
+  let queryFn: () => Promise<boolean>;
+  let mutationFn;
 
-  //   data.includes((post: any) => post.likes.connect.user_id === user?._id);
+  switch (platform) {
+    case platformTypes.facebook:
+      queryKey = ["facebook", "posts", postId, "likes", "isLiked"];
+      queryFn = async () => {
+        const { data }: { data: FacebookData } = await axios.get(
+          `/api/platforms/facebook/posts/${postId}/likes`
+        );
 
-  //   return data;
-  // });
+        const liked = data.likes!.some((like) => user!._id == like.user_id);
+        return liked;
+      };
+      mutationFn = async ({ dislike = false }: { dislike: boolean }) => {
+        if (dislike)
+          await axios.delete(`/api/platforms/facebook/posts/${postId}/likes`);
+        else await axios.post(`/api/platforms/facebook/posts/${postId}/likes`);
 
-  // Connect likes
-  const { data: likedOnConnect, isLoading: connectLoading } = useQuery({
-    queryKey: ["connect", "posts", postId, "likes", "isLiked"],
-    queryFn: async () => {
-      const { data }: { data: Data } = await axios.get(
-        `/api/posts/${postId}/likes`
-      );
+        const { data: likeData } = await axios.get(
+          `/api/platforms/facebook/posts/${postId}/likes`
+        );
+        return likeData;
+      };
+      break;
+    default: // connect
+      queryKey = ["connect", "posts", postId, "likes", "isLiked"];
+      queryFn = async () => {
+        const { data }: { data: ConnectData } = await axios.get(
+          `/api/posts/${postId}/likes`
+        );
 
-      const liked = data.likes!.some((like) => user!._id == like.user_id);
-      return liked;
-    },
+        const liked = data.likes!.some((like) => user!._id == like.user_id);
+        return liked;
+      };
+      mutationFn = async ({ dislike = false }: { dislike: boolean }) => {
+        console.log("dislike", dislike);
+        if (dislike) await axios.delete(`/api/posts/${postId}/likes`);
+        else await axios.post(`/api/posts/${postId}/likes`);
+
+        const { data: likeData } = await axios.get(
+          `/api/posts/${postId}/likes`
+        );
+        return likeData;
+      };
+      break;
+  }
+
+  const { data: liked, isLoading } = useQuery({
+    queryKey,
+    queryFn,
     enabled: !userLoading,
   });
 
-  const connectLikeMutation = useMutation({
-    mutationFn: async ({ dislike = false }: { dislike: boolean }) => {
-      if (dislike == true) {
-        const { data } = await axios.delete(`/api/posts/${postId}/likes`);
-        return data.likeCount;
-      } else {
-        const { data } = await axios.post(`/api/posts/${postId}/likes`);
-        return data.LikeCount;
-      }
-    },
-    onSuccess: (likeCount) => {
-      queryClient.invalidateQueries(["connect", "posts", postId, "likes"]);
+  const likeMutation = useMutation({
+    mutationFn,
+    onSuccess: () => {
+      console.log(queryKey.slice(-1));
+      queryClient.invalidateQueries(queryKey.slice(0, -1));
     },
   });
-
-  // Facebook likes
-  const facebookLike = async (e: React.MouseEvent<HTMLElement>) => {
-    e.preventDefault();
-
-    // TODO: Call POST api/platforms/facebook/posts/[pid]/likes
-    // await axios.post(`/api/platforms/facebook/posts/${postId}/likes`);
-  };
 
   const likeButton = (() => {
     switch (platform) {
       case platformTypes.connect:
         return (
           <button
-            disabled={connectLoading}
+            disabled={isLoading}
             onClick={() =>
-              likedOnConnect
-                ? connectLikeMutation.mutate({ dislike: true })
-                : connectLikeMutation.mutate({ dislike: false })
+              liked
+                ? likeMutation.mutate({ dislike: true })
+                : likeMutation.mutate({ dislike: false })
             }
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              fill={likedOnConnect ? "black" : "none"}
+              fill={liked ? "black" : "none"}
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
