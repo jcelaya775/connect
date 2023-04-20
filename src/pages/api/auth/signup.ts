@@ -22,7 +22,8 @@ export default async function handler(
   switch (method) {
     case "POST":
       try {
-        const { name, email, password, username } = req.body;
+        // const { name, email, password, username } = req.body;
+        const { name, email, username } = req.body;
 
         //make sure email follows conventions
         const validationResult = userValidationSchema.validate(req.body);
@@ -36,7 +37,7 @@ export default async function handler(
           break;
         }
         //store the data into const's
-        const hashedPassword = await hashPassword(password);
+        // const hashedPassword = await hashPassword(password);
         const vCode = Math.round(Math.random() * (99999 - 11111) + 11111);
 
         if (await User.findOne({ username })) {
@@ -58,7 +59,7 @@ export default async function handler(
           username,
           email,
           name,
-          password: hashedPassword,
+          // password: hashedPassword,
           code: vCode,
         });
 

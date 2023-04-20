@@ -14,6 +14,9 @@ export interface IUser extends Document {
     user_token?: string;
     user_token_expires?: string;
   };
+  friends: [user_id: string];
+  pending_friends: [user_id: string];
+  theme: string;
   code: Number;
 }
 
@@ -31,6 +34,9 @@ const UserSchema = new Schema<IUser>({
     user_token_expires: { type: String, trim: true, required: false },
     page_token_expires: { type: String, trim: true, required: false },
   },
+  friends: [{ user_id: { type: SchemaTypes.ObjectId, ref: "User" } }],
+  pending_friends: [{ user_id: { type: SchemaTypes.ObjectId, ref: "User" } }],
+  theme: { type: String, default: "corporate", trim: true, required: false },
   code: { type: Number, default: 0, trim: true, required: false },
 });
 
