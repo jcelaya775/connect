@@ -358,7 +358,7 @@ export default function Setting() {
                           </div>
                         </div>
                       </div>
-                      <div className="card w-full md:w-1/3 rounded-xl border-2 shadow-xl bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-[#FF7A00] via-[#FF0069] to-[#D300C5]">
+                      <div className="card w-full rounded-xl border-2 shadow-xl bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-[#FF7A00] via-[#FF0069] to-[#D300C5]">
                         <div className="card-body p-4 flex-col justify-between">
                           <div className="flex flex-row w-full justify-between">
                             <div className="card-title pb-0 mb-0 text-white">
@@ -367,26 +367,27 @@ export default function Setting() {
                                 alt="Instagram Logo"
                                 className="w-7"
                               ></Image>
-                              Instagram
-                            </div>
+                                Instagram
+                              </div>
+                              
                             <div className="card-actions justify-end">
-                              <label className="btn btn-sm bg-white border-white text-[#FF0069] px-6 normal-case shadow-xl">
+                              <label className="btn btn-xs bg-white border-white text-[#FF0069] px-6 normal-case shadow-xl">
                                 Login
                               </label>
                             </div>
                           </div>
-                          <div className="divider basis-full pt-0 mt-0 before:bg-white after:bg-white"></div>
-                          <div className="text-white">
+                          {/* <div className="divider basis-full pt-0 mt-0 before:bg-white after:bg-white"></div> */}
+                          {/* <div className="text-white">
                             Default Post:
                             <input
                               type="checkbox"
                               className="toggle toggle-sm checked:bg-[#FF0069] mx-2 rounded-full inline-block align-text-bottom"
                             />
-                          </div>
+                          </div> */}
                           
                         </div>
                       </div>
-                      <div className="card w-full md:w-1/3 bg-black rounded-xl border-2 shadow-xl">
+                      <div className="card w-full bg-black rounded-xl border-2 shadow-xl">
                         <div className="card-body p-4 flex-col justify-between">
                           <div className="flex flex-row w-full justify-between">
                             <div className="card-title pb-0 mb-0 text-white">
@@ -398,19 +399,19 @@ export default function Setting() {
                               TikTok
                             </div>
                             <div className="card-actions justify-end">
-                              <label className="btn btn-sm bg-white border-white text-black hover:bg-[#00f2ea] px-6 normal-case shadow-xl">
+                              <label className="btn btn-xs bg-white border-white text-black hover:bg-[#00f2ea] px-6 normal-case shadow-xl">
                                 Login
                               </label>
                             </div>
                           </div>
-                          <div className="divider basis-full pt-0 mt-0 before:bg-white after:bg-white"></div>
+                          {/* <div className="divider basis-full pt-0 mt-0 before:bg-white after:bg-white"></div>
                           <div className="text-white">
                             Default Post:
                             <input
                               type="checkbox"
                               className="toggle toggle-sm checked:bg-[#00f2ea] mx-2 rounded-full inline-block align-text-bottom"
                             />
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                     </div>

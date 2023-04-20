@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import Image from "next/image";
-import Insta from "../images/insta_logo.svg";
-import Facebook from "../images/facebook_logo.svg";
+import Insta from "../images/insta_color_logo.png";
+import Facebook from "../images/fb_color_logo.png";
 import Connect from "../images/connect_logo.svg";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
@@ -188,7 +188,7 @@ const PostModal = () => {
                 type="checkbox"
                 onClick={toggleConnect}
                 checked={connectChecked}
-                className="toggle toggle-sm toggle-primary rounded-full inline-block align-middle"
+                className="toggle toggle-md toggle-primary rounded-full inline-block align-middle"
               />
               <Image
                 src={Connect}
@@ -196,18 +196,8 @@ const PostModal = () => {
                 className="w-5 h-5 inline-block align-middle ml-2 mr-2"
               />
               Connect
-              <select
-                onClick={() => setConnectAudience(false)}
-                className="select select-xs border-gray-400 w-1/2 max-w-xs rounded-full ml-4 sm:ml-7"
-              >
-                <option disabled selected={connectAudience}>
-                  -- Choose Audience --
-                </option>
-                <option>Public</option>
-                <option>Private</option>
-              </select>
+            </div> */}
             </div>
-
             <div className="modal-action">
               <label
                 htmlFor="create-post"
