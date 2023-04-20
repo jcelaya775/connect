@@ -1,3 +1,4 @@
+import { themeTypes } from "@/types/theme";
 import mongoose, { Document, Schema, SchemaTypes, models } from "mongoose";
 
 export interface IUser extends Document {
@@ -16,7 +17,9 @@ export interface IUser extends Document {
   };
   friends: [user_id: string];
   pending_friends: [user_id: string];
-  theme: string;
+  settings: {
+    theme: themeTypes;
+  };
   code: Number;
 }
 
@@ -36,7 +39,15 @@ const UserSchema = new Schema<IUser>({
   },
   friends: [{ user_id: { type: SchemaTypes.ObjectId, ref: "User" } }],
   pending_friends: [{ user_id: { type: SchemaTypes.ObjectId, ref: "User" } }],
-  theme: { type: String, default: "corporate", trim: true, required: false },
+  settings: {
+    theme: {
+      type: String,
+      default: "corporate",
+      trim: true,
+      required: false,
+      enum: Object.values(themeTypes),
+    },
+  },
   code: { type: Number, default: 0, trim: true, required: false },
 });
 
