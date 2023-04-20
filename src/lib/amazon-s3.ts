@@ -7,36 +7,28 @@ const s3 = new S3({
   region: process.env.AWS_REGION,
 });
 
-export async function uploadFileToS3(buffer: Buffer): Promise<string> {
+
+export async function uploadFileToS3(buffer: Buffer, name: string): Promise<string> {
   try {
     // Read the contents of the file into a buffer
     // Upload the file to S3
     await s3
       .upload({
         Bucket: process.env.AWS_BUCKET_NAME || "default",
-        Key: process.env.AWS_ACCESS_KEY_ID || "default",
+        Key: name || "default",
         Body: buffer,
       })
       .promise();
 
-    console.log(
-      `File uploaded to S3 bucket ${process.env.AWS_BUCKET_NAME} with key ${process.env.AWS_ACCESS_KEY_ID}`
-    );
-
     // Generate a signed URL for the file with no expiration
     const url = await s3.getSignedUrlPromise("getObject", {
       Bucket: process.env.AWS_BUCKET_NAME,
-      Key: process.env.AWS_ACCESS_KEY_ID,
+      Key: name,
       Expires: 0,
     });
 
-    console.log(`Signed URL for file ${process.env.AWS_ACCESS_KEY_ID}: ${url}`);
-
     return url;
   } catch (error) {
-    console.error(
-      `Failed to upload file to S3 bucket ${process.env.AWS_BUCKET_NAME} with key ${process.env.AWS_ACCESS_KEY_ID}: ${error}`
-    );
     throw error;
   }
 }
