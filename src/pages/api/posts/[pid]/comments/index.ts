@@ -6,7 +6,8 @@ import { getAuthUser } from "@/lib/auth";
 
 type GetData = {
   success: boolean;
-  data?: IComment[];
+  comments?: IComment[];
+  commentCount?: number;
   error?: string;
 };
 
@@ -39,10 +40,12 @@ export default async function handler(
         if (!post) return res.status(404).json({ success: false });
 
         const comments: IComment[] = post.comments ?? [];
+        const commentCount = comments.length;
 
         res.status(200).json({
           success: true,
-          data: comments,
+          commentCount,
+          comments,
         });
       } catch (error: any) {
         res.status(400).json({ success: false, error: error.message });

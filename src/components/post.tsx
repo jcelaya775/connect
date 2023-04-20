@@ -5,6 +5,7 @@ import PostStatsBar from "./post-stats-bar";
 import OptionsDropdown from "./options-dropdown";
 
 type PostProps = {
+  postId: string;
   author: string;
   mainPlatform: platformTypes;
   platforms: platformTypes[];
@@ -32,45 +33,28 @@ type PostProps = {
 };
 
 const Post = ({
+  postId,
   author,
   mainPlatform,
   platforms,
   content,
-  connectStats,
-  facebookStats,
-  instagramStats,
-  tiktokStats,
 }: PostProps) => {
   const statsBar = (platform: platformTypes) => {
     switch (platform) {
       case platformTypes.connect:
         return (
-          <PostStatsBar
-            platform={platformTypes.connect}
-            connectStats={connectStats}
-          />
+          <PostStatsBar postId={postId} platform={platformTypes.connect} />
         );
       case platformTypes.facebook:
         return (
-          <PostStatsBar
-            platform={platformTypes.facebook}
-            facebookStats={facebookStats}
-          />
+          <PostStatsBar postId={postId} platform={platformTypes.facebook} />
         );
       case platformTypes.instagram:
         return (
-          <PostStatsBar
-            platform={platformTypes.instagram}
-            instagramStats={instagramStats}
-          />
+          <PostStatsBar postId={postId} platform={platformTypes.instagram} />
         );
       case platformTypes.tiktok:
-        return (
-          <PostStatsBar
-            platform={platformTypes.tiktok}
-            tiktokStats={tiktokStats}
-          />
-        );
+        return <PostStatsBar postId={postId} platform={platformTypes.tiktok} />;
     }
   };
 
@@ -117,7 +101,7 @@ const Post = ({
             {content.image && (
               <Image
                 className="w-full h-full"
-                src={content.image}
+                src={content.image.url}
                 alt="post image"
               />
             )}

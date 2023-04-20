@@ -63,14 +63,15 @@ const PostModal = ({ newPost = true }: { newPost: boolean }) => {
     async (postData: any) => {
       const results = [];
 
-      if (postData.connect.platforms.includes(platformTypes.connect)) {
-        const connectResult = await postToConnect(postData.connect);
-        results.push(connectResult);
-      }
-
       if (postData.connect.platforms.includes(platformTypes.facebook)) {
         const facebookResult = await postToFacebook(postData.facebook);
         results.push(facebookResult);
+      }
+
+      // TODO: If posted to other platforms, store post IDs in Connect post
+      if (postData.connect.platforms.includes(platformTypes.connect)) {
+        const connectResult = await postToConnect(postData.connect);
+        results.push(connectResult);
       }
 
       return results;
@@ -78,7 +79,7 @@ const PostModal = ({ newPost = true }: { newPost: boolean }) => {
     {
       onSuccess: () => {
         // Clear the input fields
-        queryClient.invalidateQueries(["posts"]);
+        queryClient.invalidateQueries(["connect", "posts"]);
         resetPost();
       },
     }
