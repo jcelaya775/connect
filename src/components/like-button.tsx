@@ -52,7 +52,6 @@ export default function LikeButton({ postId, platform }: LikeButtonProps) {
         return liked;
       };
       mutationFn = async ({ dislike = false }: { dislike: boolean }) => {
-        console.log("dislike", dislike);
         if (dislike) await axios.delete(`/api/posts/${postId}/likes`);
         else await axios.post(`/api/posts/${postId}/likes`);
 
@@ -73,7 +72,6 @@ export default function LikeButton({ postId, platform }: LikeButtonProps) {
   const likeMutation = useMutation({
     mutationFn,
     onSuccess: () => {
-      console.log(queryKey.slice(-1));
       queryClient.invalidateQueries(queryKey.slice(0, -1));
     },
   });

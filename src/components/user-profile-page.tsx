@@ -1,14 +1,20 @@
-import React from "react";
+import { useState } from "react";
 import SideNav from "./SideNav";
 import EditProfileModal from "./edit-profile-modal";
-import Post from "./Post";
+import Post from "./post";
 import { platformTypes } from "@/types/platform";
 import cityImage from "../images/cityscape.jpg";
+import Image from "next/image";
 
 export const UserProfilePage = () => {
+  const [friendModalVisible, setFriendsModalVisible] = useState(false);
+  const [editProfileModalVisible, setEditProfileModalVisible] = useState(false);
+
   return (
     <>
-      <EditProfileModal />
+      {editProfileModalVisible && (
+        <EditProfileModal setVisible={setEditProfileModalVisible} />
+      )}
       <div className="min-h-screen min-w-full bg-base-200 pt-16 pb-8">
         <span className="hidden sm:block">
           <SideNav />
@@ -33,6 +39,7 @@ export const UserProfilePage = () => {
                         <label
                           htmlFor="edit-profile-modal"
                           className="btn-outline btn-square bg-white cursor-pointer absolute bottom-8 right-8 rounded-full w-8 h-8 flex items-center justify-center"
+                          onClick={() => setEditProfileModalVisible(true)}
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -67,10 +74,16 @@ export const UserProfilePage = () => {
                         <h2 className="text-lg font-bold text-gray-700 mb-4">
                           Friends
                         </h2>
-                        <label htmlFor="my-modal" className="btn">
+                        <label
+                          htmlFor="my-modal"
+                          className="btn"
+                          onClick={() => setFriendsModalVisible(true)}
+                        >
                           View Friends List
                         </label>
-                        <FriendsModal />
+                        {friendModalVisible && (
+                          <FriendsModal setVisible={setFriendsModalVisible} />
+                        )}
                       </div>
                     </div> */}
                   </div>
@@ -78,35 +91,15 @@ export const UserProfilePage = () => {
                 <h2 className="text-xl font-bold text-gray-700 ml-1 mb-0">
                   Posts
                 </h2>
-                <Post
+                {/* <Post
+                  postId="1231"
                   author="John Doe"
-                  mainPlatform={platformTypes.facebook}
-                  platforms={[platformTypes.facebook, platformTypes.instagram]}
+                  mainPlatform={platformTypes.connect}
+                  platforms={[platformTypes.connect]}
                   content={{
                     body: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde laudantium enim ab doloremque quod velit tenetur delectus hic labore aliquam, soluta id magni praesentium facere quos rem facilis numquam dolore.",
                   }}
-                  facebookStats={{
-                    likes: 100,
-                    comments: 50,
-                  }}
-                  instagramStats={{
-                    likes: 100,
-                    comments: 50,
-                  }}
-                />
-                <Post
-                  author="mename"
-                  mainPlatform={platformTypes.instagram}
-                  platforms={[platformTypes.instagram]}
-                  content={{
-                    body: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Obcaecati ea praesentium aperiam temporibus cum ut blanditiis. Perferendis, dicta voluptate totam omnis nihil suscipit at perspiciatis quam quidem. Autem sapiente cum magni. Cupiditate quaerat sed totam illum fugiat consequatur. Repellat inventore qui error vero amet corporis neque possimus odio assumenda sint!",
-                    image: cityImage,
-                  }}
-                  instagramStats={{
-                    likes: 1001,
-                    comments: 302,
-                  }}
-                />
+                /> */}
               </div>
             </div>
             <div className=" flex-2 pr-6 w-1/4 hidden xl:block box-border text-center">

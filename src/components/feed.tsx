@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState } from "react";
 import SideNav from "./SideNav";
 import Post from "./post";
 import PostModal from "./post-modal";

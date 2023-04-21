@@ -8,32 +8,10 @@ import axios from "axios";
 type PostStatsProps = {
   postId: string;
   platform: platformTypes;
-  connectStats?: {
-    likes: number;
-    comments: number;
-  };
-  facebookStats?: {
-    likes: number;
-    comments: number;
-  };
-  instagramStats?: {
-    likes: number;
-    comments: number;
-  };
-  tiktokStats?: {
-    likes: number;
-    comments: number;
-  };
 };
 
-export default function PostStatsBar({
-  postId,
-  platform,
-  connectStats,
-  facebookStats,
-  instagramStats,
-  tiktokStats,
-}: PostStatsProps) {
+export default function PostStatsBar({ postId, platform }: PostStatsProps) {
+  // Connect stats
   const { data: connectLikes, isLoading: connectLikeLoading } = useQuery({
     queryKey: ["connect", "posts", postId, "likes", "count"],
     queryFn: async () => {
@@ -42,6 +20,7 @@ export default function PostStatsBar({
     },
     cacheTime: 0,
     refetchOnWindowFocus: true,
+    enabled: platform == platformTypes.connect,
   });
   const { data: connectComments, isLoading: connectCommentLoading } = useQuery({
     queryKey: ["connect", "posts", postId, "comments", "count"],
@@ -49,7 +28,31 @@ export default function PostStatsBar({
       const { data } = await axios.get(`/api/posts/${postId}/comments`);
       return data.commentCount;
     },
+    enabled: platform == platformTypes.connect,
   });
+
+  // Facebook stats
+  const { data: facebookLikes, isLoading: facebookLikesLoading } = useQuery({
+    queryKey: ["facebook", "posts", postId, "likes", "count"],
+    queryFn: async () => {
+      const { data } = await axios.get(
+        `/api/platforms/facebook/posts/${postId}/likes`
+      );
+      return data;
+    },
+    enabled: platform == platformTypes.facebook,
+  });
+  const { data: facebookComments, isLoading: facebookCommentsLoading } =
+    useQuery({
+      queryKey: ["facebook", "posts", postId, "comments", "count"],
+      queryFn: async () => {
+        const { data } = await axios.get(
+          `/api/platforms/facebook/posts/${postId}/comments`
+        );
+        return data;
+      },
+      enabled: platform == platformTypes.facebook,
+    });
 
   const icon = (() => {
     switch (platform) {
@@ -84,11 +87,11 @@ export default function PostStatsBar({
       case platformTypes.connect:
         return connectLikeLoading ? 0 : connectLikes;
       case platformTypes.facebook:
-        return facebookStats!.likes;
-      case platformTypes.instagram:
-        return instagramStats!.likes;
-      case platformTypes.tiktok:
-        return tiktokStats!.likes;
+        return facebookLikesLoading ? 0 : facebookLikes;
+      // case platformTypes.instagram:
+      //   return instagramStats!.likes;
+      // case platformTypes.tiktok:
+      //   return tiktokStats!.likes;
     }
   })();
 
@@ -96,12 +99,12 @@ export default function PostStatsBar({
     switch (platform) {
       case platformTypes.connect:
         return connectComments;
-      case platformTypes.facebook:
-        return facebookStats!.comments;
-      case platformTypes.instagram:
-        return instagramStats!.comments;
-      case platformTypes.tiktok:
-        return tiktokStats!.comments;
+      // case platformTypes.facebook:
+      //   return facebookStats!.comments;
+      // case platformTypes.instagram:
+      //   return instagramStats!.comments;
+      // case platformTypes.tiktok:
+      //   return tiktokStats!.comments;
     }
   })();
 

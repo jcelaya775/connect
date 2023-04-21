@@ -5,6 +5,8 @@ import { authOptions } from "./api/auth/[...nextauth]";
 import { GetServerSidePropsContext } from "next/types";
 
 export default function Profile() {
+  const [FriendsModalVisible, setFriendsModalVisible] = React.useState(false);
+
   return (
     <>
       <UserProfilePage />

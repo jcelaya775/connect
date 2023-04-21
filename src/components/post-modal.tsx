@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Insta from "../images/insta_color_logo.png";
 import Facebook from "../images/fb_color_logo.png";
@@ -7,7 +7,12 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { platformTypes } from "@/types/platform";
 
-const PostModal = ({ newPost = true }: { newPost: boolean }) => {
+type PostModalProps = {
+  setVisible: (visible: boolean) => void;
+  newPost?: boolean;
+};
+
+const PostModal = ({ setVisible, newPost = true }: PostModalProps) => {
   const queryClient = useQueryClient();
 
   const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
@@ -25,6 +30,28 @@ const PostModal = ({ newPost = true }: { newPost: boolean }) => {
   const toggleInstagram = () => setInstagramChecked(!instagramChecked);
   const toggleFacebook = () => setFacebookChecked(!facebookChecked);
   const toggleConnect = () => setConnectChecked(!connectChecked);
+
+  useEffect(() => {
+    const handleOutsideClick = (e: MouseEvent) => {
+      if ((e.target as Element)?.classList.contains("modal")) {
+        setVisible(false);
+      }
+    };
+
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setVisible(false);
+      }
+    };
+
+    document.addEventListener("click", handleOutsideClick);
+    document.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  });
 
   function resetPost() {
     setDescription("");
@@ -81,6 +108,7 @@ const PostModal = ({ newPost = true }: { newPost: boolean }) => {
         // Clear the input fields
         queryClient.invalidateQueries(["connect", "posts"]);
         resetPost();
+        setVisible(false);
       },
     }
   );
