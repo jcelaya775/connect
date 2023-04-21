@@ -311,7 +311,7 @@ export default function Setting() {
                         </div>
                       </div>
                     </div>
-                  <div className="card w-1/4 bg-base-100 shadow-xl">
+                  <div className="card flex-none w-full lg:w-1/4 bg-base-100 shadow-xl">
                     <div className="card-body p-4 flex-col">
                       <div className="card-title pb-0 mb-0">Social Media</div>
                       <div className="divider basis-full pt-0 mt-0"></div>
