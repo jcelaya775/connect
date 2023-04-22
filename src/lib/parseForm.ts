@@ -47,7 +47,14 @@ export const parseForm = async (
 
     form.parse(req, (err, fields, files) => {
       if (err) reject(err);
-      else resolve({ fields, files });
+      else {
+        if (req.body)
+          Object.entries(req.body).forEach(([key, value]) => {
+            fields[key] = value as string;
+          });
+
+        resolve({ fields, files });
+      }
     });
   });
 };
