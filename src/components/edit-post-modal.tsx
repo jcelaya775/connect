@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Insta from "../images/insta_logo.svg";
 import Facebook from "../images/facebook_logo.svg";
@@ -6,7 +6,11 @@ import Connect from "../images/connect_logo.svg";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 
-const EditPostModal = () => {
+type EditPostModalProps = {
+  setVisible: (visible: boolean) => void;
+};
+
+const EditPostModal = ({ setVisible }: EditPostModalProps) => {
   const queryClient = useQueryClient();
 
   const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
@@ -24,6 +28,28 @@ const EditPostModal = () => {
   const toggleInstagram = () => setInstagramChecked(!instagramChecked);
   const toggleFacebook = () => setFacebookChecked(!facebookChecked);
   const toggleConnect = () => setConnectChecked(!connectChecked);
+
+  useEffect(() => {
+    const handleOutsideClick = (e: MouseEvent) => {
+      if ((e.target as Element)?.classList.contains("modal")) {
+        setVisible(false);
+      }
+    };
+
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setVisible(false);
+      }
+    };
+
+    document.addEventListener("click", handleOutsideClick);
+    document.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  });
 
   function resetPost() {
     setDescription("");
@@ -71,7 +97,6 @@ const EditPostModal = () => {
 
     // Call the createPostMutation hook
     createPostMutation.mutate(postData);
-    
   };
 
   return (

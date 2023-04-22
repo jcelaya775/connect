@@ -66,7 +66,7 @@ const Post = ({
         <div className="h-4">
           <div className="relative">
             <div className="absolute right-3 top-1">
-              <OptionsDropdown />
+              <OptionsDropdown postId={postId} platforms={platforms} />
             </div>
           </div>
         </div>

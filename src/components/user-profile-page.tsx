@@ -39,7 +39,9 @@ export const UserProfilePage = () => {
                         <label
                           htmlFor="edit-profile-modal"
                           className="btn-outline btn-square bg-white cursor-pointer absolute bottom-8 right-8 rounded-full w-8 h-8 flex items-center justify-center"
-                          onClick={() => setEditProfileModalVisible(true)}
+                          onClick={() =>
+                            setEditProfileModalVisible((prev) => !prev)
+                          }
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -77,7 +79,7 @@ export const UserProfilePage = () => {
                         <label
                           htmlFor="my-modal"
                           className="btn"
-                          onClick={() => setFriendsModalVisible(true)}
+                          onClick={() => setFriendsModalVisible(prev => !prev)}
                         >
                           View Friends List
                         </label>
