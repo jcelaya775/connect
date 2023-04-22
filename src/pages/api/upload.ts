@@ -2,11 +2,11 @@ import { NextApiRequest, NextApiResponse } from "next";
 import connectDB from "@/lib/mongodb";
 import { parseForm } from "@/lib/parseForm";
 import { getAuthUser } from "@/lib/auth";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import fs from "fs";
 import formidable from "formidable";
-import { Blob } from "blob";
 import FormData from "form-data";
+import { IUser } from "@/models/User";
 
 // IMPORTANT: Prevents next from trying to parse the form
 // interface ParsedFile {
@@ -20,23 +20,30 @@ import FormData from "form-data";
 //   key?: string;
 // }
 
-export default async function handler(req, res) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   await connectDB();
-  const { method } = req;
+  const { method }: { method?: string } = req;
 
-  const user = await getAuthUser(req, res);
+  const user: IUser | null | void = await getAuthUser(req, res);
   if (!user || !user.facebook.page_token)
     return res.status(401).json({ success: false, message: "Unauthorized" });
 
   switch (method) {
     case "POST":
       try {
-        const { fields, files } = await parseForm(req);
-        const file = files.file;
+        const {
+          fields,
+          files,
+        }: { fields: formidable.Fields; files: formidable.Files } =
+          await parseForm(req);
+        const file: formidable.File = files.file as formidable.File;
 
-        const url = (file as formidable.File).filepath;
-        const buffer = fs.readFileSync(url);
-        const formData = new FormData();
+        const url: string = file.filepath;
+        const buffer: Buffer = fs.readFileSync(url);
+        const formData: FormData = new FormData();
         formData.append("access_token", user.facebook.page_token);
         formData.append("caption", "Hello World");
         formData.append("source", buffer, {
@@ -44,7 +51,7 @@ export default async function handler(req, res) {
           contentType: "image/jpeg",
         });
 
-        const response = await axios.post(
+        const response: AxiosResponse = await axios.post(
           "https://graph.facebook.com/v16.0/me/photos",
           formData,
           { headers: { ...formData.getHeaders() } }
