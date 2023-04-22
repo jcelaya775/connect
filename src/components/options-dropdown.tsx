@@ -4,29 +4,21 @@ import EditPostModal from "./edit-post-modal";
 import axios from "axios";
 import { platformTypes } from "@/types/platform";
 import { platform } from "os";
+import { IPost } from "@/models/Post";
 
 type OptionsDropdownProps = {
   postId: string;
   platforms: platformTypes[];
+  content: IPost["content"];
 };
 
-const OptionsDropdown = ({ postId, platforms }: OptionsDropdownProps) => {
+const OptionsDropdown = ({
+  postId,
+  platforms,
+  content,
+}: OptionsDropdownProps) => {
   const queryClient = useQueryClient();
   const [editModalVisible, setEditModalVisible] = useState(false);
-
-  console.log(postId);
-  console.log(platforms);
-
-  // const editPostMutation = useMutation({
-  //   mutationFn: () => {
-  //     // TODO: Edit post for all specified platforms
-  //     return true;
-  //   }
-  //   onSuccess: () => {
-  //     // TODO: Invalidate queries for all specified platforms
-  //     queryClient.invalidateQueries(["connect", "posts"]);
-  //   },
-  // });
 
   const deletePostMutation = useMutation({
     mutationFn: async () => {
@@ -44,7 +36,6 @@ const OptionsDropdown = ({ postId, platforms }: OptionsDropdownProps) => {
             } else success.facebook = true;
             break;
           default: // connect
-            console.log(`Deleting post ${postId} from connect`);
             const { data: connectData } = await axios.delete(
               `/api/posts/${postId}`
             );
@@ -74,8 +65,15 @@ const OptionsDropdown = ({ postId, platforms }: OptionsDropdownProps) => {
 
   return (
     <>
-      {editModalVisible && <EditPostModal setVisible={setEditModalVisible} />}
-      <div className="dropdown dropdown-hover dropdown-end">
+      {editModalVisible && (
+        <EditPostModal
+          postId={postId}
+          platforms={platforms}
+          content={content}
+          setVisible={setEditModalVisible}
+        />
+      )}
+      <div className="dropdown dropdown-end">
         <label tabIndex={0} className="cursor-pointer">
           <svg
             xmlns="http://www.w3.org/2000/svg"

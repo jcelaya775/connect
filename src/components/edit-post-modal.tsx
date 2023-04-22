@@ -5,16 +5,26 @@ import Facebook from "../images/facebook_logo.svg";
 import Connect from "../images/connect_logo.svg";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { platformTypes } from "@/types/platform";
+import { IPost } from "@/models/Post";
 
 type EditPostModalProps = {
+  postId: string;
+  platforms: platformTypes[];
+  content: IPost["content"];
   setVisible: (visible: boolean) => void;
 };
 
-const EditPostModal = ({ setVisible }: EditPostModalProps) => {
+const EditPostModal = ({
+  postId,
+  platforms,
+  content,
+  setVisible,
+}: EditPostModalProps) => {
   const queryClient = useQueryClient();
 
   const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
-  const [description, setDescription] = useState("");
+  const [description, setDescription] = useState(content.body);
   const [upload, setUpload] = useState("no file uploaded");
 
   const [instagramChecked, setInstagramChecked] = useState(false);
@@ -61,6 +71,56 @@ const EditPostModal = ({ setVisible }: EditPostModalProps) => {
     setFacebookAudience(true);
     setConnectAudience("public");
   }
+
+  const editPostMutation = useMutation({
+    mutationFn: async () => {
+      const updatedPost: any = {};
+
+      for (const platform in platforms) {
+        switch (platform) {
+          case platformTypes.facebook:
+            const { data: facebookData } = await axios.put(
+              `/api/platforms/facebook/posts/${postId}`,
+              {
+                message: description,
+              }
+            );
+            if (facebookData.error) {
+              updatedPost.facebook = false;
+              console.error(facebookData.error);
+            } else updatedPost.facebook = facebookData;
+            break;
+          default: // connect
+            const { data: connectData } = await axios.put(
+              `/api/posts/${postId}`,
+              {
+                content: { body: description },
+              }
+            );
+            if (connectData.error) {
+              updatedPost.connect = false;
+              console.error(connectData.error);
+            } else updatedPost.connect = connectData;
+            break;
+        }
+      }
+
+      setVisible(false);
+      return updatedPost;
+    },
+    onSuccess: () => {
+      for (const platform in platforms) {
+        switch (platform) {
+          case platformTypes.facebook:
+            queryClient.invalidateQueries(["facebook", "posts"]);
+            break;
+          default: // connect
+            queryClient.invalidateQueries(["connect", "posts"]);
+            break;
+        }
+      }
+    },
+  });
 
   const createPostMutation = useMutation(
     async (postData: any) => {
@@ -236,6 +296,7 @@ const EditPostModal = ({ setVisible }: EditPostModalProps) => {
               <button
                 type="submit"
                 className="btn btn-sm btn-primary gap-2 py-0 px-5 normal-case"
+                onClick={() => editPostMutation.mutate()}
               >
                 Update
               </button>
