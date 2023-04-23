@@ -3,7 +3,9 @@ import connectDB from "@/lib/mongodb";
 import { getAuthUser } from "@/lib/auth";
 import { uploadFileToS3 } from "@/lib/amazon-s3";
 import formidable from "formidable";
+import FormData from "form-data";
 import fs from "fs";
+import { parseForm } from "@/lib/parseForm";
 
 // IMPORTANT: Prevents next from trying to parse the form
 export const config = {
@@ -11,10 +13,10 @@ export const config = {
     bodyParser: false,
   },
 };
-interface ParsedFile {
-  filename: string | null;
-  content: Buffer;
-}
+type formidableData = {
+  fields: formidable.Fields;
+  files: formidable.Files;
+};
 interface uploadFile {
   success: boolean;
   signedUrl?: string;
@@ -35,56 +37,45 @@ export default async function handler(
       res.status(200).json({ success: true, httpStatus: "200", data: data });
     }
     case "POST": {
-      const form = new formidable.IncomingForm();
       try {
-        const parsedFile = await new Promise<ParsedFile>((resolve, reject) => {
-          form.parse(req, (err, fields, files) => {
-            if (err) {
-              console.error(err);
-              reject(new Error("File upload failed"));
-              return;
-            }
+        console.log("pre-parse");
+        const { fields, files }: formidableData = await parseForm(req);
+        const { message, name, caption }: formidable.Fields = fields;
+        const parsedFile: formidable.File = files.file as formidable.File;
+        console.log("post-parse");
+        let id: string, postId: string;
 
-            const file = files["file"] as formidable.File;
+        if (parsedFile) {
+          // Create image post
+          console.log(`in if. file: ${parsedFile}`);
+          const url: string = parsedFile.filepath;
+          const buffer: Buffer = fs.readFileSync(url);
+          const formData: FormData = new FormData();
+          console.log("pre-data");
 
-            if (!file) {
-              reject(new Error("File not found"));
-              return;
-            }
-
-            const content = fs.readFileSync(file.filepath);
-
-            if (!content) {
-              reject(new Error("Failed to read file content"));
-              return;
-            }
-
-            const parsedFile: ParsedFile = {
-              filename: file.originalFilename,
-              content: content,
-            };
-
-            resolve(parsedFile);
+          formData.append("caption", caption);
+          console.log("pre-buffer");
+          formData.append("source", buffer, {
+            filename: url,
+            contentType: "image/jpeg",
           });
-        });
-
-        // Do something with the parsed file, e.g. upload to S3
-        if (!parsedFile.filename || !parsedFile.content) {
-          res
-            .status(400)
-            .json({ status: false, message: "File not parsed properly." });
+          console.log("post buffer");
+          const signedURL = await uploadFileToS3(
+            buffer,
+            parsedFile.originalFilename!
+          );
+          console.log("signed");
+          if (!signedURL) {
+            res
+              .status(400)
+              .json({ status: false, message: "could not upload to S3" });
+          }
+          res.status(200).json({
+            status: true,
+            key: parsedFile.originalFilename,
+            url: signedURL,
+          });
         }
-
-        const signedURL = await uploadFileToS3(
-          parsedFile.content,
-          parsedFile.filename!
-        );
-        if (!signedURL) {
-          res
-            .status(400)
-            .json({ status: false, message: "could not upload to S3" });
-        }
-        res.status(200).json({ status: true, key: parsedFile.filename, url: signedURL });
       } catch (err) {
         res
           .status(401)
