@@ -38,7 +38,8 @@ export default function PostStatsBar({ postId, platform }: PostStatsProps) {
       const { data } = await axios.get(
         `/api/platforms/facebook/posts/${postId}/likes`
       );
-      return data;
+      if (data.hasLiked) return data.likeCount + 1;
+      else return data.likeCount;
     },
     enabled: platform == platformTypes.facebook,
   });
@@ -49,9 +50,10 @@ export default function PostStatsBar({ postId, platform }: PostStatsProps) {
         const { data } = await axios.get(
           `/api/platforms/facebook/posts/${postId}/comments`
         );
-        return data;
+        return data.commentCount;
       },
       enabled: platform == platformTypes.facebook,
+      refetchOnWindowFocus: true,
     });
 
   const icon = (() => {
@@ -99,8 +101,8 @@ export default function PostStatsBar({ postId, platform }: PostStatsProps) {
     switch (platform) {
       case platformTypes.connect:
         return connectComments;
-      // case platformTypes.facebook:
-      //   return facebookStats!.comments;
+      case platformTypes.facebook:
+        return facebookComments;
       // case platformTypes.instagram:
       //   return instagramStats!.comments;
       // case platformTypes.tiktok:

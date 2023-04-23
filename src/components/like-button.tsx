@@ -22,37 +22,40 @@ export default function LikeButton({ postId, platform }: LikeButtonProps) {
 
   switch (platform) {
     case platformTypes.facebook:
-      queryKey = ["facebook", "posts", postId, "likes", "isLiked"];
+      queryKey = ["facebook", "posts", postId, "likes", "hasLiked"];
       queryFn = async () => {
         const { data }: { data: FacebookData } = await axios.get(
           `/api/platforms/facebook/posts/${postId}/likes`
         );
 
-        const liked = data.likes!.some(
-          (userId: ObjectId) => user!._id == userId
-        );
-        return liked;
+        return data.hasLiked!;
       };
       mutationFn = async ({ dislike = false }: { dislike: boolean }) => {
         if (dislike)
           await axios.delete(`/api/platforms/facebook/posts/${postId}/likes`);
-        else await axios.post(`/api/platforms/facebook/posts/${postId}/likes`);
+        else {
+          const res = await axios.post(
+            `/api/platforms/facebook/posts/${postId}/likes`
+          );
+          console.log(res);
+        }
 
         const { data: likeData } = await axios.get(
           `/api/platforms/facebook/posts/${postId}/likes`
         );
+        console.log(likeData);
+
         return likeData;
       };
       break;
     default: // connect
-      queryKey = ["connect", "posts", postId, "likes", "isLiked"];
+      queryKey = ["connect", "posts", postId, "likes", "hasLiked"];
       queryFn = async () => {
         const { data }: { data: ConnectData } = await axios.get(
           `/api/posts/${postId}/likes`
         );
 
-        const liked = data.likes!.some((like) => user!._id === like.user_id);
-        return liked;
+        return data.hasLiked!;
       };
       mutationFn = async ({ dislike = false }: { dislike: boolean }) => {
         if (dislike) await axios.delete(`/api/posts/${postId}/likes`);
@@ -61,12 +64,13 @@ export default function LikeButton({ postId, platform }: LikeButtonProps) {
         const { data: likeData } = await axios.get(
           `/api/posts/${postId}/likes`
         );
+
         return likeData;
       };
       break;
   }
 
-  const { data: liked, isLoading } = useQuery({
+  const { data: hasLiked, isLoading } = useQuery({
     queryKey,
     queryFn,
     enabled: !userLoading,
@@ -75,7 +79,8 @@ export default function LikeButton({ postId, platform }: LikeButtonProps) {
   const likeMutation = useMutation({
     mutationFn,
     onSuccess: () => {
-      queryClient.invalidateQueries(queryKey.slice(0, -1));
+      console.log(queryKey.slice(0, -2));
+      queryClient.invalidateQueries(queryKey.slice(0, -2));
     },
   });
 
@@ -86,14 +91,14 @@ export default function LikeButton({ postId, platform }: LikeButtonProps) {
           <button
             disabled={isLoading}
             onClick={() =>
-              liked
+              hasLiked
                 ? likeMutation.mutate({ dislike: true })
                 : likeMutation.mutate({ dislike: false })
             }
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              fill={liked ? "black" : "none"}
+              fill={hasLiked ? "black" : "none"}
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
@@ -109,7 +114,13 @@ export default function LikeButton({ postId, platform }: LikeButtonProps) {
         );
       case platformTypes.facebook:
         return (
-          <button>
+          <button
+            onClick={() =>
+              hasLiked
+                ? likeMutation.mutate({ dislike: true })
+                : likeMutation.mutate({ dislike: false })
+            }
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="w-6 h-6"

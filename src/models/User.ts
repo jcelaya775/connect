@@ -14,6 +14,7 @@ export interface IUser extends Document {
   is_verified: boolean;
   email: string;
   facebook: {
+    user_id?: string;
     page_id?: string;
     page_name?: string;
     page_token?: string;
@@ -38,6 +39,7 @@ const UserSchema = new Schema<IUser>(
     is_verified: { type: Boolean, default: false },
     email: { type: String, trim: true, required: true, unique: true },
     facebook: {
+      user_id: { type: String, trim: true, required: false },
       page_id: { type: String, trim: true, required: false },
       page_name: { type: String, trim: true, required: false },
       user_token: { type: String, trim: true, required: false },

@@ -21,11 +21,11 @@ export const ProfilePage = () => {
                   <div className="flex items-center w-full px-4 py-10 bg-cover card bg-[url('https://picsum.photos/id/314/1000/300')]">
                     <div className="card glass lg:card-side text-neutral-content">
                       <figure className="p-6 relative">
-                        <Image
+                        {/* <Image
                           src="https://picsum.photos/200"
                           alt="Profile Picture"
                           className="rounded-full ml-0 mx-auto border-white border-2"
-                        ></Image>
+                        ></Image> */}
                         {/* <!-- Edit Profile Picture Button --> */}
                         {/* <button className="btn-outline btn-square bg-white absolute bottom-8 right-8 rounded-full w-8 h-8 flex items-center justify-center"> */}
                         {/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6"> */}

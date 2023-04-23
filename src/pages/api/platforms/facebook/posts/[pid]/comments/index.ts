@@ -29,7 +29,7 @@ export default async function handler(
         const { pid } = req.query;
 
         const response = await axios.get(
-          `https://graph.facebook.com/v16.0/${pid}/comments?access_token=${page_token}`
+          `https://graph.facebook.com/v16.0/${pid}/comments?summary=true&access_token=${page_token}`
         );
         const comments = response.data.data;
         const commentCount = response.data.data.length;

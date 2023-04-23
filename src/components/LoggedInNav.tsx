@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { signOut } from "next-auth/react";
 
 const LoggedInNav = () => (
   <>
@@ -59,7 +60,7 @@ const LoggedInNav = () => (
                 </Link>
               </li>
               <li>
-                <Link href="#">
+                <Link href="#" onClick={() => signOut()}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"

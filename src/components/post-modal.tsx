@@ -9,9 +9,10 @@ import { platformTypes } from "@/types/platform";
 
 type PostModalProps = {
   newPost?: boolean;
+  setVisible: (visible: boolean) => void;
 };
 
-const PostModal = ({ newPost = true }: PostModalProps) => {
+const PostModal = ({ newPost = true, setVisible }: PostModalProps) => {
   const queryClient = useQueryClient();
 
   const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
@@ -48,7 +49,6 @@ const PostModal = ({ newPost = true }: PostModalProps) => {
       throw new Error("Error posting to Connect");
     }
 
-    console.log(res.data);
     return res.data;
   };
 
@@ -59,7 +59,6 @@ const PostModal = ({ newPost = true }: PostModalProps) => {
       throw new Error("Error posting to Facebook");
     }
 
-    console.log(res.data);
     return res.data;
   };
 
@@ -69,7 +68,7 @@ const PostModal = ({ newPost = true }: PostModalProps) => {
 
       if (postData.connect.platforms.includes(platformTypes.facebook)) {
         const facebookResult = await postToFacebook(postData.facebook);
-        console.log(facebookResult.data);
+        postData.connect.facebook_id = facebookResult.postId;
         results.push(facebookResult);
       }
 
@@ -86,6 +85,7 @@ const PostModal = ({ newPost = true }: PostModalProps) => {
         // Clear the input fields
         queryClient.invalidateQueries(["connect", "posts"]);
         resetPost();
+        setVisible(false);
       },
     }
   );

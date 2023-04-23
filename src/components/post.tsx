@@ -37,6 +37,8 @@ const Post = ({
   author,
   mainPlatform,
   platforms,
+  facebookId,
+  instagramId,
   content,
 }: PostProps) => {
   const statsBar = (platform: platformTypes) => {
@@ -53,7 +55,7 @@ const Post = ({
         return (
           <PostStatsBar
             key={platform}
-            postId={postId}
+            postId={facebookId}
             platform={platformTypes.facebook}
           />
         );
@@ -61,7 +63,7 @@ const Post = ({
         return (
           <PostStatsBar
             key={platform}
-            postId={postId}
+            postId={instagramId}
             platform={platformTypes.instagram}
           />
         );
@@ -76,7 +78,7 @@ const Post = ({
     }
   };
 
-  const statBars = platforms.map((platform: platformTypes, idx: number) =>
+  const statBars = platforms.map((platform: platformTypes) =>
     statsBar(platform)
   );
 
@@ -125,6 +127,7 @@ const Post = ({
             {content.image && (
               <Image
                 className="w-full h-full"
+                priority
                 width={300}
                 height={300}
                 src={content.image.url}

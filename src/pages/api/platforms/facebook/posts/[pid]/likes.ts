@@ -6,6 +6,7 @@ import { ObjectId } from "mongoose";
 
 export type Data = {
   success: boolean;
+  hasLiked?: boolean;
   likes?: ObjectId[];
   likeCount?: number;
   error?: string;
@@ -30,12 +31,13 @@ export default async function handler(
         const { pid } = req.query;
 
         const response = await axios.get(
-          `https://graph.facebook.com/v16.0/${pid}/likes?access_token=${page_token}`
+          `https://graph.facebook.com/v16.0/${pid}/likes?summary=true&access_token=${page_token}`
         );
         const likes = response.data.data;
         const likeCount = response.data.data.length;
+        const hasLiked = response.data.summary.has_liked;
 
-        res.status(200).json({ success: true, likes, likeCount });
+        res.status(200).json({ success: true, hasLiked, likes, likeCount });
       } catch (error: any) {
         res.status(500).json({ success: false, error: error.message });
       }

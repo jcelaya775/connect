@@ -1,6 +1,8 @@
 import React from "react";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
+import useUser from "@/hooks/useUser";
+import { IUser } from "@/models/User";
 
 const SideNav = () => {
   return (

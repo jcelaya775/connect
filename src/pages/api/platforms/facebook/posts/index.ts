@@ -44,6 +44,10 @@ export default async function handler(
         // } while (hasNextPage);
 
         const posts = response.data.data;
+        posts.forEach((post: any) => {
+          post.main_platform = "facebook";
+          post.author = user.name;
+        });
 
         res.status(200).json({ success: true, posts });
       } catch (error: any) {
