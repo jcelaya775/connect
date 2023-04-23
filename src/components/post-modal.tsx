@@ -8,11 +8,10 @@ import axios from "axios";
 import { platformTypes } from "@/types/platform";
 
 type PostModalProps = {
-  setVisible: (visible: boolean) => void;
   newPost?: boolean;
 };
 
-const PostModal = ({ setVisible, newPost = true }: PostModalProps) => {
+const PostModal = ({ newPost = true }: PostModalProps) => {
   const queryClient = useQueryClient();
 
   const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
@@ -30,28 +29,6 @@ const PostModal = ({ setVisible, newPost = true }: PostModalProps) => {
   const toggleInstagram = () => setInstagramChecked(!instagramChecked);
   const toggleFacebook = () => setFacebookChecked(!facebookChecked);
   const toggleConnect = () => setConnectChecked(!connectChecked);
-
-  useEffect(() => {
-    const handleOutsideClick = (e: MouseEvent) => {
-      if ((e.target as Element)?.classList.contains("modal")) {
-        setVisible(false);
-      }
-    };
-
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setVisible(false);
-      }
-    };
-
-    document.addEventListener("click", handleOutsideClick);
-    document.addEventListener("keydown", handleEscape);
-
-    return () => {
-      document.removeEventListener("click", handleOutsideClick);
-      document.removeEventListener("keydown", handleEscape);
-    };
-  });
 
   function resetPost() {
     setDescription("");
@@ -92,6 +69,7 @@ const PostModal = ({ setVisible, newPost = true }: PostModalProps) => {
 
       if (postData.connect.platforms.includes(platformTypes.facebook)) {
         const facebookResult = await postToFacebook(postData.facebook);
+        console.log(facebookResult.data);
         results.push(facebookResult);
       }
 
@@ -108,7 +86,6 @@ const PostModal = ({ setVisible, newPost = true }: PostModalProps) => {
         // Clear the input fields
         queryClient.invalidateQueries(["connect", "posts"]);
         resetPost();
-        setVisible(false);
       },
     }
   );
