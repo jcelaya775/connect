@@ -7,7 +7,7 @@ import mongoose, {
   models,
 } from "mongoose";
 
-// TODO: Add favorites
+// TODO: Add favorites and likes
 export interface IUser extends Document {
   username: string;
   name: string;
