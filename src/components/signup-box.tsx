@@ -109,7 +109,7 @@ const SignUpBox = () => {
               </div>
               <div className="form-control mt-6">
                 <button
-                  className="btn bg-primary disabled:bg-primary hover:bg-secondary"
+                  className="btn btn-primary disabled:btn-disabled hover:bg-secondary"
                   disabled={!formComplete}
                   onClick={signUp}
                 >

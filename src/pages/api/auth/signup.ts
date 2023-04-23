@@ -1,9 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import connectDB from "../../../lib/connectDB";
 import User, { IUser } from "../../../models/User";
-import { hashPassword } from "@/validation/passwordHash";
-import { userValidationSchema } from "@/validation/userValidation";
-import { sendVerificationEmail } from "@/validation/verificationEmail";
+import { hashPassword } from "@/lib/validation/passwordHash";
+import { userValidationSchema } from "@/lib/validation/userValidation";
+import { sendVerificationEmail } from "@/lib/validation/verificationEmail";
 
 type Data = {
   success: boolean;

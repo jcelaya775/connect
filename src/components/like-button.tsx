@@ -5,6 +5,7 @@ import { Data as FacebookData } from "@/pages/api/platforms/facebook/posts/[pid]
 import { platformTypes } from "@/types/platform";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { ObjectId } from "mongoose";
 
 type LikeButtonProps = {
   postId: string;
@@ -27,7 +28,9 @@ export default function LikeButton({ postId, platform }: LikeButtonProps) {
           `/api/platforms/facebook/posts/${postId}/likes`
         );
 
-        const liked = data.likes!.some((like) => user!._id == like.user_id);
+        const liked = data.likes!.some(
+          (userId: ObjectId) => user!._id == userId
+        );
         return liked;
       };
       mutationFn = async ({ dislike = false }: { dislike: boolean }) => {
@@ -48,7 +51,7 @@ export default function LikeButton({ postId, platform }: LikeButtonProps) {
           `/api/posts/${postId}/likes`
         );
 
-        const liked = data.likes!.some((like) => user!._id == like.user_id);
+        const liked = data.likes!.some((like) => user!._id === like.user_id);
         return liked;
       };
       mutationFn = async ({ dislike = false }: { dislike: boolean }) => {

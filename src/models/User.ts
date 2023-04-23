@@ -20,8 +20,8 @@ export interface IUser extends Document {
     user_token?: string;
     user_token_expires?: string;
   };
-  friends: [user_id: ObjectId];
-  pending_friends: [user_id: string];
+  friends: [{ user_id: ObjectId }];
+  pending_friends: [user_id: ObjectId];
   settings: {
     theme: themeTypes;
   };

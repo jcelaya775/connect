@@ -43,22 +43,42 @@ const Post = ({
     switch (platform) {
       case platformTypes.connect:
         return (
-          <PostStatsBar postId={postId} platform={platformTypes.connect} />
+          <PostStatsBar
+            key={platform}
+            postId={postId}
+            platform={platformTypes.connect}
+          />
         );
       case platformTypes.facebook:
         return (
-          <PostStatsBar postId={postId} platform={platformTypes.facebook} />
+          <PostStatsBar
+            key={platform}
+            postId={postId}
+            platform={platformTypes.facebook}
+          />
         );
       case platformTypes.instagram:
         return (
-          <PostStatsBar postId={postId} platform={platformTypes.instagram} />
+          <PostStatsBar
+            key={platform}
+            postId={postId}
+            platform={platformTypes.instagram}
+          />
         );
       case platformTypes.tiktok:
-        return <PostStatsBar postId={postId} platform={platformTypes.tiktok} />;
+        return (
+          <PostStatsBar
+            key={platform}
+            postId={postId}
+            platform={platformTypes.tiktok}
+          />
+        );
     }
   };
 
-  const statBars = platforms.map((platform) => statsBar(platform));
+  const statBars = platforms.map((platform: platformTypes, idx: number) =>
+    statsBar(platform)
+  );
 
   return (
     <>
@@ -105,6 +125,8 @@ const Post = ({
             {content.image && (
               <Image
                 className="w-full h-full"
+                width={300}
+                height={300}
                 src={content.image.url}
                 alt="post image"
               />

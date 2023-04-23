@@ -2,10 +2,11 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import connectDB from "@/lib/mongodb";
 import axios from "axios";
 import { getAuthUser } from "@/lib/auth";
+import { ObjectId } from "mongoose";
 
 export type Data = {
   success: boolean;
-  likes?: any[];
+  likes?: ObjectId[];
   likeCount?: number;
   error?: string;
 };
