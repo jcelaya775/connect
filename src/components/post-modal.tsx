@@ -57,7 +57,7 @@ const PostModal = ({ setVisible, newPost = true }: PostModalProps) => {
     setDescription("");
     setUpload("no file uploaded");
     setInstagramChecked(false);
-    setFacebookChecked(true);
+    setFacebookChecked(false);
     setConnectChecked(true);
     setInstagramAudience('');
     setFacebookAudience('');
