@@ -3,6 +3,7 @@ import Image from "next/image";
 import logo from "@/images/link_icon_content.svg";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import { signIn } from "next-auth/react";
 
 // TODO: Give feedback to uesr if email or verification code is incorrect
 const VerifyBox = () => {
@@ -32,10 +33,8 @@ const VerifyBox = () => {
     const res = await fetch("api/auth/verify-email", options);
     const data = await res.json();
 
-    console.log(data);
-
     if (data.success) {
-      router.push("/");
+      signIn("github", { callbackUrl: "/" });
     } else {
       switch (data.error) {
         case "User is already verified":

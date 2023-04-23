@@ -10,17 +10,14 @@ import { GetServerSidePropsContext } from "next";
 import { getServerSession } from "next-auth/next";
 import { useSession } from "next-auth/react";
 
-import React from "react";
-import { MyPage } from "../components/types";
+type HomeProps = { authenticated: boolean };
 
-export default function Home() {
-  const { data: session } = useSession();
-
-  if (!session) {
+export default function Home({ authenticated }: HomeProps) {
+  if (!authenticated) {
     return (
-      <>
-        <LandingPage />
-      </>
+      <Layout_Logout>
+        <SignUpBox />
+      </Layout_Logout>
     );
   }
 
@@ -39,9 +36,12 @@ export default function Home() {
 
 // TODO: Fix decryption error in getServerSession
 export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const user: IUser | null = await getAuthUserFromPage(context);
+  if (!user || !user.is_verified) return { props: { authenticated: false } };
+
   return {
     props: {
-      session: await getServerSession(context.req, context.res, authOptions),
+      authenticated: true,
     },
   };
 }

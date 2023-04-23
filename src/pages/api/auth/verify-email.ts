@@ -29,6 +29,7 @@ export default async function handler(
           break;
         }
 
+        console.log(user.code, code);
         // Verify the user's code
         if (user.code !== parseInt(code)) {
           res.status(403).json({ success: false });

@@ -1,13 +1,18 @@
 import { themeTypes } from "@/types/theme";
-import mongoose, { Document, Schema, SchemaTypes, models } from "mongoose";
+import mongoose, {
+  Document,
+  ObjectId,
+  Schema,
+  SchemaTypes,
+  models,
+} from "mongoose";
 
 export interface IUser extends Document {
   username: string;
   name: string;
-  password: string;
   is_verified: boolean;
   email: string;
-  facebook?: {
+  facebook: {
     page_id?: string;
     page_name?: string;
     page_token?: string;
@@ -15,11 +20,12 @@ export interface IUser extends Document {
     user_token?: string;
     user_token_expires?: string;
   };
-  friends: [user_id: string];
+  friends: [user_id: ObjectId];
   pending_friends: [user_id: string];
   settings: {
     theme: themeTypes;
   };
+  biography?: string;
   timestamp: Date;
   code: Number;
 }
@@ -27,15 +33,14 @@ export interface IUser extends Document {
 const UserSchema = new Schema<IUser>(
   {
     username: { type: String, trim: true, required: true, unique: true },
-    name: String,
-    password: { type: String, trim: true, required: true },
+    name: { type: String, trim: true, required: true },
     is_verified: { type: Boolean, default: false },
     email: { type: String, trim: true, required: true, unique: true },
     facebook: {
       page_id: { type: String, trim: true, required: false },
       page_name: { type: String, trim: true, required: false },
-      user_token: { type: String, trim: true, required: false, unique: true },
-      page_token: { type: String, trim: true, required: false, unique: true },
+      user_token: { type: String, trim: true, required: false },
+      page_token: { type: String, trim: true, required: false },
       user_token_expires: { type: String, trim: true, required: false },
       page_token_expires: { type: String, trim: true, required: false },
     },
@@ -50,6 +55,7 @@ const UserSchema = new Schema<IUser>(
         enum: Object.values(themeTypes),
       },
     },
+    biography: { type: String, trim: true, required: false },
     code: { type: Number, default: 0, trim: true, required: false },
   },
   { timestamps: true }

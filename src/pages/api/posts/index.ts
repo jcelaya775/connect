@@ -25,7 +25,7 @@ export default async function handler(
 
   // Authenticate user
   const user = await getAuthUser(req, res);
-  if (!user) return res.status(401).json({ success: false });
+  if (!user) return;
 
 	switch (method) {
 		case "GET": // authenticated endpoint

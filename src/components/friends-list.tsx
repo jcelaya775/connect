@@ -1,28 +1,28 @@
 import { useState } from "react";
-import Link from 'next/link'
+import Link from "next/link";
 
 const pendFriends = [
   {
     id: 11,
     name: "Babe Ruth",
-    avatar: "https://randomuser.me/api/portraits/men/9.jpg"
+    avatar: "https://randomuser.me/api/portraits/men/9.jpg",
   },
   {
     id: 12,
     name: "Serena Williams",
-    avatar: "https://randomuser.me/api/portraits/women/3.jpg"
+    avatar: "https://randomuser.me/api/portraits/women/3.jpg",
   },
   {
     id: 13,
     name: "Hillary Clinton",
-    avatar: "https://randomuser.me/api/portraits/women/4.jpg"
+    avatar: "https://randomuser.me/api/portraits/women/4.jpg",
   },
   {
     id: 14,
     name: "Donald Trump",
-    avatar: "https://randomuser.me/api/portraits/men/10.jpg"
-  }
-]
+    avatar: "https://randomuser.me/api/portraits/men/10.jpg",
+  },
+];
 const friends = [
   {
     id: 1,
@@ -49,7 +49,7 @@ const friends = [
     name: "David Johnson",
     avatar: "https://randomuser.me/api/portraits/men/3.jpg",
   },
-  {    
+  {
     id: 6,
     name: "Jorge Celaya",
     avatar: "https://randomuser.me/api/portraits/men/4.jpg",
@@ -72,8 +72,8 @@ const friends = [
   {
     id: 10,
     name: "Braedon Fyock",
-    avatar: "https://randomuser.me/api/portraits/men/8.jpg"
-  }
+    avatar: "https://randomuser.me/api/portraits/men/8.jpg",
+  },
 ];
 
 const FriendsPage = () => {
@@ -81,19 +81,19 @@ const FriendsPage = () => {
   const [pendingFriends, setPendingFriends] = useState(pendFriends.slice(0, 4));
   const [allFriends, setAllFriends] = useState(friends);
 
-  const handleAddFriend = (friend:any) => {
+  const handleAddFriend = (friend: any) => {
     const newPendingFriends = pendingFriends.filter((f) => f.id !== friend.id);
     const newAllFriends = [...allFriends, friend];
     setPendingFriends(newPendingFriends);
     setAllFriends(newAllFriends);
   };
 
-  const handleRemoveFriend = (friend:any) => {
+  const handleRemoveFriend = (friend: any) => {
     const newPendingFriends = pendingFriends.filter((f) => f.id !== friend.id);
     setPendingFriends(newPendingFriends);
   };
 
-  const handleSearch = (event:any) => {
+  const handleSearch = (event: any) => {
     const searchTerm = event.target.value;
     setSearchTerm(searchTerm);
     const filteredFriends = friends.filter((friend) =>
@@ -113,9 +113,9 @@ const FriendsPage = () => {
         />
       </div>
       {pendingFriends.length > 0 ? (
-      <div className="p-8 sm:px-24 lg:px-10 mt-0">
-        <h2 className="text-xl font-medium mb-4">Pending friends</h2>
-        
+        <div className="p-8 sm:px-24 lg:px-10 mt-0">
+          <h2 className="text-xl font-medium mb-4">Pending friends</h2>
+
           <div className="card bg-white p-4 h-max overflow-y-scroll">
             <ul className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {pendingFriends.map((friend) => (
@@ -134,63 +134,92 @@ const FriendsPage = () => {
                       <p className="text-gray-500">Pending approval</p>
                     </div>
                     <div className="tooltip tooltip-left" data-tip="Accept">
-                    <button title="Accept" onClick={() => handleAddFriend(friend)}
-                      className="inline-flex items-center px-0 py-0 mr-2 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
+                      <button
+                        title="Accept"
+                        onClick={() => handleAddFriend(friend)}
+                        className="inline-flex items-center px-0 py-0 mr-2 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth="1.5"
+                          stroke="currentColor"
+                          className="w-6 h-6"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
                       </button>
-                      </div>
+                    </div>
                     {/* <div className="md:divider md:divider-horizontal"></div> */}
                     <div className="tooltip tooltip-left" data-tip="Deny">
-                    <button title="Decline" onClick={() => handleRemoveFriend(friend)}
-                      className="inline-flex items-center px-0 py-0 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-
+                      <button
+                        title="Decline"
+                        onClick={() => handleRemoveFriend(friend)}
+                        className="inline-flex items-center px-0 py-0 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth="1.5"
+                          stroke="currentColor"
+                          className="w-6 h-6"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
                       </button>
-                      </div>
+                    </div>
                   </div>
                 </li>
               ))}
             </ul>
           </div>
-        
-      </div>
-        ) : (<></>)}
+        </div>
+      ) : (
+        <></>
+      )}
       <div className="px-8 sm:px-24 lg:px-10 mt-0 divider"></div>
       <div className="px-8 sm:px-24 lg:px-10 mt-0">
         <h2 className="text-xl font-medium mb-4">All friends</h2>
         <div className="card bg-white p-4 h-max">
-        <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {allFriends.map((friend) => (
-        <li
-          key={friend.id}
-          className="bg-white shadow-md rounded-md overflow-hidden"
-        >
-          <div className="flex items-center p-4">
-            <img
-              src={friend.avatar}
-              alt={friend.name}
-              className="w-10 h-10 rounded-full mr-4"
-            />
-            <div className="flex-1">
-              <h3 className="font-medium">{friend.name}</h3>
-              <p className="text-gray-500">Friend</p>
-            </div>
-            <button
-              className="btn btn-primary btn-sm normal-case">
-              <Link href={`/${friend.name.replace(" ","")}`}>View Profile</Link>
-            </button>
-          </div>
-        </li>
-      ))}
-    </ul>
+          <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {allFriends.map((friend) => (
+              <li
+                key={friend.id}
+                className="bg-white shadow-md rounded-md overflow-hidden"
+              >
+                <div className="flex items-center p-4">
+                  <img
+                    src={friend.avatar}
+                    alt={friend.name}
+                    className="w-10 h-10 rounded-full mr-4"
+                  />
+                  <div className="flex-1">
+                    <h3 className="font-medium">{friend.name}</h3>
+                    <p className="text-gray-500">Friend</p>
+                  </div>
+                  <button className="btn btn-primary btn-sm normal-case">
+                    <Link href={`/${friend.name.replace(" ", "")}`}>
+                      View Profile
+                    </Link>
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-);
+  );
 };
 
 export default FriendsPage;
