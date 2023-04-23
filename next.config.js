@@ -6,6 +6,7 @@ const nextConfig = {
       "images.unsplash.com",
       "images.pexels.com",
       "connect-social-media-bucket.s3.us-east-2.amazonaws.com",
+      "scontent-ord5-1.xx.fbcdn.net",
     ],
   },
 };

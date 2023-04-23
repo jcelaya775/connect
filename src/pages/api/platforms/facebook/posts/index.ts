@@ -45,7 +45,7 @@ export default async function handler(
 
         const posts = response.data.data;
         posts.forEach((post: any) => {
-          post.main_platform = "facebook";
+          post.main_platform = "Facebook";
           post.author = user.name;
         });
 

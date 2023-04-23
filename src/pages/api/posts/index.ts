@@ -13,7 +13,7 @@ type GetData = {
 
 type PostData = {
   success: boolean;
-  data?: IPost;
+  post?: IPost;
 };
 
 export default async function handler(

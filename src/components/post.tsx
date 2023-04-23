@@ -124,7 +124,7 @@ const Post = ({
             <p>{content.body}</p>
           </div>
           <div className="basis-1/6">
-            {content.image && (
+            {content.image?.url && (
               <Image
                 className="w-full h-full"
                 priority
@@ -132,6 +132,7 @@ const Post = ({
                 height={300}
                 src={content.image.url}
                 alt="post image"
+                unoptimized
               />
             )}
           </div>
