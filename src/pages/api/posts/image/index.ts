@@ -5,6 +5,7 @@ import { uploadFileToS3 } from "@/lib/amazon-s3";
 import formidable from "formidable";
 import FormData from "form-data";
 import fs from "fs";
+import Post, { IPost } from "@/models/Post";
 import { parseForm } from "@/lib/parseForm";
 
 // IMPORTANT: Prevents next from trying to parse the form
@@ -38,34 +39,59 @@ export default async function handler(
     }
     case "POST": {
       try {
-        console.log("pre-parse");
+        //grab the file and fields
         const { fields, files }: formidableData = await parseForm(req);
-        const { message, name, caption }: formidable.Fields = fields;
+        const {
+          message,
+          username,
+          body,
+          user_id,
+          author,
+          community_id,
+          main_platform,
+          facebook_post_id,
+          visibility,
+          link,
+        }: formidable.Fields = fields;
         const parsedFile: formidable.File = files.file as formidable.File;
-        console.log("post-parse");
         let id: string, postId: string;
 
+        //if there is a file, grab data
         if (parsedFile) {
           // Create image post
-          console.log(`in if. file: ${parsedFile}`);
           const url: string = parsedFile.filepath;
           const buffer: Buffer = fs.readFileSync(url);
           const formData: FormData = new FormData();
-          console.log("pre-data");
-
-          formData.append("caption", caption);
-          console.log("pre-buffer");
-          formData.append("source", buffer, {
-            filename: url,
-            contentType: "image/jpeg",
-          });
-          console.log("post buffer");
-          const signedURL = await uploadFileToS3(
-            buffer,
-            parsedFile.originalFilename!
-          );
-          console.log("signed");
-          if (!signedURL) {
+          let signedURL: string = "";
+          formData.append("message", message);
+          formData.append("username", username);
+          formData.append("body", body);
+          formData.append("user_id", user_id);
+          formData.append("author", author);
+          formData.append("community_id", community_id);
+          formData.append("main_platform", main_platform);
+          formData.append("facebook_post_id", facebook_post_id);
+          formData.append("visibility", visibility);
+          formData.append("link", link);
+          if (buffer) {
+            formData.append("source", buffer, {
+              filename: url,
+              contentType: "image/jpeg",
+            });
+            signedURL = await uploadFileToS3(
+              buffer,
+              parsedFile.originalFilename!
+            );
+            const newPost: IPost = new Post({});
+          } else {
+            res
+              .status(400)
+              .json({
+                success: false,
+                error: "Could not parse buffer from file",
+              });
+          }
+          if (signedURL === "") {
             res
               .status(400)
               .json({ status: false, message: "could not upload to S3" });
@@ -75,6 +101,7 @@ export default async function handler(
             key: parsedFile.originalFilename,
             url: signedURL,
           });
+        } else {
         }
       } catch (err) {
         res

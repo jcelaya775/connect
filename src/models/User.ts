@@ -29,6 +29,8 @@ export interface IUser extends Document {
   };
   biography?: string;
   timestamp: Date;
+  pfpCDN: string;
+  coverCDN: string;
   code: Number;
 }
 
