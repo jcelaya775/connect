@@ -42,37 +42,45 @@ export default async function handler(
         //grab the file and fields
         const { fields, files }: formidableData = await parseForm(req);
         const {
-          message,
           username,
+          email,
           body,
           user_id,
-          author,
           community_id,
           main_platform,
           facebook_post_id,
+          instagram_post_id,
           visibility,
           link,
         }: formidable.Fields = fields;
         const parsedFile: formidable.File = files.file as formidable.File;
-        let id: string, postId: string;
 
         //if there is a file, grab data
         if (parsedFile) {
           // Create image post
+          console.log("creating image");
           const url: string = parsedFile.filepath;
           const buffer: Buffer = fs.readFileSync(url);
           const formData: FormData = new FormData();
           let signedURL: string = "";
-          formData.append("message", message);
+          console.log("appending data");
+          if (facebook_post_id)
+            formData.append("facebook_post_id", facebook_post_id);
+          if (instagram_post_id)
+            formData.append("instagram_post_id", instagram_post_id);
+          if (body) formData.append("body", body);
+          if (community_id) formData.append("community_id", community_id);
+          if (link) formData.append("link", link);
+
           formData.append("username", username);
-          formData.append("body", body);
           formData.append("user_id", user_id);
-          formData.append("author", author);
-          formData.append("community_id", community_id);
+          console.log("user_id appended");
+          console.log("community id appended");
           formData.append("main_platform", main_platform);
-          formData.append("facebook_post_id", facebook_post_id);
+          formData.append("email", email);
           formData.append("visibility", visibility);
-          formData.append("link", link);
+          console.log("form data appended");
+
           if (buffer) {
             formData.append("source", buffer, {
               filename: url,
@@ -82,24 +90,45 @@ export default async function handler(
               buffer,
               parsedFile.originalFilename!
             );
+            console.log("before new post");
             const newPost: IPost = new Post({});
           } else {
-            res
-              .status(400)
-              .json({
-                success: false,
-                error: "Could not parse buffer from file",
-              });
+            res.status(400).json({
+              success: false,
+              error: "Could not parse buffer from file",
+            });
           }
           if (signedURL === "") {
             res
               .status(400)
               .json({ status: false, message: "could not upload to S3" });
           }
+          const newPost: IPost = new Post({
+            user_id: user_id,
+            username: username,
+            email: email,
+            community_id: community_id,
+            main_platform: main_platform,
+            platforms: [facebook_post_id, instagram_post_id],
+            content: {
+              body: body,
+            },
+            visibility: visibility,
+          });
+          newPost.save((err, post) => {
+            if (err) {
+              console.error("Error saving post:", err);
+              res.status(500).json({
+                success: false,
+                err: "unable to save post to MongoDB",
+              });
+            } else {
+              console.log("Post saved successfully:", post);
+            }
+          });
           res.status(200).json({
             status: true,
-            key: parsedFile.originalFilename,
-            url: signedURL,
+            Post: newPost,
           });
         } else {
         }
