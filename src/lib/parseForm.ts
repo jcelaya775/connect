@@ -52,7 +52,6 @@ export const parseForm = async (
           Object.entries(req.body).forEach(([key, value]) => {
             fields[key] = value as string;
           });
-
         resolve({ fields, files });
       }
     });
