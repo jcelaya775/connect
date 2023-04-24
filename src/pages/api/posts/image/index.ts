@@ -112,20 +112,13 @@ export default async function handler(
             platforms: [facebook_post_id, instagram_post_id],
             content: {
               body: body,
+              image: {
+                signUrl: signedURL,
+              },
             },
             visibility: visibility,
           });
-          newPost.save((err, post) => {
-            if (err) {
-              console.error("Error saving post:", err);
-              res.status(500).json({
-                success: false,
-                err: "unable to save post to MongoDB",
-              });
-            } else {
-              console.log("Post saved successfully:", post);
-            }
-          });
+          newPost.save();
           res.status(200).json({
             status: true,
             Post: newPost,
