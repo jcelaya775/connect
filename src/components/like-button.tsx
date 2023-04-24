@@ -69,6 +69,10 @@ export default function LikeButton({ postId, platform }: LikeButtonProps) {
     queryFn,
     enabled: !userLoading,
     refetchInterval: 1000 * 60 * 5,
+    retryDelay(failureCount, error) {
+      if (failureCount < 3) return 1000 * 60 * 5;
+      else return 1000 * 60 * 60;
+    },
   });
 
   const likeMutation = useMutation({

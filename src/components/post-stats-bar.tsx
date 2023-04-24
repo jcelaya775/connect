@@ -20,6 +20,11 @@ export default function PostStatsBar({ postId, platform }: PostStatsProps) {
     },
     refetchOnWindowFocus: true,
     enabled: platform == platformTypes.connect,
+    refetchInterval: 1000 * 60 * 5,
+    retryDelay(failureCount, error) {
+      if (failureCount < 3) return 1000 * 60 * 5;
+      else return 1000 * 60 * 60;
+    },
   });
   const { data: connectComments, isLoading: connectCommentLoading } = useQuery({
     queryKey: ["connect", "posts", postId, "comments", "count"],
@@ -28,6 +33,11 @@ export default function PostStatsBar({ postId, platform }: PostStatsProps) {
       return data.commentCount;
     },
     enabled: platform == platformTypes.connect,
+    refetchInterval: 1000 * 60 * 5,
+    retryDelay(failureCount, error) {
+      if (failureCount < 3) return 1000 * 60 * 5;
+      else return 1000 * 60 * 60;
+    },
   });
 
   // Facebook stats
@@ -41,6 +51,11 @@ export default function PostStatsBar({ postId, platform }: PostStatsProps) {
       else return data.likeCount;
     },
     enabled: platform == platformTypes.facebook,
+    refetchInterval: 1000 * 60 * 5,
+    retryDelay(failureCount, error) {
+      if (failureCount < 3) return 1000 * 60 * 5;
+      else return 1000 * 60 * 60;
+    },
   });
   const { data: facebookComments, isLoading: facebookCommentsLoading } =
     useQuery({
@@ -53,6 +68,11 @@ export default function PostStatsBar({ postId, platform }: PostStatsProps) {
       },
       enabled: platform == platformTypes.facebook,
       refetchOnWindowFocus: true,
+      refetchInterval: 1000 * 60 * 5,
+      retryDelay(failureCount, error) {
+        if (failureCount < 3) return 1000 * 60 * 5;
+        else return 1000 * 60 * 60;
+      },
     });
 
   const icon = (() => {
