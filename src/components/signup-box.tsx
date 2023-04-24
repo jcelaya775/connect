@@ -35,8 +35,6 @@ const SignUpBox = () => {
     const res = await fetch("api/auth/signup", options);
     const data = await res.json();
 
-    console.log(data);
-
     if (data.success) router.push("/verify-email");
     else {
       switch (data.error) {

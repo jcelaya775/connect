@@ -39,7 +39,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   await connectDB();
   const user: IUser | null = await getAuthUserFromPage(context);
   if (!user || !user.is_verified) return { props: { authenticated: false } };
-  console.log(user);
 
   return {
     props: {

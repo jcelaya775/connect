@@ -33,17 +33,11 @@ export default function LikeButton({ postId, platform }: LikeButtonProps) {
       mutationFn = async ({ dislike = false }: { dislike: boolean }) => {
         if (dislike)
           await axios.delete(`/api/platforms/facebook/posts/${postId}/likes`);
-        else {
-          const res = await axios.post(
-            `/api/platforms/facebook/posts/${postId}/likes`
-          );
-          console.log(res);
-        }
+        else await axios.post(`/api/platforms/facebook/posts/${postId}/likes`);
 
         const { data: likeData } = await axios.get(
           `/api/platforms/facebook/posts/${postId}/likes`
         );
-        console.log(likeData);
 
         return likeData;
       };

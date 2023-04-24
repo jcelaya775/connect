@@ -32,8 +32,10 @@ export default async function handler(
         const response = await axios.get(
           `https://graph.facebook.com/v16.0/me/feed?fields=${fields}&access_token=${page_token}`
         );
+        console.log(response);
 
-        // Get user's posts
+        const posts = response.data.data;
+        // // Get user's posts
         // const posts = [];
         // let hasNextPage: boolean = true;
         // do {
@@ -43,7 +45,7 @@ export default async function handler(
         //   hasNextPage = newPostResponse.data.length > 0 ? true : false;
         // } while (hasNextPage);
 
-        const posts = response.data.data;
+        // const posts = response.data.data;
         posts.forEach((post: any) => {
           post.main_platform = "Facebook";
           post.author = user.name;
