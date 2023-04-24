@@ -83,7 +83,7 @@ const PostModal = ({ newPost = true, setVisible }: PostModalProps) => {
     {
       onSuccess: () => {
         // Clear the input fields
-        queryClient.invalidateQueries(["connect", "posts"]);
+        queryClient.invalidateQueries(["posts"]);
         resetPost();
         setVisible(false);
       },

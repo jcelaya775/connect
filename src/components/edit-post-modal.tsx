@@ -10,6 +10,8 @@ import { IPost } from "@/models/Post";
 
 type EditPostModalProps = {
   postId: string;
+  facebookId: string;
+  instagramId: string;
   platforms: platformTypes[];
   content: IPost["content"];
   setVisible: (visible: boolean) => void;
@@ -17,6 +19,8 @@ type EditPostModalProps = {
 
 const EditPostModal = ({
   postId,
+  facebookId,
+  instagramId,
   platforms,
   content,
   setVisible,
@@ -76,21 +80,10 @@ const EditPostModal = ({
     mutationFn: async () => {
       const updatedPost: any = {};
 
-      for (const platform in platforms) {
+      for (const platform of platforms) {
+        console.log(`Platform: ${platform}`);
         switch (platform) {
-          case platformTypes.facebook:
-            const { data: facebookData } = await axios.put(
-              `/api/platforms/facebook/posts/${postId}`,
-              {
-                message: description,
-              }
-            );
-            if (facebookData.error) {
-              updatedPost.facebook = false;
-              console.error(facebookData.error);
-            } else updatedPost.facebook = facebookData;
-            break;
-          default: // connect
+          case platformTypes.connect:
             const { data: connectData } = await axios.put(
               `/api/posts/${postId}`,
               {
@@ -102,61 +95,38 @@ const EditPostModal = ({
               console.error(connectData.error);
             } else updatedPost.connect = connectData;
             break;
+          case platformTypes.facebook:
+            const { data: facebookData } = await axios.put(
+              `/api/platforms/facebook/posts/${facebookId}`,
+              {
+                message: description,
+              }
+            );
+            if (facebookData.error) {
+              updatedPost.facebook = false;
+              console.error(facebookData.error);
+            } else updatedPost.facebook = facebookData;
+            break;
+        }
+      }
+
+      return updatedPost;
+    },
+    onSuccess: () => {
+      for (const platform of platforms) {
+        switch (platform) {
+          case platformTypes.facebook:
+            queryClient.invalidateQueries(["posts"]);
+            break;
+          default: // connect
+            queryClient.invalidateQueries(["posts"]);
+            break;
         }
       }
 
       setVisible(false);
-      return updatedPost;
-    },
-    onSuccess: () => {
-      for (const platform in platforms) {
-        switch (platform) {
-          case platformTypes.facebook:
-            queryClient.invalidateQueries(["facebook", "posts"]);
-            break;
-          default: // connect
-            queryClient.invalidateQueries(["connect", "posts"]);
-            break;
-        }
-      }
     },
   });
-
-  const createPostMutation = useMutation(
-    async (postData: any) => {
-      const res = await axios.post("/api/posts", postData);
-
-      if (res.data.success === false) {
-        throw new Error("Error creating post");
-      }
-
-      return res.data;
-    },
-    {
-      onSuccess: () => {
-        // Clear the input fields
-        queryClient.invalidateQueries(["connectPosts"]);
-        resetPost();
-      },
-    }
-  );
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    // Define postData object based on your form inputs
-    const postData = {
-      visibility: connectAudience,
-      // TODO: Add community
-      // community: description ?? "Default Community",
-      content: {
-        body: description,
-      },
-    };
-
-    // Call the createPostMutation hook
-    createPostMutation.mutate(postData);
-  };
 
   return (
     <>
@@ -164,7 +134,12 @@ const EditPostModal = ({
 
       <div className="modal">
         <div className="modal-box rounded-lg">
-          <form onSubmit={handleSubmit}>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              editPostMutation.mutate();
+            }}
+          >
             <h3 className="py-0 my-0 font-bold text-lg">Edit Post</h3>
             <div className="divider pb-3 my-0"></div>
             <div className="form-control">
@@ -221,7 +196,6 @@ const EditPostModal = ({
               <button
                 type="submit"
                 className="btn btn-sm btn-primary gap-2 py-0 px-5 normal-case"
-                onClick={() => editPostMutation.mutate()}
               >
                 Update
               </button>

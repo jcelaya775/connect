@@ -6,6 +6,8 @@ import OptionsDropdown from "./options-dropdown";
 
 type PostProps = {
   postId: string;
+  facebookId: string;
+  instagramId: string;
   author: string;
   mainPlatform: platformTypes;
   platforms: platformTypes[];
@@ -34,11 +36,11 @@ type PostProps = {
 
 const Post = ({
   postId,
+  facebookId,
+  instagramId,
   author,
   mainPlatform,
   platforms,
-  facebookId,
-  instagramId,
   content,
 }: PostProps) => {
   const statsBar = (platform: platformTypes) => {
@@ -90,6 +92,8 @@ const Post = ({
             <div className="absolute right-3 top-1">
               <OptionsDropdown
                 postId={postId}
+                facebookId={facebookId}
+                instagramId={instagramId}
                 platforms={platforms}
                 content={content}
               />

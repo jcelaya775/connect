@@ -8,12 +8,16 @@ import { IPost } from "@/models/Post";
 
 type OptionsDropdownProps = {
   postId: string;
+  facebookId: string;
+  instagramId: string;
   platforms: platformTypes[];
   content: IPost["content"];
 };
 
 const OptionsDropdown = ({
   postId,
+  facebookId,
+  instagramId,
   platforms,
   content,
 }: OptionsDropdownProps) => {
@@ -24,11 +28,11 @@ const OptionsDropdown = ({
     mutationFn: async () => {
       let success: any = {};
 
-      for (const platform in platforms) {
+      for (const platform of platforms) {
         switch (platform) {
           case platformTypes.facebook:
             const { data: facebookData } = await axios.delete(
-              `/api/platforms/facebook/posts/${postId}`
+              `/api/platforms/facebook/posts/${facebookId}`
             );
             if (facebookData.error) {
               success.facebook = false;
@@ -50,13 +54,13 @@ const OptionsDropdown = ({
       return success;
     },
     onSuccess: () => {
-      for (const platform in platforms) {
+      for (const platform of platforms) {
         switch (platform) {
           case platformTypes.facebook:
-            queryClient.invalidateQueries(["facebook", "posts"]);
+            queryClient.invalidateQueries(["posts"]);
             break;
           default: // connect
-            queryClient.invalidateQueries(["connect", "posts"]);
+            queryClient.invalidateQueries(["posts"]);
             break;
         }
       }
@@ -68,6 +72,8 @@ const OptionsDropdown = ({
       {editModalVisible && (
         <EditPostModal
           postId={postId}
+          facebookId={facebookId}
+          instagramId={instagramId}
           platforms={platforms}
           content={content}
           setVisible={setEditModalVisible}

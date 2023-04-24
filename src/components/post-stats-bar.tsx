@@ -13,28 +13,28 @@ type PostStatsProps = {
 export default function PostStatsBar({ postId, platform }: PostStatsProps) {
   // Connect stats
   const { data: connectLikes, isLoading: connectLikeLoading } = useQuery({
-    queryKey: ["connect", "posts", postId, "likes", "count"],
+    queryKey: ["posts", postId, "likes", "count"],
     queryFn: async () => {
       const { data } = await axios.get(`/api/posts/${postId}/likes`);
       return data.likeCount;
     },
     enabled: platform == platformTypes.connect,
     refetchOnWindowFocus: false,
-    refetchInterval: 1000 * 60 * 5,
+    refetchInterval: 1000 * 60 * 5, // 5 minutes
     retryDelay(failureCount, error) {
       if (failureCount < 3) return 1000 * 60 * 5;
       else return 1000 * 60 * 60;
     },
   });
   const { data: connectComments, isLoading: connectCommentLoading } = useQuery({
-    queryKey: ["connect", "posts", postId, "comments", "count"],
+    queryKey: ["posts", postId, "comments", "count"],
     queryFn: async () => {
       const { data } = await axios.get(`/api/posts/${postId}/comments`);
       return data.commentCount;
     },
     enabled: platform == platformTypes.connect,
     refetchOnWindowFocus: false,
-    refetchInterval: 1000 * 60 * 5,
+    refetchInterval: 1000 * 60 * 5, // 5 minutes
     retryDelay(failureCount, error) {
       if (failureCount < 3) return 1000 * 60 * 5;
       else return 1000 * 60 * 60;
@@ -43,7 +43,7 @@ export default function PostStatsBar({ postId, platform }: PostStatsProps) {
 
   // Facebook stats
   const { data: facebookLikes, isLoading: facebookLikesLoading } = useQuery({
-    queryKey: ["facebook", "posts", postId, "likes", "count"],
+    queryKey: ["posts", postId, "likes", "count"],
     queryFn: async () => {
       const { data } = await axios.get(
         `/api/platforms/facebook/posts/${postId}/likes`
@@ -53,7 +53,7 @@ export default function PostStatsBar({ postId, platform }: PostStatsProps) {
     },
     enabled: platform == platformTypes.facebook,
     refetchOnWindowFocus: false,
-    refetchInterval: 1000 * 60 * 5,
+    refetchInterval: 1000 * 60 * 5, // 5 minutes
     retryDelay(failureCount, error) {
       if (failureCount < 3) return 1000 * 60 * 5;
       else return 1000 * 60 * 60;
@@ -61,7 +61,7 @@ export default function PostStatsBar({ postId, platform }: PostStatsProps) {
   });
   const { data: facebookComments, isLoading: facebookCommentsLoading } =
     useQuery({
-      queryKey: ["facebook", "posts", postId, "comments", "count"],
+      queryKey: ["posts", postId, "comments", "count"],
       queryFn: async () => {
         const { data } = await axios.get(
           `/api/platforms/facebook/posts/${postId}/comments`
@@ -70,7 +70,7 @@ export default function PostStatsBar({ postId, platform }: PostStatsProps) {
       },
       enabled: platform == platformTypes.facebook,
       refetchOnWindowFocus: false,
-      refetchInterval: 1000 * 60 * 5,
+      refetchInterval: 1000 * 60 * 5, // 5 minutes
       retryDelay(failureCount, error) {
         if (failureCount < 3) return 1000 * 60 * 5;
         else return 1000 * 60 * 60;

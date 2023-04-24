@@ -13,6 +13,8 @@ export default function useUser() {
       const { data } = await axios.get("/api/auth");
       return data.user;
     },
+    refetchOnWindowFocus: false,
+    refetchInterval: 1000 * 60 * 60 * 1, // 1 hour
   });
 
   return user;

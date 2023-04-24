@@ -22,7 +22,7 @@ export default function LikeButton({ postId, platform }: LikeButtonProps) {
 
   switch (platform) {
     case platformTypes.facebook:
-      queryKey = ["facebook", "posts", postId, "likes", "hasLiked"];
+      queryKey = ["posts", postId, "likes", "hasLiked"];
       queryFn = async () => {
         const { data }: { data: FacebookData } = await axios.get(
           `/api/platforms/facebook/posts/${postId}/likes`
@@ -43,7 +43,7 @@ export default function LikeButton({ postId, platform }: LikeButtonProps) {
       };
       break;
     default: // connect
-      queryKey = ["connect", "posts", postId, "likes", "hasLiked"];
+      queryKey = ["posts", postId, "likes", "hasLiked"];
       queryFn = async () => {
         const { data }: { data: ConnectData } = await axios.get(
           `/api/posts/${postId}/likes`
@@ -69,10 +69,10 @@ export default function LikeButton({ postId, platform }: LikeButtonProps) {
     queryFn,
     enabled: !userLoading,
     refetchOnWindowFocus: false,
-    refetchInterval: 1000 * 60 * 5,
+    refetchInterval: 1000 * 60 * 5, // 5 minutes
     retryDelay(failureCount, error) {
-      if (failureCount < 3) return 1000 * 60 * 5;
-      else return 1000 * 60 * 60;
+      if (failureCount < 3) return 1000 * 60 * 1;
+      else return 1000 * 60 * 5;
     },
   });
 
