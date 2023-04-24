@@ -47,7 +47,6 @@ export default async function handler(
       try {
         const { pid } = req.query;
 
-        // NOTE: Liking photos is not supported on Graph API
         const response = await axios.post(
           `https://graph.facebook.com/v16.0/${pid}/likes?access_token=${page_token}`
         );
