@@ -73,7 +73,6 @@ export const LandingPage = () => {
                     className="btn bg-primary hover:bg-secondary"
                     onClick={(e) => {
                       e.preventDefault();
-                      console.log("login");
                       signIn("github", {
                         callbackUrl: "/",
                       });

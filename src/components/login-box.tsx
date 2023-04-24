@@ -30,11 +30,8 @@ const LoginBox = () => {
     const res = await fetch("api/auth/login", options);
     const data = await res.json();
 
-    console.log(data);
-
     if (data.success) {
       const accessTokenCookie: string = res.headers.get("Authorization")!;
-      console.log(accessTokenCookie);
 
       document.cookie = accessTokenCookie;
 

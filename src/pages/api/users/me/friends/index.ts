@@ -49,8 +49,6 @@ export default async function handler(
         const currentUser = await User.findById(_id).populate(
           "friends.user_id"
         );
-        console.log(currentUser);
-        console.log(currentUser.friends);
 
         const friendObjects: [{ user_id: ObjectId }] = currentUser.friends;
         const friends = friendObjects.map((friend: { user_id: ObjectId }) => {

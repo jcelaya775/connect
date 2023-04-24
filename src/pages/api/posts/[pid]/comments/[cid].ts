@@ -43,8 +43,6 @@ export default async function handler(
         });
         if (!comment) return res.status(404).json({ success: false });
 
-        console.log(comment);
-
         const replies: IComment[] = comment.replies ?? [];
 
         res.status(200).json({ success: true, data: replies });

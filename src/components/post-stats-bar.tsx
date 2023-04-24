@@ -18,7 +18,6 @@ export default function PostStatsBar({ postId, platform }: PostStatsProps) {
       const { data } = await axios.get(`/api/posts/${postId}/likes`);
       return data.likeCount;
     },
-    cacheTime: 0,
     refetchOnWindowFocus: true,
     enabled: platform == platformTypes.connect,
   });

@@ -14,7 +14,6 @@ export default function withServerSideAuth(
 ): WrappedGetServerSideProps {
   const wrappedGetServerSideProps = (context: GetServerSidePropsContext) => {
     const { req, res } = context;
-    console.log(req.url);
 
     const session = getServerSession(req, res, authOptions);
 

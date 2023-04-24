@@ -130,7 +130,6 @@ const EditPostModal = ({
         throw new Error("Error creating post");
       }
 
-      console.log(res.data);
       return res.data;
     },
     {

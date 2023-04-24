@@ -32,7 +32,6 @@ export default async function handler(
         const response = await axios.get(
           `https://graph.facebook.com/v16.0/me/feed?fields=${fields}&access_token=${page_token}`
         );
-        console.log(response);
 
         const posts = response.data.data;
         // // Get user's posts

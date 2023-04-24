@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import connectDB from "../../../lib/mongodb";
+import connectDB from "@/lib/mongodb";
 import User, { IUser } from "../../../models/User";
 import { comparePassword } from "@/lib/validation/passwordHash";
 import jwt from "jsonwebtoken";

@@ -68,13 +68,13 @@ export default function LikeButton({ postId, platform }: LikeButtonProps) {
     queryKey,
     queryFn,
     enabled: !userLoading,
+    refetchInterval: 1000 * 60 * 5,
   });
 
   const likeMutation = useMutation({
     mutationFn,
     onSuccess: () => {
-      console.log(queryKey.slice(0, -2));
-      queryClient.invalidateQueries(queryKey.slice(0, -2));
+      queryClient.invalidateQueries(queryKey.slice(0, -1));
     },
   });
 
