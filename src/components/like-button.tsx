@@ -68,6 +68,7 @@ export default function LikeButton({ postId, platform }: LikeButtonProps) {
     queryKey,
     queryFn,
     enabled: !userLoading,
+    refetchOnWindowFocus: false,
     refetchInterval: 1000 * 60 * 5,
     retryDelay(failureCount, error) {
       if (failureCount < 3) return 1000 * 60 * 5;

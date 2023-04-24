@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import connectDB from "@/lib/mongodb";
 import axios from "axios";
 import { getAuthUser } from "@/lib/auth";
+import { platformTypes } from "@/types/platform";
 
 type Data = {
   success: boolean;
@@ -46,7 +47,7 @@ export default async function handler(
 
         // const posts = response.data.data;
         posts.forEach((post: any) => {
-          post.main_platform = "Facebook";
+          post.main_platform = platformTypes.facebook;
           post.author = user.name;
         });
 

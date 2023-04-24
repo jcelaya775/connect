@@ -18,8 +18,8 @@ export default function PostStatsBar({ postId, platform }: PostStatsProps) {
       const { data } = await axios.get(`/api/posts/${postId}/likes`);
       return data.likeCount;
     },
-    refetchOnWindowFocus: true,
     enabled: platform == platformTypes.connect,
+    refetchOnWindowFocus: false,
     refetchInterval: 1000 * 60 * 5,
     retryDelay(failureCount, error) {
       if (failureCount < 3) return 1000 * 60 * 5;
@@ -33,6 +33,7 @@ export default function PostStatsBar({ postId, platform }: PostStatsProps) {
       return data.commentCount;
     },
     enabled: platform == platformTypes.connect,
+    refetchOnWindowFocus: false,
     refetchInterval: 1000 * 60 * 5,
     retryDelay(failureCount, error) {
       if (failureCount < 3) return 1000 * 60 * 5;
@@ -51,6 +52,7 @@ export default function PostStatsBar({ postId, platform }: PostStatsProps) {
       else return data.likeCount;
     },
     enabled: platform == platformTypes.facebook,
+    refetchOnWindowFocus: false,
     refetchInterval: 1000 * 60 * 5,
     retryDelay(failureCount, error) {
       if (failureCount < 3) return 1000 * 60 * 5;
@@ -67,7 +69,7 @@ export default function PostStatsBar({ postId, platform }: PostStatsProps) {
         return data.commentCount;
       },
       enabled: platform == platformTypes.facebook,
-      refetchOnWindowFocus: true,
+      refetchOnWindowFocus: false,
       refetchInterval: 1000 * 60 * 5,
       retryDelay(failureCount, error) {
         if (failureCount < 3) return 1000 * 60 * 5;

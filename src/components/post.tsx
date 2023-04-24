@@ -128,8 +128,8 @@ const Post = ({
               <Image
                 className="w-full h-full"
                 priority
-                width={300}
-                height={300}
+                width={800}
+                height={800}
                 src={content.image.url}
                 alt="post image"
                 unoptimized
