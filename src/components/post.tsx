@@ -4,7 +4,7 @@ import { platformTypes } from "@/types/platform";
 import PostStatsBar from "./post-stats-bar";
 import OptionsDropdown from "./options-dropdown";
 
-type PostProps = {
+export type PostProps = {
   postId: string;
   facebookId: string;
   instagramId: string;
