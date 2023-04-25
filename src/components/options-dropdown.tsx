@@ -41,7 +41,7 @@ const OptionsDropdown = ({
             break;
           default: // connect
             const { data: connectData } = await axios.delete(
-              `/api/posts/${postId}`
+              `/api/platforms/connect/posts/${postId}`
             );
             if (connectData.error) {
               success.connect = false;

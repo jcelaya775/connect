@@ -26,7 +26,7 @@ export default async function handler(
 
   switch (method) {
     /**
-     * @route   GET api/posts/:pid/comments
+     * @route   GET api/platforms/connect/posts/:pid/comments
      * @desc    Get all comments for a post
      * @access  Public
      * @params  pid: string (required)
@@ -52,7 +52,7 @@ export default async function handler(
       }
       break;
     /**
-     * @route   POST api/posts/:pid/comments
+     * @route   POST api/platforms/connect/posts/:pid/comments
      * @desc    Create a comment for a post
      * @access  Private
      * @params  comment: string (required)

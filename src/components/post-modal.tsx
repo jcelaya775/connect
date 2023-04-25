@@ -43,7 +43,7 @@ const PostModal = ({ newPost = true, setVisible }: PostModalProps) => {
   };
 
   const postToConnect = async (postData: any) => {
-    const res = await axios.post("/api/posts", postData);
+    const res = await axios.post("/api/platforms/connect/posts", postData);
 
     if (res.data.success === false) {
       throw new Error("Error posting to Connect");

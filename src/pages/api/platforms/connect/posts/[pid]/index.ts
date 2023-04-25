@@ -18,7 +18,7 @@ export default async function handler(
 
   switch (method) {
     /**
-     * @route   GET api/posts/:pid
+     * @route   GET api/platforms/connect/posts/:pid
      * @desc    Get a post by id
      * @access  Public
      * @params  pid: string (required)
@@ -42,7 +42,7 @@ export default async function handler(
 
       break;
     /**
-     * @route   PUT api/posts/:pid
+     * @route   PUT api/platforms/connect/posts/:pid
      * @desc    Update a post
      * @access  Private
      * @params  pid: string (required)
@@ -92,7 +92,7 @@ export default async function handler(
 
       break;
     /**
-     * @route   DELETE api/posts/:pid
+     * @route   DELETE api/platforms/connect/posts/:pid
      * @desc    Delete a post
      * @access  Private
      * @params  pid: string (required)

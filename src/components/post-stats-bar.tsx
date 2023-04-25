@@ -15,7 +15,9 @@ export default function PostStatsBar({ postId, platform }: PostStatsProps) {
   const { data: connectLikes, isLoading: connectLikeLoading } = useQuery({
     queryKey: ["posts", postId, "likes", "count"],
     queryFn: async () => {
-      const { data } = await axios.get(`/api/posts/${postId}/likes`);
+      const { data } = await axios.get(
+        `/api/platforms/connect/posts/${postId}/likes`
+      );
       return data.likeCount;
     },
     enabled: platform == platformTypes.connect,
@@ -29,7 +31,9 @@ export default function PostStatsBar({ postId, platform }: PostStatsProps) {
   const { data: connectComments, isLoading: connectCommentLoading } = useQuery({
     queryKey: ["posts", postId, "comments", "count"],
     queryFn: async () => {
-      const { data } = await axios.get(`/api/posts/${postId}/comments`);
+      const { data } = await axios.get(
+        `/api/platforms/connect/posts/${postId}/comments`
+      );
       return data.commentCount;
     },
     enabled: platform == platformTypes.connect,

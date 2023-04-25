@@ -28,7 +28,7 @@ export default async function handler(
 
   switch (method) {
     /**
-     * @route   GET api/posts/:pid/comments/:cid
+     * @route   GET api/platforms/connect/posts/:pid/comments/:cid
      * @desc    Get all replies for a comment
      * @access  Public
      * @params  pid: string (required)
@@ -52,7 +52,7 @@ export default async function handler(
 
       break;
     /**
-     * @route   POST api/posts/:pid/comments/:cid
+     * @route   POST api/platforms/connect/posts/:pid/comments/:cid
      * @desc    Create a reply to a comment
      * @access  Private
      * @params  cid: string (required)
@@ -94,7 +94,7 @@ export default async function handler(
 
       break;
     /**
-     * @route   PUT api/posts/:pid/comments/:cid
+     * @route   PUT api/platforms/connect/posts/:pid/comments/:cid
      * @desc    Edit a comment
      * @access  Private
      * @params  cid: string (required)
@@ -121,7 +121,7 @@ export default async function handler(
 
       break;
     /**
-     * @route   DELETE api/posts/:pid/comments/:cid
+     * @route   DELETE api/platforms/connect/posts/:pid/comments/:cid
      * @desc    Delete a comment
      * @access  Private
      * @params  cid: string (required)

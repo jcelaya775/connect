@@ -1,6 +1,6 @@
 import useUser from "@/hooks/useUser";
 import { IPost } from "@/models/Post";
-import { Data as ConnectData } from "@/pages/api/posts/[pid]/likes";
+import { Data as ConnectData } from "@/pages/api/platforms/connect/posts/[pid]/likes";
 import { Data as FacebookData } from "@/pages/api/platforms/facebook/posts/[pid]/likes";
 import { platformTypes } from "@/types/platform";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -46,17 +46,18 @@ export default function LikeButton({ postId, platform }: LikeButtonProps) {
       queryKey = ["posts", postId, "likes", "hasLiked"];
       queryFn = async () => {
         const { data }: { data: ConnectData } = await axios.get(
-          `/api/posts/${postId}/likes`
+          `/api/platforms/connect/posts/${postId}/likes`
         );
 
         return data.hasLiked!;
       };
       mutationFn = async ({ dislike = false }: { dislike: boolean }) => {
-        if (dislike) await axios.delete(`/api/posts/${postId}/likes`);
-        else await axios.post(`/api/posts/${postId}/likes`);
+        if (dislike)
+          await axios.delete(`/api/platforms/connect/posts/${postId}/likes`);
+        else await axios.post(`/api/platforms/connect/posts/${postId}/likes`);
 
         const { data: likeData } = await axios.get(
-          `/api/posts/${postId}/likes`
+          `/api/platforms/connect/posts/${postId}/likes`
         );
 
         return likeData;

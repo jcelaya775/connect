@@ -81,11 +81,10 @@ const EditPostModal = ({
       const updatedPost: any = {};
 
       for (const platform of platforms) {
-        console.log(`Platform: ${platform}`);
         switch (platform) {
           case platformTypes.connect:
             const { data: connectData } = await axios.put(
-              `/api/posts/${postId}`,
+              `/api/platforms/connect/posts/${postId}`,
               {
                 content: { body: description },
               }

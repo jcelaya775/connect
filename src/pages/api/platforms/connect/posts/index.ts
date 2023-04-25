@@ -44,7 +44,7 @@ export default async function handler(
 
       break;
     /**
-     * @route   POST api/posts
+     * @route   POST api/platforms/connect/posts
      * @desc    Create a post
      * @access  Private
      * @body    title: string (required)

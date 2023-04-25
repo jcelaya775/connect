@@ -25,7 +25,7 @@ export default async function handler(
 
   switch (method) {
     /**
-     * @route   GET api/posts/:pid/likes
+     * @route   GET api/platforms/connect/posts/:pid/likes
      * @desc    Get a post's likes
      * @access  Public
      * @params  pid: string (required)
@@ -48,7 +48,7 @@ export default async function handler(
 
       break;
     /**
-     * @route    POST api/posts/:pid/likes
+     * @route    POST api/platforms/connect/posts/:pid/likes
      * @desc     Like a post
      * @access   Private
      * @body     none
@@ -86,7 +86,7 @@ export default async function handler(
 
       break;
     /**
-     * route    DELETE api/posts/:pid/likes
+     * route    DELETE api/platforms/connect/posts/:pid/likes
      * desc     Unlike a post
      * access   Private
      * body     none
