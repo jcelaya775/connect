@@ -20,7 +20,7 @@
     "bcryptjs": "^2.4.3",
     "classnames": "^2.3.2",
     "cookie": "^0.5.0",
-    "daisyui": "^2.51.5",
+    "daisyui": "^1.25.4",
     "eslint": "8.33.0",
     "eslint-config-next": "13.1.6",
     "joi": "^17.7.0",
@@ -48,6 +48,6 @@
     "autoprefixer": "^10.4.13",
     "local-ssl-proxy": "^2.0.5",
     "postcss": "^8.4.21",
-    "tailwindcss": "^3.2.4"
+    "tailwindcss": "^2.2.2"
   }
 }
