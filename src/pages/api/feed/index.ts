@@ -60,19 +60,20 @@ export default async function handler(
             Cookie: req.headers.cookie,
           },
         });
-        connectPosts.forEach((post: IConnectPost) => {
-          // Store all facebook and instagram post ids
-          for (const platform of post.platforms) {
-            switch (platform) {
-              case platformTypes.facebook:
-                facebookPostIds.add(post.facebook_id!);
-                break;
-              case platformTypes.instagram:
-                instagramPostIds.add(post.instagram_id!);
-                break;
+        if (connectPosts)
+          connectPosts.forEach((post: IConnectPost) => {
+            // Store all facebook and instagram post ids
+            for (const platform of post.platforms) {
+              switch (platform) {
+                case platformTypes.facebook:
+                  facebookPostIds.add(post.facebook_id!);
+                  break;
+                case platformTypes.instagram:
+                  instagramPostIds.add(post.instagram_id!);
+                  break;
+              }
             }
-          }
-        });
+          });
         allPosts.push(...connectPosts);
 
         // Get user's facebook posts
@@ -83,10 +84,11 @@ export default async function handler(
             Cookie: req.headers.cookie,
           },
         });
-        facebookPosts.forEach((post: IFacebookPost) => {
-          // Only add post if it doesn't already exist
-          if (!facebookPostIds.has(post.id)) allPosts.push(post);
-        });
+        if (facebookPosts)
+          facebookPosts.forEach((post: IFacebookPost) => {
+            // Only add post if it doesn't already exist
+            if (!facebookPostIds.has(post.id)) allPosts.push(post);
+          });
 
         allPosts.sort((postA: GenericPost, postB: GenericPost) => {
           let timeA: number = getDate(postA);
