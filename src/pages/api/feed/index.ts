@@ -52,31 +52,33 @@ export default async function handler(
         const facebookPostIds: Set<string> = new Set<string>();
         const instagramPostIds: Set<string> = new Set<string>();
 
-        console.log(`${url}/api/platforms/connect/posts`)
-        
-        // Get user's connect posts
-        const {
-          data: { posts: connectPosts },
-        } = await axios.get(`${url}/api/platforms/connect/posts`, {
-          headers: {
-            Cookie: req.headers.cookie,
-          },
-        });
-        if (connectPosts)
-          connectPosts.forEach((post: IConnectPost) => {
-            // Store all facebook and instagram post ids
-            for (const platform of post.platforms) {
-              switch (platform) {
-                case platformTypes.facebook:
-                  facebookPostIds.add(post.facebook_id!);
-                  break;
-                case platformTypes.instagram:
-                  instagramPostIds.add(post.instagram_id!);
-                  break;
-              }
-            }
+        try {
+          // Get user's connect posts
+          const {
+            data: { posts: connectPosts },
+          } = await axios.get(`${url}/api/platforms/connect/posts`, {
+            headers: {
+              Cookie: req.headers.cookie,
+            },
           });
-        allPosts.push(...connectPosts);
+          if (connectPosts)
+            connectPosts.forEach((post: IConnectPost) => {
+              // Store all facebook and instagram post ids
+              for (const platform of post.platforms) {
+                switch (platform) {
+                  case platformTypes.facebook:
+                    facebookPostIds.add(post.facebook_id!);
+                    break;
+                  case platformTypes.instagram:
+                    instagramPostIds.add(post.instagram_id!);
+                    break;
+                }
+              }
+            });
+          allPosts.push(...connectPosts);
+        } catch (error: any) {
+          console.log(error.response.data);
+        }
 
         // // Get user's facebook posts
         // const {
