@@ -5,6 +5,7 @@ import Post from "./post";
 import { platformTypes } from "@/types/platform";
 import cityImage from "../images/cityscape.jpg";
 import Image from "next/image";
+import FriendsModal from "./friends-list-modal";
 
 export const UserProfilePage = () => {
   const [friendModalVisible, setFriendsModalVisible] = useState(false);
@@ -22,7 +23,7 @@ export const UserProfilePage = () => {
         {/* Main Content Area */}
         <div className="flex-1 bg-base-200 min-h-screen pr-8 pt-6 pl-8 sm:pl-24 w-full lg:pl-48 xl:pr-0">
           <div className="flex flex-row gap-x-10">
-            <div className="flex-initial w-full xl:w-3/4">
+            <div className="flex-initial w-full">
               <div className="flex flex-col w-full gap-5">
                 <div className="container mx-auto my-8">
                   {/*  Profile Card  */}
@@ -68,31 +69,27 @@ export const UserProfilePage = () => {
                       </div>
                     </div>
                   </div>
+                </div>
 
-                  <div className="grid grid-cols-2 gap-4">
-                    {/* <!-- Friends Card -->
-                    <div className="card shadow-md bg-white">
-                      <div className="card-body">
-                        <h2 className="text-lg font-bold text-gray-700 mb-4">
-                          Friends
-                        </h2>
+                  </div>
+                  <div className="w-full">
+                  <div className="mt-4">
                         <label
                           htmlFor="my-modal"
-                          className="btn"
+                          className="btn btn-sm"
                           onClick={() => setFriendsModalVisible(prev => !prev)}
                         >
-                          View Friends List
+                          View Friends
                         </label>
                         {friendModalVisible && (
                           <FriendsModal setVisible={setFriendsModalVisible} />
                         )}
-                      </div>
-                    </div> */}
                   </div>
-                </div>
-                <h2 className="text-xl font-bold text-gray-700 ml-1 mb-0">
+                  </div>
+                  <h2 className="text-xl font-bold text-gray-700 ml-1 mb-0 mt-8">
                   Posts
-                </h2>
+                  </h2>
+                </div>
                 {/* <Post
                   postId="1231"
                   author="John Doe"
@@ -104,7 +101,7 @@ export const UserProfilePage = () => {
                 /> */}
               </div>
             </div>
-            <div className=" flex-2 pr-6 w-1/4 hidden xl:block box-border text-center">
+{/*             <div className=" flex-2 pr-6 w-1/4 hidden xl:block box-border text-center">
               <div className="card bg-white">
                 <div className="text-3xl card-title justify-center text-gray-900 border-b-2 border-gray-100">
                   My Goals
@@ -175,7 +172,7 @@ export const UserProfilePage = () => {
                     </div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

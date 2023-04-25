@@ -29,7 +29,7 @@ const SideNav = () => {
             </Link>
           </li>
           <li className="hover-bordered">
-            <Link href="/profile">
+            <Link href="/userprofile">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -47,7 +47,7 @@ const SideNav = () => {
               <span className="hidden lg:block">Profile</span>
             </Link>
           </li>
-          <li className="hover-bordered">
+          {/* <li className="hover-bordered">
             <Link href="#">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -64,8 +64,8 @@ const SideNav = () => {
                 />
               </svg>
               <span className="hidden lg:block">Dashboard</span>
-            </Link>
-          </li>
+            </Link> 
+          </li> */}
           <li className="hover-bordered">
             <Link href="/friends">
               <svg

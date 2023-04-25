@@ -24,7 +24,7 @@ const BtmNav = () => {
             </Link>
           </button>
           <button className="hover:border-t-2 hover:bg-gray-200/75">
-            <Link href="/profile">
+            <Link href="/userprofile">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
