@@ -7,8 +7,37 @@ const s3 = new S3({
   region: process.env.AWS_REGION,
 });
 
+export async function updateFileOnS3(
+  buffer: Buffer,
+  originalFilename: string
+): Promise<string> {
+  try {
+    // Read the contents of the file into a buffer
+    // Upload the file to S3
+    await s3
+      .upload({
+        Bucket: process.env.AWS_BUCKET_NAME || "default",
+        Key: originalFilename || "default",
+        Body: buffer,
+      })
+      .promise();
 
-export async function uploadFileToS3(buffer: Buffer, name: string): Promise<string> {
+    // Generate a signed URL for the file with no expiration
+    const url = await s3.getSignedUrlPromise("getObject", {
+      Bucket: process.env.AWS_BUCKET_NAME,
+      Key: originalFilename,
+      Expires: 0,
+    });
+
+    return url;
+  } catch (error) {
+    throw error;
+  }
+}
+export async function uploadFileToS3(
+  buffer: Buffer,
+  name: string
+): Promise<string> {
   try {
     // Read the contents of the file into a buffer
     // Upload the file to S3
