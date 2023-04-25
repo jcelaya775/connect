@@ -3,6 +3,7 @@ import connectDB from "@/lib/mongodb";
 import axios from "axios";
 import { getAuthUser } from "@/lib/auth";
 import { platformTypes } from "@/types/platform";
+import { IFacebookPost } from "@/types/post";
 
 type Data = {
   success: boolean;
@@ -46,7 +47,7 @@ export default async function handler(
         // } while (hasNextPage);
 
         // const posts = response.data.data;
-        posts.forEach((post: any) => {
+        posts.forEach((post: IFacebookPost) => {
           post.main_platform = platformTypes.facebook;
           post.author = user.name;
         });

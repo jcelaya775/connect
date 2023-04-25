@@ -1,6 +1,6 @@
 import { useState } from "react";
 import SideNav from "./SideNav";
-import Post from "./post";
+import Post, { PostProps } from "./post";
 import PostModal from "./post-modal";
 import BtmNav from "./bottom-nav";
 import { platformTypes } from "@/types/platform";

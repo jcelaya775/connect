@@ -1,5 +1,5 @@
 import useUser from "@/hooks/useUser";
-import { IPost } from "@/models/Post";
+import { IConnectPost } from "@/models/Post";
 import { Data as ConnectData } from "@/pages/api/platforms/connect/posts/[pid]/likes";
 import { Data as FacebookData } from "@/pages/api/platforms/facebook/posts/[pid]/likes";
 import { platformTypes } from "@/types/platform";

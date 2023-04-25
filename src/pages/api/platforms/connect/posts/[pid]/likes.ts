@@ -1,12 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import connectDB from "@/lib/mongodb";
-import Post, { IPost } from "@/models/Post";
+import Post from "@/models/Post";
+import { IConnectPost } from "@/models/Post";
 import { getAuthUser } from "@/lib/auth";
 
 export type Data = {
   success: boolean;
   hasLiked?: boolean;
-  likes?: IPost["likes"];
+  likes?: IConnectPost["likes"];
   likeCount?: number;
   error?: string;
 };
@@ -32,7 +33,9 @@ export default async function handler(
      **/
     case "GET":
       try {
-        const post: IPost | null = await Post.findOne<IPost>({ _id: pid });
+        const post: IConnectPost | null = await Post.findOne<IConnectPost>({
+          _id: pid,
+        });
         if (!post) return res.status(404).json({ success: false });
 
         const likeCount = post.likes.length;
@@ -61,7 +64,9 @@ export default async function handler(
       try {
         const { _id: user_id } = user;
 
-        const post: IPost | null = await Post.findOne<IPost>({ _id: pid });
+        const post: IConnectPost | null = await Post.findOne<IConnectPost>({
+          _id: pid,
+        });
         if (!post) return res.status(404).json({ success: false });
 
         // Check if user has already liked the post
@@ -97,7 +102,9 @@ export default async function handler(
       try {
         const { _id: user_id } = user;
 
-        const post: IPost | null = await Post.findOne<IPost>({ _id: pid });
+        const post: IConnectPost | null = await Post.findOne<IConnectPost>({
+          _id: pid,
+        });
         if (!post) return res.status(404).json({ success: false });
 
         // Check if user has not liked the post

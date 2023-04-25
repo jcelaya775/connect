@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import connectDB from "@/lib/mongodb";
-import Post, { IPost } from "@/models/Post";
+import Post from "@/models/Post";
+import { IConnectPost } from "@/models/Post";
 import Comment, { IComment } from "@/models/Comment";
 import { getAuthUser } from "@/lib/auth";
 
@@ -36,7 +37,9 @@ export default async function handler(
       try {
         const { pid } = req.query;
 
-        const post: IPost | null = await Post.findOne<IPost>({ _id: pid });
+        const post: IConnectPost | null = await Post.findOne<IConnectPost>({
+          _id: pid,
+        });
         if (!post) return res.status(404).json({ success: false });
 
         const comments: IComment[] = post.comments ?? [];
@@ -67,7 +70,9 @@ export default async function handler(
         const { pid } = req.query;
         const { content } = req.body;
 
-        const post: IPost | null = await Post.findOne<IPost>({ _id: pid });
+        const post: IConnectPost | null = await Post.findOne<IConnectPost>({
+          _id: pid,
+        });
         if (!post) {
           return res.status(404).json({ success: false });
         }

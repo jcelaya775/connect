@@ -4,14 +4,14 @@ import EditPostModal from "./edit-post-modal";
 import axios from "axios";
 import { platformTypes } from "@/types/platform";
 import { platform } from "os";
-import { IPost } from "@/models/Post";
+import { IConnectPost } from "@/models/Post";
 
 type OptionsDropdownProps = {
   postId: string;
   facebookId: string;
   instagramId: string;
   platforms: platformTypes[];
-  content: IPost["content"];
+  content: IConnectPost["content"];
 };
 
 const OptionsDropdown = ({

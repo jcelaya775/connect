@@ -1,19 +1,16 @@
 import { useState, useRef, useEffect } from "react";
-import Image from "next/image";
-import Insta from "../images/insta_logo.svg";
-import Facebook from "../images/facebook_logo.svg";
-import Connect from "../images/connect_logo.svg";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { platformTypes } from "@/types/platform";
-import { IPost } from "@/models/Post";
+import { IConnectPost } from "@/models/Post";
+import { GenericPost } from "@/types/post";
 
 type EditPostModalProps = {
   postId: string;
   facebookId: string;
   instagramId: string;
   platforms: platformTypes[];
-  content: IPost["content"];
+  content: IConnectPost["content"];
   setVisible: (visible: boolean) => void;
 };
 
@@ -30,18 +27,6 @@ const EditPostModal = ({
   const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
   const [description, setDescription] = useState(content.body);
   const [upload, setUpload] = useState("no file uploaded");
-
-  const [instagramChecked, setInstagramChecked] = useState(false);
-  const [facebookChecked, setFacebookChecked] = useState(false);
-  const [connectChecked, setConnectChecked] = useState(true);
-
-  const [instagramAudience, setInstagramAudience] = useState(true);
-  const [facebookAudience, setFacebookAudience] = useState(true);
-  const [connectAudience, setConnectAudience] = useState<string>("public");
-
-  const toggleInstagram = () => setInstagramChecked(!instagramChecked);
-  const toggleFacebook = () => setFacebookChecked(!facebookChecked);
-  const toggleConnect = () => setConnectChecked(!connectChecked);
 
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
@@ -68,17 +53,11 @@ const EditPostModal = ({
   function resetPost() {
     setDescription("");
     setUpload("no file uploaded");
-    setInstagramChecked(false);
-    setFacebookChecked(false);
-    setConnectChecked(true);
-    setInstagramAudience(true);
-    setFacebookAudience(true);
-    setConnectAudience("public");
   }
 
   const editPostMutation = useMutation({
     mutationFn: async () => {
-      const updatedPost: any = {};
+      const updatedPost: GenericPost & any = {};
 
       for (const platform of platforms) {
         switch (platform) {
