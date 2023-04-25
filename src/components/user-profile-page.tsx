@@ -73,10 +73,10 @@ export const UserProfilePage = () => {
 
                   </div>
                   <div className="w-full">
-                  <div className="mt-4">
+                  <div className="my-4">
                         <label
                           htmlFor="my-modal"
-                          className="btn btn-sm"
+                          className="btn btn-primary btn-sm"
                           onClick={() => setFriendsModalVisible(prev => !prev)}
                         >
                           View Friends
@@ -84,21 +84,32 @@ export const UserProfilePage = () => {
                         {friendModalVisible && (
                           <FriendsModal setVisible={setFriendsModalVisible} />
                         )}
+                    </div>
                   </div>
+                  <div className="flex flex-col gap-y-4 md:flex-row md:gap-x-4">
+                    <div className="card w-full md:w-3/4 bg-base-100 rounded">
+                      <div className="card-title p-4">
+                        Posts
+                      </div>
+                      <div className="card-body">
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. In iaculis nunc sed augue lacus viverra vitae. Auctor urna nunc id cursus. Diam quam nulla porttitor massa. Ullamcorper malesuada proin libero nunc consequat interdum varius. Sagittis nisl rhoncus mattis rhoncus urna neque viverra. Viverra orci sagittis eu volutpat odio facilisis. Proin libero nunc consequat interdum varius. Feugiat nisl pretium fusce id velit ut tortor. Et ligula ullamcorper malesuada proin libero nunc consequat interdum varius. Convallis convallis tellus id interdum velit. Et ultrices neque ornare aenean euismod elementum nisi quis eleifend. Gravida arcu ac tortor dignissim convallis aenean et tortor at. Sit amet dictum sit amet justo donec enim diam vulputate. Ac tortor dignissim convallis aenean et tortor at risus viverra. In pellentesque massa placerat duis ultricies lacus sed. Amet justo donec enim diam vulputate ut. Nibh sit amet commodo nulla facilisi nullam. Ut venenatis tellus in metus vulputate eu scelerisque felis imperdiet. Scelerisque eleifend donec pretium vulputate sapien nec sagittis.
+
+Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Senectus et netus et malesuada fames ac turpis. Suscipit tellus mauris a diam maecenas sed. Tincidunt eget nullam non nisi est sit amet facilisis magna. Mi quis hendrerit dolor magna. Urna nec tincidunt praesent semper feugiat. Malesuada fames ac turpis egestas maecenas. At ultrices mi tempus imperdiet nulla malesuada pellentesque elit. Sit amet volutpat consequat mauris nunc congue nisi. Egestas maecenas pharetra convallis posuere. Habitant morbi tristique senectus et netus et malesuada. Cras tincidunt lobortis feugiat vivamus at augue. Ultrices vitae auctor eu augue. Tristique senectus et netus et malesuada fames ac turpis egestas. Consequat mauris nunc congue nisi vitae suscipit tellus mauris a. Tincidunt augue interdum velit euismod in pellentesque massa. Tincidunt nunc pulvinar sapien et ligula ullamcorper. Eget nunc scelerisque viverra mauris in aliquam sem fringilla ut. Id aliquet risus feugiat in ante metus dictum at. Morbi quis commodo odio aenean.
+
+Accumsan sit amet nulla facilisi morbi tempus iaculis urna. Purus sit amet volutpat consequat mauris. Tellus mauris a diam maecenas sed. Platea dictumst quisque sagittis purus sit amet volutpat. Senectus et netus et malesuada fames ac. Aenean pharetra magna ac placerat. Volutpat est velit egestas dui id ornare arcu. Quis eleifend quam adipiscing vitae proin sagittis nisl rhoncus mattis. Hac habitasse platea dictumst vestibulum. Mattis enim ut tellus elementum sagittis vitae et leo duis. In ante metus dictum at tempor commodo ullamcorper. Enim ut sem viverra aliquet eget sit. Elementum nisi quis eleifend quam adipiscing vitae proin sagittis.
+
+Massa sed elementum tempus egestas. Commodo ullamcorper a lacus vestibulum. Aenean vel elit scelerisque mauris pellentesque. Aliquam ut porttitor leo a diam sollicitudin. Volutpat sed cras ornare arcu dui vivamus arcu felis bibendum. Tristique senectus et netus et malesuada fames ac. Id velit ut tortor pretium viverra suspendisse. Odio pellentesque diam volutpat commodo sed egestas egestas fringilla phasellus. Morbi tincidunt ornare massa eget egestas purus viverra. Sodales ut eu sem integer. Urna condimentum mattis pellentesque id nibh tortor id aliquet lectus. Gravida arcu ac tortor dignissim convallis aenean et. Tempus egestas sed sed risus pretium quam vulputate dignissim. Morbi tristique senectus et netus et malesuada fames ac turpis. Adipiscing tristique risus nec feugiat in fermentum posuere. Viverra maecenas accumsan lacus vel facilisis volutpat.
+
+Eu scelerisque felis imperdiet proin fermentum leo. Tortor consequat id porta nibh venenatis cras sed. Massa sed elementum tempus egestas sed. Nullam non nisi est sit amet facilisis magna. Nulla facilisi etiam dignissim diam quis. Dis parturient montes nascetur ridiculus mus mauris vitae. Enim praesent elementum facilisis leo. Dictumst vestibulum rhoncus est pellentesque elit ullamcorper dignissim cras tincidunt. Integer eget aliquet nibh praesent. Viverra aliquet eget sit amet tellus cras. Aliquet nec ullamcorper sit amet risus nullam eget felis. Sem viverra aliquet eget sit amet tellus. Elit ullamcorper dignissim cras tincidunt lobortis feugiat vivamus at. Sagittis purus sit amet volutpat consequat mauris nunc congue nisi. Tempus urna et pharetra pharetra massa massa. Ipsum consequat nisl vel pretium lectus quam id leo in.
+                      </div>
+                    </div>
+                    <div className="card w-full md:w-1/4 bg-base-100 rounded h-min">
+                      <div className="card-title p-4">
+                        Friends
+                      </div>
+                    </div>
                   </div>
-                  <h2 className="text-xl font-bold text-gray-700 ml-1 mb-0 mt-8">
-                  Posts
-                  </h2>
                 </div>
-                {/* <Post
-                  postId="1231"
-                  author="John Doe"
-                  mainPlatform={platformTypes.connect}
-                  platforms={[platformTypes.connect]}
-                  content={{
-                    body: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde laudantium enim ab doloremque quod velit tenetur delectus hic labore aliquam, soluta id magni praesentium facere quos rem facilis numquam dolore.",
-                  }}
-                /> */}
               </div>
             </div>
 {/*             <div className=" flex-2 pr-6 w-1/4 hidden xl:block box-border text-center">

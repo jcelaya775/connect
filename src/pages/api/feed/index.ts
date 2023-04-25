@@ -52,6 +52,8 @@ export default async function handler(
         const facebookPostIds: Set<string> = new Set<string>();
         const instagramPostIds: Set<string> = new Set<string>();
 
+        console.log(`${url}/api/platforms/connect/posts`)
+        
         // Get user's connect posts
         const {
           data: { posts: connectPosts },
