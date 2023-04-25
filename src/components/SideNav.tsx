@@ -104,7 +104,7 @@ const SideNav = () => {
               <span className="hidden lg:block">Favorites</span>
             </Link>
           </li>
-          <li className="xl:hidden hover-bordered">
+          {/* <li className="xl:hidden hover-bordered">
             <Link href="#">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -122,7 +122,7 @@ const SideNav = () => {
               </svg>
               <span className="hidden lg:block">LOTW</span>
             </Link>
-          </li>
+          </li> */}
         </ul>
         <div className="absolute bottom-20 left-0 horz:hidden">
           <ul className="menu bg-base-100 p-2 rounded-box">
