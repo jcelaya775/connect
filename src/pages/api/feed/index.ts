@@ -76,19 +76,19 @@ export default async function handler(
           });
         allPosts.push(...connectPosts);
 
-        // Get user's facebook posts
-        const {
-          data: { posts: facebookPosts },
-        } = await axios.get(`${url}/api/platforms/facebook/posts`, {
-          headers: {
-            Cookie: req.headers.cookie,
-          },
-        });
-        if (facebookPosts)
-          facebookPosts.forEach((post: IFacebookPost) => {
-            // Only add post if it doesn't already exist
-            if (!facebookPostIds.has(post.id)) allPosts.push(post);
-          });
+        // // Get user's facebook posts
+        // const {
+        //   data: { posts: facebookPosts },
+        // } = await axios.get(`${url}/api/platforms/facebook/posts`, {
+        //   headers: {
+        //     Cookie: req.headers.cookie,
+        //   },
+        // });
+        // if (facebookPosts)
+        //   facebookPosts.forEach((post: IFacebookPost) => {
+        //     // Only add post if it doesn't already exist
+        //     if (!facebookPostIds.has(post.id)) allPosts.push(post);
+        //   });
 
         allPosts.sort((postA: GenericPost, postB: GenericPost) => {
           let timeA: number = getDate(postA);
