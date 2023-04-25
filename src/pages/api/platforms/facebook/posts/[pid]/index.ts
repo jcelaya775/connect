@@ -6,6 +6,7 @@ import { getAuthUser } from "@/lib/auth";
 type Data = {
   success: boolean;
   post?: any;
+  postId?: string;
   error?: string;
 };
 
@@ -67,8 +68,9 @@ export default async function handler(
           `https://graph.facebook.com/v16.0/${pid}?access_token=${page_token}`
         );
         const post = response.data;
+        const postId = post.id;
 
-        res.status(200).json({ success: true, post });
+        res.status(200).json({ success: true, postId });
       } catch (error: any) {
         res.status(500).json({ success: false, error: error.message });
       }

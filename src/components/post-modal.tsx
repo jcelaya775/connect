@@ -6,6 +6,7 @@ import Connect from "../images/connect_logo.svg";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { platformTypes } from "@/types/platform";
+import { GenericPost } from "@/types/post";
 
 type PostModalProps = {
   newPost?: boolean;
@@ -81,9 +82,12 @@ const PostModal = ({ newPost = true, setVisible }: PostModalProps) => {
       return results;
     },
     {
-      onSuccess: () => {
-        // Clear the input fields
+      onSuccess: (post: any) => {
+        // queryClient.setQueryData(["posts"], (oldPosts: any) => {
+        //   [post, ...oldPosts];
+        // });
         queryClient.invalidateQueries(["posts"]);
+
         resetPost();
         setVisible(false);
       },

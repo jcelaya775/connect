@@ -7,6 +7,7 @@ import { getAuthUser } from "@/lib/auth";
 type Data = {
   success: boolean;
   data?: IConnectPost;
+  postId?: string;
   error?: string;
 };
 
@@ -128,7 +129,7 @@ export default async function handler(
         if (!deletedPost) return res.status(404).json({ success: false });
 
         // Return deleted post
-        res.status(200).json({ success: true, data: deletedPost });
+        res.status(200).json({ success: true, postId: deletedPost._id });
       } catch (error: any) {
         res.status(400).json({ success: false, error: error.message });
       }

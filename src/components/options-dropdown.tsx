@@ -5,6 +5,9 @@ import axios from "axios";
 import { platformTypes } from "@/types/platform";
 import { platform } from "os";
 import { IConnectPost } from "@/models/Post";
+import { GenericPost } from "@/types/post";
+import { getPostId } from "@/lib/postHelpers";
+import { ObjectId } from "mongodb";
 
 type OptionsDropdownProps = {
   postId: string;
@@ -26,44 +29,34 @@ const OptionsDropdown = ({
 
   const deletePostMutation = useMutation({
     mutationFn: async () => {
-      let success: any = {};
-
       for (const platform of platforms) {
         switch (platform) {
           case platformTypes.facebook:
-            const { data: facebookData } = await axios.delete(
+            const {
+              data: { postId: facebookPostId },
+            } = await axios.delete(
               `/api/platforms/facebook/posts/${facebookId}`
             );
-            if (facebookData.error) {
-              success.facebook = false;
-              console.error(facebookData.error);
-            } else success.facebook = true;
-            break;
-          default: // connect
-            const { data: connectData } = await axios.delete(
-              `/api/platforms/connect/posts/${postId}`
-            );
-            if (connectData.error) {
-              success.connect = false;
-              console.error(connectData.error);
-            } else success.connect = true;
-            break;
-        }
-      }
 
-      return success;
-    },
-    onSuccess: () => {
-      for (const platform of platforms) {
-        switch (platform) {
-          case platformTypes.facebook:
-            queryClient.invalidateQueries(["posts"]);
-            break;
+            return facebookPostId;
           default: // connect
-            queryClient.invalidateQueries(["posts"]);
-            break;
+            const {
+              data: { postId: connectPostId },
+            } = await axios.delete(`/api/platforms/connect/posts/${postId}`);
+
+            return connectPostId;
         }
       }
+    },
+    onSuccess: (deletedPostId: ObjectId | string) => {
+      // queryClient.setQueryData(["posts"], (oldPosts: any) => {
+      //   const newPosts = oldPosts.filter((post: GenericPost) => {
+      //     String(getPostId(post)) !== String(deletedPostId);
+      //   });
+      //   return newPosts;
+      // });
+
+      queryClient.invalidateQueries(["posts"]);
     },
   });
 
