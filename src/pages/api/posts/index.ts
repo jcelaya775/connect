@@ -10,6 +10,22 @@ export const config = {
   },
 };
 
+// IMPORTANT: Prevents next from trying to parse the form
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+type formidableData = {
+  fields: formidable.Fields;
+  files: formidable.Files;
+};
+interface uploadFile {
+  success: boolean;
+  signedUrl?: string;
+  message: string;
+  key?: string;
+}
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
