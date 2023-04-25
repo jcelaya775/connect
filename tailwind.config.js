@@ -21,15 +21,15 @@ module.exports = {
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
 
-		// Or if using `src` directory:
-		"./src/**/*.{js,ts,jsx,tsx}",
-	],
-	daisyui:{
-		themes:['corporate', 'business']
-	},
-	theme: {
-		extend: {},
-	},
-	plugins: [require("daisyui")],
-	darkMode: ['class', '[data-mode="business"']
+    // Or if using `src` directory:
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  daisyui: {
+    themes: ["corporate", "business"],
+  },
+  theme: {
+    extend: {},
+  },
+  plugins: [require("daisyui")],
+  darkMode: "class",
 };
