@@ -19,6 +19,11 @@ export default async function handler(
   if (!user) return res.status(401).json({ success: false });
 
   switch (method) {
+    /**
+     * @route          GET api/users/me
+     * @description    Get the current user
+     * @access         Private
+     */
     case "GET":
       try {
         const { email } = user;

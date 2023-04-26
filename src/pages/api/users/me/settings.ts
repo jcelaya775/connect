@@ -23,6 +23,11 @@ export default async function handler(
   const { _id } = user;
 
   switch (method) {
+    /**
+     * @route          GET api/users/me/settings
+     * @description    Get the current user's settings
+     * @access         Private
+     */
     case "GET":
       try {
         const user: IUser = (await User.findOne({ _id })) as IUser;
