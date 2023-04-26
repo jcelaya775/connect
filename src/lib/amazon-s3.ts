@@ -1,5 +1,5 @@
 import { S3 } from "aws-sdk";
-import fs from "fs/promises";
+
 // Create an S3 client object
 const s3 = new S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -34,6 +34,7 @@ export async function updateFileOnS3(
     throw error;
   }
 }
+
 export async function uploadFileToS3(
   buffer: Buffer,
   name: string
@@ -59,5 +60,18 @@ export async function uploadFileToS3(
     return url;
   } catch (error) {
     throw error;
+  }
+}
+
+export async function deleteFileFromS3(name: string): Promise<boolean> {
+  try {
+    await s3.deleteObject({
+      Bucket: process.env.AWS_BUCKET_NAME || "default",
+      Key: name || "default",
+    });
+
+    return true;
+  } catch (error) {
+    return false;
   }
 }
