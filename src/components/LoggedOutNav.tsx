@@ -3,7 +3,7 @@ import Link from "next/link";
 
 const LoggedOutNav = () => (
   <>
-    <div className="navbar bg-base-100 drop-shadow-md fixed z-10">
+    <div className="navbar bg-base-100 drop-shadow-md fixed z-10 sm:px-4 md:px-8">
       <div className="flex-1">
         <Link
           href="/"
