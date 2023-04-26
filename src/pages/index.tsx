@@ -17,6 +17,12 @@ export default function Home({ authenticated }: HomeProps) {
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme)
       document.querySelector("html")?.setAttribute("data-theme", savedTheme);
+    else {
+      if (window.matchMedia("(prefers-color-scheme: dark)").matches)
+        document.querySelector("html")?.setAttribute("data-theme", "dark");
+      else
+        document.querySelector("html")?.setAttribute("data-theme", "corporate");
+    }
   }, []);
 
   if (!authenticated) {
