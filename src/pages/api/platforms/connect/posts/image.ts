@@ -11,6 +11,7 @@ import { beTarask } from "date-fns/locale";
 type PostData = {
   success: boolean;
   signedUrl?: string;
+  filename?: string;
   error?: string;
 };
 
@@ -40,12 +41,13 @@ export default async function handler(
 
         let signedUrl: string = await uploadFileToS3(
           buffer,
-          parsedFile.originalFilename!
+          parsedFile.originalFilename
         );
 
         res.status(200).json({
           success: true,
           signedUrl,
+          filename: parsedFile.originalFilename,
         });
       } catch (err) {
         res.status(500).json({ success: false, error: "Could not parse file" });

@@ -16,6 +16,7 @@ import Post, { IConnectPost } from "@/models/Post";
 type PutData = {
   success: boolean;
   signedUrl?: string;
+  filename?: string;
   error?: string;
 };
 
@@ -72,10 +73,10 @@ export default async function handler(
         // Update image
         let signedUrl: string = await uploadFileToS3(
           buffer,
-          parsedFile.originalFilename!
+          parsedFile.originalFilename
         );
         post.content.image = {
-          filename: parsedFile.originalFilename!,
+          filename: parsedFile.originalFilename,
           signedUrl,
         };
 
@@ -84,6 +85,7 @@ export default async function handler(
         res.status(200).json({
           success: true,
           signedUrl,
+          filename: parsedFile.originalFilename,
         });
       } catch (err) {
         res.status(401).json({ success: false, error: "could not parse file" });
