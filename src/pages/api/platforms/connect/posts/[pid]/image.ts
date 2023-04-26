@@ -1,16 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import connectDB from "@/lib/mongodb";
 import { getAuthUser } from "@/lib/auth";
-import {
-  uploadFileToS3,
-  updateFileOnS3,
-  deleteFileFromS3,
-} from "@/lib/amazon-s3";
+import { uploadFileToS3, deleteFileFromS3 } from "@/lib/amazon-s3";
 import formidable from "formidable";
-import FormData from "form-data";
 import fs from "fs";
 import { parseForm } from "@/lib/parseForm";
-import { beTarask } from "date-fns/locale";
 import Post, { IConnectPost } from "@/models/Post";
 
 type PutData = {
@@ -73,10 +67,11 @@ export default async function handler(
         // Update image
         let signedUrl: string = await uploadFileToS3(
           buffer,
-          parsedFile.originalFilename
+          parsedFile.originalFilename!
         );
+        signedUrl = signedUrl.split("?")[0];
         post.content.image = {
-          filename: parsedFile.originalFilename,
+          filename: parsedFile.originalFilename!,
           signedUrl,
         };
 
@@ -85,7 +80,7 @@ export default async function handler(
         res.status(200).json({
           success: true,
           signedUrl,
-          filename: parsedFile.originalFilename,
+          filename: parsedFile.originalFilename!,
         });
       } catch (err) {
         res.status(401).json({ success: false, error: "could not parse file" });
