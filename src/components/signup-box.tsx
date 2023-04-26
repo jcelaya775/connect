@@ -51,7 +51,7 @@ const SignUpBox = () => {
   };
 
   return (
-    <div data-theme="corporate">
+    <div>
       <div className="hero min-h-screen bg-base-200">
         <div className="hero-content flex-col lg:flex-row z-0">
           <div className="text-center max-w-screen-sm prose lg:text-left lg:w-[500px]">

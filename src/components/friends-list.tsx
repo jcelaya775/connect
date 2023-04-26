@@ -116,12 +116,12 @@ const FriendsPage = () => {
         <div className="p-8 sm:px-24 lg:px-10 mt-0">
           <h2 className="text-xl font-medium mb-4">Pending friends</h2>
 
-          <div className="card bg-white p-4 h-max overflow-y-scroll">
+          <div className="card bg-base-100 p-4 h-max overflow-y-scroll">
             <ul className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {pendingFriends.map((friend) => (
                 <li
                   key={friend.id}
-                  className="bg-white shadow-md rounded-md overflow-hidden"
+                  className="bg-base-100 shadow-md rounded-md overflow-hidden"
                 >
                   <div className="flex items-center p-4">
                     <img
@@ -190,12 +190,12 @@ const FriendsPage = () => {
       <div className="px-8 sm:px-24 lg:px-10 mt-0 divider"></div>
       <div className="px-8 sm:px-24 lg:px-10 mt-0">
         <h2 className="text-xl font-medium mb-4">All friends</h2>
-        <div className="card bg-white p-4 h-max">
+        <div className="card bg-base-100 p-4 h-max">
           <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {allFriends.map((friend) => (
               <li
                 key={friend.id}
-                className="bg-white shadow-md rounded-md overflow-hidden"
+                className="bg-base-100 shadow-md rounded-md overflow-hidden"
               >
                 <div className="flex items-center p-4">
                   <img
