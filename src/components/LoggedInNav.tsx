@@ -28,7 +28,7 @@ const LoggedInNav = () => (
             className="input input-bordered input-sm"
           />
         </div>
-        <div className="dropdown dropdown-hover dropdown-end">
+        <div className="dropdown dropdown-end">
           <label tabIndex={0} className="avatar cursor-pointer pt-1">
             <div className="w-9 rounded-full">
               <svg
