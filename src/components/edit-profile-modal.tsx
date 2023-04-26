@@ -158,7 +158,7 @@ const EditProfileModal = ({ setVisible }: EditProfileModalProps) => {
           <div className="modal-action">
             <label
               htmlFor="edit-profile-modal"
-              className="btn btn-sm btn-ghost bg-gray-400 gap-2 py-0 px-5 normal-case"
+              className="btn btn-sm btn-ghost bg-base-100 gap-2 py-0 px-5 normal-case"
               onClick={() => resetProfile()}
             >
               Reset

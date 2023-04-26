@@ -166,7 +166,7 @@ const EditPostModal = ({
             <div className="modal-action">
               <label
                 htmlFor="edit-post-modal"
-                className="btn btn-sm btn-ghost bg-gray-200 gap-2 py-0 px-5 normal-case"
+                className="btn btn-sm btn-ghost gap-2 py-0 px-5 normal-case"
                 onClick={() => resetPost()}
               >
                 Cancel

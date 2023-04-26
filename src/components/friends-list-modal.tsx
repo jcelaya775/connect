@@ -71,7 +71,7 @@ const FriendsModal = ({ setVisible }: FriendsModalProps) => {
         <div className="modal-box rounded-lg">
           <div className="card">
             <div className="card-body">
-              <div className="card-title text-2xl text-gray-900 font-bold">
+              <div className="card-title text-2xl text-base-content font-bold">
                 Friends List
               </div>
               <input
@@ -81,7 +81,7 @@ const FriendsModal = ({ setVisible }: FriendsModalProps) => {
                 value={searchTerm}
                 onChange={handleSearch}
               />
-              <div className="overflow-auto h-40 bg-gray-200 pl-5">
+              <div className="overflow-auto h-40 bg-base-100 pl-5">
                 {searchTerm.length > 0
                   ? filteredFriends.map((friend) => (
                       <div key={friend.id} className="flex items-center my-2">
@@ -109,7 +109,9 @@ const FriendsModal = ({ setVisible }: FriendsModalProps) => {
                           <p className="font-medium">{friend.name}</p>
                         </div>
                         <div className="ml-auto">
-                          <button className="btn btn-sm">View Profile</button>
+                          <button className="btn btn-sm btn-primary">
+                            View Profile
+                          </button>
                         </div>
                       </div>
                     ))}
@@ -117,7 +119,7 @@ const FriendsModal = ({ setVisible }: FriendsModalProps) => {
             </div>
           </div>
           <div className="modal-action">
-            <label htmlFor="my-modal" className="btn">
+            <label htmlFor="my-modal" className="btn btn-primary">
               Close
             </label>
           </div>
