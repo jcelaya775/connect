@@ -89,7 +89,7 @@ export default function LikeButton({ postId, platform }: LikeButtonProps) {
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              fill={hasLiked ? "black" : "none"}
+              fill={hasLiked ? "currentColor" : "none"}
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
