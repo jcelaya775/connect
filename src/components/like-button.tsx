@@ -1,11 +1,11 @@
 import useUser from "@/hooks/useUser";
-import { IConnectPost } from "@/models/Post";
 import { Data as ConnectData } from "@/pages/api/platforms/connect/posts/[pid]/likes";
 import { Data as FacebookData } from "@/pages/api/platforms/facebook/posts/[pid]/likes";
 import { platformTypes } from "@/types/platform";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { ObjectId } from "mongoose";
+import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
+import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 
 type LikeButtonProps = {
   postId: string;
@@ -14,15 +14,13 @@ type LikeButtonProps = {
 
 export default function LikeButton({ postId, platform }: LikeButtonProps) {
   const queryClient = useQueryClient();
-  const { user, isLoading: userLoading } = useUser();
 
-  let queryKey: string[];
+  let queryKey: string[] = ["posts", postId, "likes", "hasLiked"];
   let queryFn: () => Promise<boolean>;
   let mutationFn;
 
   switch (platform) {
     case platformTypes.facebook:
-      queryKey = ["posts", postId, "likes", "hasLiked"];
       queryFn = async () => {
         const { data }: { data: FacebookData } = await axios.get(
           `/api/platforms/facebook/posts/${postId}/likes`
@@ -43,7 +41,6 @@ export default function LikeButton({ postId, platform }: LikeButtonProps) {
       };
       break;
     default: // connect
-      queryKey = ["posts", postId, "likes", "hasLiked"];
       queryFn = async () => {
         const { data }: { data: ConnectData } = await axios.get(
           `/api/platforms/connect/posts/${postId}/likes`
@@ -68,19 +65,13 @@ export default function LikeButton({ postId, platform }: LikeButtonProps) {
   const { data: hasLiked, isLoading } = useQuery({
     queryKey,
     queryFn,
-    enabled: !userLoading,
-    refetchOnWindowFocus: false,
-    refetchInterval: 1000 * 60 * 5, // 5 minutes
-    retryDelay(failureCount, error) {
-      if (failureCount < 3) return 1000 * 60 * 1;
-      else return 1000 * 60 * 5;
-    },
   });
 
   const likeMutation = useMutation({
     mutationFn,
     onSuccess: () => {
-      queryClient.invalidateQueries(queryKey.slice(0, -1));
+      queryClient.invalidateQueries(["posts", postId, "likes", "hasLiked"]);
+      queryClient.invalidateQueries(["posts", postId, "likes", "count"]);
     },
   });
 
@@ -121,14 +112,7 @@ export default function LikeButton({ postId, platform }: LikeButtonProps) {
                 : likeMutation.mutate({ dislike: false })
             }
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-6 h-6"
-              viewBox="0 0 24 24"
-              id="like"
-            >
-              <path d="M21.3,10.08A3,3,0,0,0,19,9H14.44L15,7.57A4.13,4.13,0,0,0,11.11,2a1,1,0,0,0-.91.59L7.35,9H5a3,3,0,0,0-3,3v7a3,3,0,0,0,3,3H17.73a3,3,0,0,0,2.95-2.46l1.27-7A3,3,0,0,0,21.3,10.08ZM7,20H5a1,1,0,0,1-1-1V12a1,1,0,0,1,1-1H7Zm13-7.82-1.27,7a1,1,0,0,1-1,.82H9V10.21l2.72-6.12A2.11,2.11,0,0,1,13.1,6.87L12.57,8.3A2,2,0,0,0,14.44,11H19a1,1,0,0,1,.77.36A1,1,0,0,1,20,12.18Z"></path>
-            </svg>
+            {hasLiked ? <ThumbUpAltIcon /> : <ThumbUpOffAltIcon />}
           </button>
         );
       case platformTypes.instagram:
