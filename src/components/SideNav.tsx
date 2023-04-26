@@ -64,7 +64,7 @@ const SideNav = () => {
                 />
               </svg>
               <span className="hidden lg:block">Dashboard</span>
-            </Link> 
+            </Link>
           </li> */}
           <li className="hover-bordered">
             <Link href="/friends">
