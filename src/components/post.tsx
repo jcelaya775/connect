@@ -128,13 +128,13 @@ const Post = ({
             <p>{content.body}</p>
           </div>
           <div className="basis-1/6">
-            {content.image?.url && (
+            {content.image?.signedUrl && (
               <Image
                 className="w-full h-full"
                 priority
                 width={800}
                 height={800}
-                src={content.image.url}
+                src={content.image.signedUrl}
                 alt="post image"
                 unoptimized
               />
