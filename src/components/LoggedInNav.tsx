@@ -6,7 +6,10 @@ const LoggedInNav = () => (
   <>
     <div className="navbar bg-base-100 drop-shadow-md fixed z-10 sm:px-4 md:px-8">
       <div className="flex-1">
-        <Link href="/" className="normal-case text-2xl cursor-pointer">
+        <Link
+          href="/"
+          className="font-semibold normal-case text-2xl cursor-pointer"
+        >
           Connect
           <svg
             viewBox="0 0 20 20"
