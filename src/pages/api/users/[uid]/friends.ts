@@ -125,7 +125,7 @@ export default async function handler(
         if (
           targetUser.pending_friends.some(
             (pending_friend: { user_id: ObjectId }) =>
-              String(pending_friend.user_id) === String(uid)
+              String(pending_friend.user_id) === String(currentUser._id)
           )
         ) {
           // Remove the users from each other friend requests/pending friends
