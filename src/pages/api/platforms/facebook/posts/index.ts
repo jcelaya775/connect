@@ -14,7 +14,7 @@ type GetData = {
 type PostData = {
   success: boolean;
   id?: string;
-  post_id?: string;
+  postId?: string;
   error?: string;
 };
 type formidableData = {
@@ -87,8 +87,7 @@ export default async function handler(
             { headers: { ...formData.getHeaders() } }
           );
 
-          id = res.data.id;
-          postId = res.data.post_id;
+          postId = res.data.id;
         } else {
           // Create text post
           const res: AxiosResponse = await axios.post(
@@ -99,11 +98,10 @@ export default async function handler(
             }
           );
 
-          id = res.data.id;
-          postId = res.data.post_id;
+          postId = res.data.id;
         }
 
-        res.status(200).json({ success: true, id, post_id: postId });
+        res.status(200).json({ success: true, postId });
       } catch (error: any) {
         console.log(error);
         res.status(400).json({ success: false, error: error.message });
