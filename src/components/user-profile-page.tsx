@@ -81,7 +81,7 @@ export const UserProfilePage = () => {
                         </div>
                       </div>
                       <div className="card w-full bg-base-100 rounded">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio enim ipsam voluptates sapiente ad fugit culpa a qui totam assumenda maiores ducimus nesciunt, molestias ipsum nobis quasi commodi quas. Cum?</p>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio enim ipsam voluptates sapiente ad fugit culpa a qui totam assumenda maiores ducimus nesciunt, molestias ipsum nobis quasi commodi quas.</p>
                       </div>
                     </div>
                     <div className="flex flex-col gap-y-4 w-full md:w-1/4">
@@ -91,7 +91,7 @@ export const UserProfilePage = () => {
                       </div>
                     </div>
 
-                    <div className="card bg-base-100">
+                    <div className="card bg-base-100 rounded">
                       <div className="card-body">
                       <div className="flex flex-row gap-x-2 lg:gap-x-4 mx-auto">
                       <div className="flex flex-row gap-x-2 lg:flex-col lg:gap-y-4 w-1/2">
