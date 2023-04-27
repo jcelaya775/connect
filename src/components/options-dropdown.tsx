@@ -94,6 +94,13 @@ const OptionsDropdown = ({
           <li>
             <label
               htmlFor="edit-post-modal"
+            >
+              Save Post
+            </label>
+          </li>  
+          <li>
+            <label
+              htmlFor="edit-post-modal"
               onClick={() => setEditModalVisible((prev) => !prev)}
             >
               Edit
