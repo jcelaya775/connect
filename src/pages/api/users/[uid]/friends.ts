@@ -201,11 +201,11 @@ export default async function handler(
               String(friend.user_id) === String(targetUser._id)
           )
         ) {
-          currentUser.pending_friends = currentUser.pending_friends.filter(
+          currentUser.friend_requests = currentUser.friend_requests.filter(
             (pending_friend: { user_id: ObjectId }) =>
               String(pending_friend.user_id) !== String(targetUser._id)
           );
-          targetUser.friend_requests = targetUser.friend_requests.filter(
+          targetUser.pending_friends = targetUser.pending_friends.filter(
             (pending_friend: { user_id: ObjectId }) =>
               String(pending_friend.user_id) !== String(_id)
           );
