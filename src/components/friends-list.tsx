@@ -84,10 +84,10 @@ const FriendsPage = () => {
     mutationKey: ["users", "me", "friends", "delete"],
     mutationFn: async (userId: string) => {
       const {
-        data: { friend },
+        data: { success },
       } = await axios.delete(`/api/users/${userId}/friends`);
 
-      return friend;
+      return success;
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["users", "me", "friends"]);

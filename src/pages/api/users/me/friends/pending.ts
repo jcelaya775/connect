@@ -65,7 +65,10 @@ export default async function handler(
         );
 
         const pendingFriends = await User.find({
-          _id: { $in: pendingFriendIds },
+          $and: [
+            { _id: { $in: pendingFriendIds } }, // filter friends by friendIds
+            query, // filter friends by name, username, or email
+          ],
         }).select("_id email username name");
 
         res.status(200).json({ success: true, pendingFriends });

@@ -182,14 +182,6 @@ export default async function handler(
 
         const { uid } = req.query;
 
-        // Check if the current currentUser is trying to remove themselves as a friend
-        if (String(_id) === uid) {
-          return res.status(404).json({
-            success: false,
-            error: "You cannot be friends with yourself",
-          });
-        }
-
         const targetUser: IUser | null = await User.findOne({ _id: uid });
         if (!targetUser) {
           return res.status(404).json({
