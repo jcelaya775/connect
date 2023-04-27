@@ -9,6 +9,7 @@ type QueryParams = {
   name?: string;
   username?: string;
   email?: string;
+  profilePicture?: string;
 };
 
 type Data = {
@@ -57,7 +58,7 @@ export default async function handler(
         const friendIds = friendObjects.map((friend) => friend.user_id);
 
         const friends = await User.find({ _id: { $in: friendIds } }).select(
-          "_id email username name"
+          "_id email username name profile_picture"
         );
 
         res.status(200).json({ success: true, friends });
@@ -191,7 +192,7 @@ export default async function handler(
           });
         }
 
-        // If the users are not friends, remove the friend request
+        // If the users are not friends, decline the friend request
         if (
           !targetUser.friends.some(
             (friend: { user_id: ObjectId }) =>

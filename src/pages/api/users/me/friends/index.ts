@@ -5,6 +5,14 @@ import { getAuthUser } from "@/lib/auth";
 import User, { IUser } from "@/models/User";
 import { ObjectId } from "mongoose";
 
+type Friend = {
+  id: IUser["_id"];
+  name: IUser["name"];
+  username: IUser["username"];
+  email: IUser["email"];
+  profilePicture: IUser["profile_picture"];
+};
+
 type ResponseData = {
   success: boolean;
   friends?: IUser["_id"] & IUser["name"] & IUser["email"] & IUser["username"];
@@ -61,7 +69,7 @@ export default async function handler(
         const friendIds = friendObjects.map((friend) => friend.user_id);
 
         const friends = await User.find({ _id: { $in: friendIds } }).select(
-          "_id email username name"
+          "_id email username name profile_picture"
         );
 
         res.status(200).json({ success: true, friends });

@@ -29,8 +29,8 @@ export interface IUser extends Document {
     theme: themeTypes;
   };
   biography?: string;
-  profilePictureUrl: string;
-  coverImageUrl: string;
+  profile_picture: string;
+  cover_image: string;
   code: Number;
   timestamp: Date;
 }
@@ -62,12 +62,12 @@ export const UserSchema = new Schema<IUser>(
         enum: Object.values(themeTypes),
       },
     },
-    profilePictureUrl: {
+    profile_picture: {
       type: String,
       trim: true,
       required: false,
     },
-    coverImageUrl: {
+    cover_image: {
       type: String,
       trim: true,
       required: false,
