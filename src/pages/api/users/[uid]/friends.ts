@@ -123,7 +123,7 @@ export default async function handler(
 
         // Current user accepts friend request
         if (
-          targetUser.friend_requests.some(
+          targetUser.pending_friends.some(
             (pending_friend: { user_id: ObjectId }) =>
               String(pending_friend.user_id) === String(uid)
           )
