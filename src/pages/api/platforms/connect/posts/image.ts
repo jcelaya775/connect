@@ -45,8 +45,6 @@ export default async function handler(
         );
         signedUrl = signedUrl.split("?")[0];
 
-        console.log(signedUrl);
-
         res.status(200).json({
           success: true,
           signedUrl,

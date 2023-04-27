@@ -22,19 +22,20 @@ export interface IUser extends Document {
     user_token?: string;
     user_token_expires?: string;
   };
-  friends: [{ user_id: ObjectId }];
-  pending_friends: [user_id: ObjectId];
+  friends: { user_id: ObjectId }[];
+  pending_friends: { user_id: ObjectId }[];
+  friend_requests: { user_id: ObjectId }[];
   settings: {
     theme: themeTypes;
   };
   biography?: string;
   timestamp: Date;
-  pfpCDN: string;
-  coverCDN: string;
+  profilePictureUrl: string;
+  coverImageUrl: string;
   code: Number;
 }
 
-const UserSchema = new Schema<IUser>(
+export const UserSchema = new Schema<IUser>(
   {
     username: { type: String, trim: true, required: true, unique: true },
     name: { type: String, trim: true, required: true },
@@ -51,6 +52,7 @@ const UserSchema = new Schema<IUser>(
     },
     friends: [{ user_id: { type: SchemaTypes.ObjectId, ref: "User" } }],
     pending_friends: [{ user_id: { type: SchemaTypes.ObjectId, ref: "User" } }],
+    friend_requests: [{ user_id: { type: SchemaTypes.ObjectId, ref: "User" } }],
     settings: {
       theme: {
         type: String,
@@ -59,6 +61,16 @@ const UserSchema = new Schema<IUser>(
         required: false,
         enum: Object.values(themeTypes),
       },
+    },
+    profilePictureUrl: {
+      type: String,
+      trim: true,
+      required: false,
+    },
+    coverImageUrl: {
+      type: String,
+      trim: true,
+      required: false,
     },
     biography: { type: String, trim: true, required: false },
     code: { type: Number, default: 0, trim: true, required: false },

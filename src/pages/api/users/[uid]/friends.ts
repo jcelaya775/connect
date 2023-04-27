@@ -1,19 +1,20 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import connectDB from "@/lib/mongodb";
-import axios, { AxiosResponse } from "axios";
-import { getAuthUser } from "@/lib/auth";
 import User, { IUser } from "@/models/User";
 import { ObjectId } from "mongoose";
+import { getAuthUser } from "@/lib/auth";
+
+type QueryParams = {
+  uid?: string;
+  name?: string;
+  username?: string;
+  email?: string;
+};
 
 type Data = {
   success: boolean;
   friends?: IUser["_id"] & IUser["name"] & IUser["email"] & IUser["username"];
-};
-
-type reqBody = {
-  name?: string;
-  username?: string;
-  email?: string;
+  error?: string;
 };
 
 export default async function handler(
@@ -35,7 +36,7 @@ export default async function handler(
      */
     case "GET":
       try {
-        const { name, username, email }: reqBody = req.query;
+        const { uid, name, username, email }: QueryParams = req.query;
 
         // Query users by name, username, or email
         const query: { $or: {}[] } = { $or: [] };
@@ -50,19 +51,181 @@ export default async function handler(
           orArray.push({ email: { $regex: email as string, $options: "i" } });
         if (orArray.length > 0) query.$or = orArray;
 
-        const currentUser = await User.findById(_id).populate(
-          "friends.user_id"
+        const currentUser = await User.findById(uid);
+        const friendObjects: { _id: ObjectId; user_id: ObjectId }[] =
+          currentUser.friends;
+        const friendIds = friendObjects.map((friend) => friend.user_id);
+
+        const friends = await User.find({ _id: { $in: friendIds } }).select(
+          "_id email username name"
         );
 
-        const friendObjects: [{ user_id: ObjectId }] = currentUser.friends;
-        console.log(friendObjects);
-        const friends = friendObjects.map((friend: { user_id: ObjectId }) => {
-          {
-            friend._id, friend.name, friend.username, friend.email;
-          }
-        });
-
         res.status(200).json({ success: true, friends });
+      } catch (error: any) {
+        return res.status(500).json({ success: false, error: error.message });
+      }
+
+      break;
+    /**
+     * @route /api/users/[uid]/add-friend
+     * @method POST
+     * @description Add a friend
+     * @access Private
+     * @param {string} uid - The friend's id
+     */
+    case "POST":
+      try {
+        const currentUser: IUser | null | void = await getAuthUser(req, res);
+        if (!currentUser) return res.status(401).json({ success: false });
+        const { _id } = currentUser;
+
+        const { uid } = req.query;
+
+        // Check if the current currentUser is trying to add themselves as a friend
+        if (String(_id) === uid) {
+          return res.status(404).json({
+            success: false,
+            error: "You cannot add yourself as a friend",
+          });
+        }
+
+        const targetUser: IUser | null = await User.findOne({ _id: uid });
+        if (!targetUser) {
+          return res.status(404).json({
+            success: false,
+            error: "User not found",
+          });
+        }
+
+        // Check if the users are already friends
+        if (
+          targetUser.friends.some(
+            (friend: { user_id: ObjectId }) =>
+              String(friend.user_id) === String(currentUser._id)
+          ) ||
+          currentUser.friends.some(
+            (friend: { user_id: ObjectId }) =>
+              String(friend.user_id) === String(targetUser._id)
+          )
+        ) {
+          return res.status(400).json({
+            success: false,
+            error: "Already friends",
+          });
+        }
+
+        // Current user accepts friend request
+        if (
+          targetUser.friend_requests.some(
+            (pending_friend: { user_id: ObjectId }) =>
+              String(pending_friend.user_id) === String(uid)
+          )
+        ) {
+          // Remove the users from each other friend requests/pending friends
+          currentUser.friend_requests = currentUser.friend_requests.filter(
+            (pending_friend: { user_id: ObjectId }) =>
+              String(pending_friend.user_id) !== String(targetUser._id)
+          );
+          targetUser.pending_friends = targetUser.pending_friends.filter(
+            (pending_friend: { user_id: ObjectId }) =>
+              String(pending_friend.user_id) !== String(_id)
+          );
+
+          currentUser.friends.push({ user_id: targetUser._id });
+          targetUser.friends.push({ user_id: currentUser._id });
+        } else {
+          // Current user sends friend request
+          if (
+            currentUser.pending_friends.some(
+              (pending_friend: { user_id: ObjectId }) =>
+                String(pending_friend.user_id) === String(targetUser._id)
+            )
+          ) {
+            return res.status(400).json({
+              success: false,
+              error: "Already sent a friend request",
+            });
+          }
+
+          currentUser.pending_friends.push({ user_id: targetUser._id });
+          targetUser.friend_requests.push({ user_id: currentUser._id });
+        }
+
+        await currentUser.save();
+        await targetUser.save();
+
+        res.status(200).json({ success: true });
+      } catch (error: any) {
+        return res.status(500).json({ success: false, error: error.message });
+      }
+
+      break;
+    /**
+     * @route /api/users/[uid]/friends
+     * @method DELETE
+     * @description Remove a friend
+     * @access Private
+     * @param {string} uid - The friend's id
+     */
+    case "DELETE":
+      try {
+        const currentUser: IUser | null | void = await getAuthUser(req, res);
+        if (!currentUser) return res.status(401).json({ success: false });
+        const { _id } = currentUser;
+
+        const { uid } = req.query;
+
+        // Check if the current currentUser is trying to remove themselves as a friend
+        if (String(_id) === uid) {
+          return res.status(404).json({
+            success: false,
+            error: "You cannot be friends with yourself",
+          });
+        }
+
+        const targetUser: IUser | null = await User.findOne({ _id: uid });
+        if (!targetUser) {
+          return res.status(404).json({
+            success: false,
+            error: "User not found",
+          });
+        }
+
+        // If the users are not friends, remove the friend request
+        if (
+          !targetUser.friends.some(
+            (friend: { user_id: ObjectId }) =>
+              String(friend.user_id) === String(currentUser._id)
+          ) &&
+          !currentUser.friends.some(
+            (friend: { user_id: ObjectId }) =>
+              String(friend.user_id) === String(targetUser._id)
+          )
+        ) {
+          currentUser.pending_friends = currentUser.pending_friends.filter(
+            (pending_friend: { user_id: ObjectId }) =>
+              String(pending_friend.user_id) !== String(targetUser._id)
+          );
+          targetUser.friend_requests = targetUser.friend_requests.filter(
+            (pending_friend: { user_id: ObjectId }) =>
+              String(pending_friend.user_id) !== String(_id)
+          );
+        } else {
+          // Remove the users from each other's friends list
+          currentUser.friends = currentUser.friends.filter(
+            (friend: { user_id: ObjectId }) =>
+              String(friend.user_id) !== String(targetUser._id)
+          );
+          targetUser.friends = targetUser.friends.filter(
+            (friend: { user_id: ObjectId }) =>
+              String(friend.user_id) !== String(currentUser._id)
+          );
+        }
+
+        await currentUser.save();
+        await targetUser.save();
+
+        res.status(200).json({ success: true });
       } catch (error: any) {
         return res.status(500).json({ success: false, error: error.message });
       }

@@ -7,11 +7,11 @@ import { ObjectId } from "mongoose";
 
 type ResponseData = {
   success: boolean;
-  friends?: IUser["name"] & IUser["email"] & IUser["username"];
+  friends?: IUser["_id"] & IUser["name"] & IUser["email"] & IUser["username"];
   error?: string;
 };
 
-type reqBody = {
+type QueryParams = {
   name?: string;
   username?: string;
   email?: string;
@@ -19,7 +19,7 @@ type reqBody = {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse<ResponseData>
 ) {
   await connectDB();
   const { method }: { method?: string } = req;
@@ -30,17 +30,17 @@ export default async function handler(
 
   switch (method) {
     /**
-     * @route          GET api/users/[uid]/friends
-     * @description    Get all friends of a user
-     * @access         Public
-     * @param {string} name - The name of the user (optional)
-     * @param {string} username - The username of the user (optional)
-     * @param {string} email - The email of the user (optional)
+     * @route          GET api/users/me/friends
+     * @description    Get all friends of current user
+     * @access         Private
+     * @param {string} name - friends' name (optional)
+     * @param {string} username -  friends'username  optional)
+     * @param {string} email -  friends'email (optional)
      *
      */
     case "GET":
       try {
-        const { name, username, email }: reqBody = req.query;
+        const { name, username, email }: QueryParams = req.query;
 
         // Query users by name, username, or email
         const query: { $or: {}[] } = { $or: [] };
@@ -63,30 +63,6 @@ export default async function handler(
         const friends = await User.find({ _id: { $in: friendIds } }).select(
           "_id email username name"
         );
-
-        // Programatic approach
-        // const currentUser = await User.findById(_id).populate(
-        //   "friends.user_id"
-        // );
-
-        // const friendObjects = currentUser.friends.filter(
-        //   (friend: { user_id: IUser }) =>
-        //     friend.user_id.name
-        //       .toLowerCase()
-        //       .match(new RegExp(name?.toLowerCase() + ".*")) ||
-        //     friend.user_id.username
-        //       .toLowerCase()
-        //       .match(new RegExp(username?.toLowerCase() + ".*")) ||
-        //     friend.user_id.email
-        //       .toLowerCase()
-        //       .match(new RegExp(email?.toLowerCase() + ".*"))
-        // );
-        // const friends = friendObjects.map((friend: { user_id: IUser }) => ({
-        //   _id: friend.user_id._id,
-        //   name: friend.user_id.name,
-        //   username: friend.user_id.username,
-        //   email: friend.user_id.email,
-        // }));
 
         res.status(200).json({ success: true, friends });
       } catch (error: any) {
