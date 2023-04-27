@@ -29,10 +29,10 @@ export interface IUser extends Document {
     theme: themeTypes;
   };
   biography?: string;
-  timestamp: Date;
   profilePictureUrl: string;
   coverImageUrl: string;
   code: Number;
+  timestamp: Date;
 }
 
 export const UserSchema = new Schema<IUser>(

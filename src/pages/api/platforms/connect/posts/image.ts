@@ -1,12 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import connectDB from "@/lib/mongodb";
 import { getAuthUser } from "@/lib/auth";
-import { uploadFileToS3, updateFileOnS3 } from "@/lib/amazon-s3";
+import { uploadFileToS3 } from "@/lib/amazon-s3";
 import formidable from "formidable";
-import FormData from "form-data";
 import fs from "fs";
 import { parseForm } from "@/lib/parseForm";
-import { beTarask } from "date-fns/locale";
 
 type PostData = {
   success: boolean;
