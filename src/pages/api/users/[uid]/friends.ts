@@ -14,7 +14,11 @@ type QueryParams = {
 
 type Data = {
   success: boolean;
-  friends?: IUser["_id"] & IUser["name"] & IUser["email"] & IUser["username"];
+  friends?: IUser["_id"] &
+    IUser["name"] &
+    IUser["email"] &
+    IUser["username"] &
+    IUser["profile_picture"];
   error?: string;
 };
 
@@ -57,9 +61,12 @@ export default async function handler(
           currentUser.friends;
         const friendIds = friendObjects.map((friend) => friend.user_id);
 
-        const friends = await User.find({ _id: { $in: friendIds } }).select(
-          "_id email username name profile_picture"
-        );
+        const friends = await User.find({
+          $and: [
+            { _id: { $in: friendIds } }, // get all friends
+            query, // filter friends by name, username, or email
+          ],
+        }).select("_id email username name profile_picture");
 
         res.status(200).json({ success: true, friends });
       } catch (error: any) {
@@ -83,12 +90,11 @@ export default async function handler(
         const { uid } = req.query;
 
         // Check if the current currentUser is trying to add themselves as a friend
-        if (String(_id) === uid) {
+        if (String(_id) === uid)
           return res.status(404).json({
             success: false,
             error: "You cannot add yourself as a friend",
           });
-        }
 
         const targetUser: IUser | null = await User.findOne({ _id: uid });
         if (!targetUser) {

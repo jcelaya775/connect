@@ -10,6 +10,16 @@ type Data = {
 	data?: IUser[];
 };
 
+type Data = {
+  success: boolean;
+  users?: IUser["_id"] &
+    IUser["name"] &
+    IUser["email"] &
+    IUser["username"] &
+    IUser["profile_picture"];
+  error?: string;
+};
+
 export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse<Data>

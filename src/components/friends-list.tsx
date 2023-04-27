@@ -1,32 +1,34 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { IUser } from "@/models/User";
 import axios from "axios";
 import Link from "next/link";
 import Image from "next/image";
 
-type Friend = IUser["_id"] & IUser["name"] & IUser["email"] & IUser["username"];
+type Friend = IUser["_id"] &
+  IUser["name"] &
+  IUser["email"] &
+  IUser["username"] &
+  IUser["profile_picture"];
 
 const FriendsPage = () => {
   const queryClient = useQueryClient();
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   const {
-    data: pendingFriends,
-    isLoading: pendingFriendsLoading,
-    error: pendingFriendsError,
+    data: friendRequests,
+    isLoading: friendRequestsLoading,
+    error: friendRequestsError,
   } = useQuery({
-    queryKey: ["users", "me", "friends", "pending"],
+    queryKey: ["users", "me", "friends", "requests"],
     queryFn: async () => {
       const {
-        data: { pendingFriends },
-      }: { data: { pendingFriends: Friend[] } } = await axios.get(
-        "/api/users/me/friends/pending"
+        data: { friendRequests },
+      }: { data: { friendRequests: Friend[] } } = await axios.get(
+        "/api/users/me/friends/requests"
       );
 
-      console.log(pendingFriends);
-
-      return pendingFriends;
+      return friendRequests;
     },
   });
 
@@ -39,9 +41,28 @@ const FriendsPage = () => {
     queryFn: async () => {
       const {
         data: { friends },
-      } = await axios.get("/api/users/me/friends");
+      }: { data: { friends: Friend[] } } = await axios.get(
+        `/api/users/me/friends?name=${searchTerm}&username=${searchTerm}&email=${searchTerm}`
+      );
 
       return friends;
+    },
+  });
+
+  const searchFriendMutation = useMutation({
+    mutationKey: ["users", "me", "friends", "search"],
+    mutationFn: async (searchTerm: string) => {
+      const {
+        data: { friends },
+      }: { data: { friends: Friend[] } } = await axios.get(
+        `/api/users/me/friends?name=${searchTerm}&username=${searchTerm}&email=${searchTerm}`
+      );
+
+      return friends;
+    },
+    onSuccess: (filteredFriends) => {
+      console.log(filteredFriends);
+      queryClient.setQueryData(["users", "me", "friends"], filteredFriends);
     },
   });
 
@@ -80,29 +101,40 @@ const FriendsPage = () => {
           placeholder="Search friends"
           className="w-full rounded-md h-10 pl-5"
           value={searchTerm}
+          onChange={(e) => {
+            setSearchTerm(e.target.value);
+            searchFriendMutation.mutate(e.target.value);
+          }}
         />
       </div>
-      {!pendingFriends ||
-        (pendingFriends.length === 0 && (
-          <p className="text-center p-10">No pending friends</p>
-        ))}
-      {pendingFriends && pendingFriends.length > 0 && (
+      {friendRequests && friendRequests.length > 0 && (
         <div className="p-8 sm:px-24 lg:px-10 mt-0">
-          <h2 className="text-xl font-medium mb-4">Pending friends</h2>
-
-          <div className="card bg-base-100 p-4 h-max overflow-y-scroll">
+          <h2 className="text-xl font-medium mb-4">Friend requests</h2>
+          <div className="card bg-base-200 p-4 h-max">
             <ul className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              {pendingFriends.map((friend: Friend) => (
+              {friendRequests.map((friend: Friend) => (
                 <li
                   key={friend._id}
                   className="bg-base-100 shadow-md rounded-md overflow-hidden"
                 >
                   <div className="flex items-center p-4">
-                    <Image
-                      src={friend.profilePicture}
-                      alt={friend.name}
-                      className="w-10 h-10 rounded-full mr-4"
-                    />
+                    {friend.profile_picture ? (
+                      <Image
+                        src={friend.profile_picture}
+                        alt={friend.name}
+                        className="w-10 h-10 rounded-full mr-4"
+                      />
+                    ) : (
+                      <div className="w-9 rounded-full mr-6">
+                        <svg
+                          viewBox="0 0 512 512"
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="fill-current"
+                        >
+                          <path d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c39.77 0 72 32.24 72 72S295.8 272 256 272c-39.76 0-72-32.24-72-72S216.2 128 256 128zM256 448c-52.93 0-100.9-21.53-135.7-56.29C136.5 349.9 176.5 320 224 320h64c47.54 0 87.54 29.88 103.7 71.71C356.9 426.5 308.9 448 256 448z" />
+                        </svg>
+                      </div>
+                    )}
                     <div className="flex-1">
                       <h3 className="font-medium">{friend.name}</h3>
                       <p className="text-gray-500">Pending approval</p>
@@ -161,10 +193,14 @@ const FriendsPage = () => {
           </div>
         </div>
       )}
-      <div className="px-8 sm:px-24 lg:px-10 mt-0 divider"></div>
+      {friendRequests && friendRequests.length > 0 ? (
+        <div className="px-8 sm:px-24 lg:px-10 mt-0 divider"></div>
+      ) : (
+        <div className="py-2"></div>
+      )}
       <div className="px-8 sm:px-24 lg:px-10 mt-0">
         <h2 className="text-xl font-medium mb-4">All friends</h2>
-        <div className="card bg-base-100 p-4 h-max">
+        <div className="card bg-base-200 p-4 h-max">
           {!friends ||
             (friends.length === 0 && (
               <p className="text-center p-10">No friends</p>
@@ -177,11 +213,23 @@ const FriendsPage = () => {
                   className="bg-base-100 shadow-md rounded-md overflow-hidden"
                 >
                   <div className="flex items-center p-4">
-                    <Image
-                      src={friend.profilePicture}
-                      alt={friend.name}
-                      className="w-10 h-10 rounded-full mr-4"
-                    />
+                    {friend.profile_picture ? (
+                      <Image
+                        src={friend.profile_picture}
+                        alt={friend.name}
+                        className="w-10 h-10 rounded-full mr-4"
+                      />
+                    ) : (
+                      <div className="w-9 rounded-full mr-6">
+                        <svg
+                          viewBox="0 0 512 512"
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="fill-current"
+                        >
+                          <path d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c39.77 0 72 32.24 72 72S295.8 272 256 272c-39.76 0-72-32.24-72-72S216.2 128 256 128zM256 448c-52.93 0-100.9-21.53-135.7-56.29C136.5 349.9 176.5 320 224 320h64c47.54 0 87.54 29.88 103.7 71.71C356.9 426.5 308.9 448 256 448z" />
+                        </svg>
+                      </div>
+                    )}
                     <div className="flex-1">
                       <h3 className="font-medium">{friend.name}</h3>
                       <p className="text-gray-500">Friend</p>
