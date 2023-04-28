@@ -46,10 +46,16 @@ export default async function handler(
 
         // Delete current image
         const post: IConnectPost | null = await Post.findById(pid);
+
         if (!post)
           return res
             .status(404)
             .json({ success: false, error: "Post not found" });
+        if (String(post.user_id) !== String(user._id))
+          return res
+            .status(401)
+            .json({ success: false, error: "Unauthorized" });
+
         const { image } = post.content;
 
         const deletedFileName = image?.filename;
@@ -92,10 +98,15 @@ export default async function handler(
         const { pid } = req.query;
 
         const post: IConnectPost | null = await Post.findById(pid);
+
         if (!post)
           return res
             .status(404)
             .json({ success: false, error: "Post not found" });
+        if (String(post.user_id) !== String(user._id))
+          return res
+            .status(401)
+            .json({ success: false, error: "Unauthorized" });
 
         const { image } = post.content;
         const filename = image?.filename;

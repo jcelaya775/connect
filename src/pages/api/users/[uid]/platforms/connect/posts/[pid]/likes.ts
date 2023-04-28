@@ -26,8 +26,8 @@ export default async function handler(
 
   switch (method) {
     /**
-     * @route   GET api/platforms/connect/posts/:pid/likes
-     * @desc    Get a post's likes
+     * @route   GET api/users/[uid]/platforms/connect/posts/:pid/likes
+     * @desc    Get a user's post's likes
      * @access  Public
      * @params  pid: string (required)
      **/
