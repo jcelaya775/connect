@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import ExitBtn from "./exit-button";
 
 type Post = {
   id: number;
