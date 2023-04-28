@@ -93,7 +93,7 @@ export const UserProfilePage = () => {
 
                     <div className="card bg-base-100 rounded">
                       <div className="card-body">
-                      <div className="flex flex-row gap-x-2 lg:gap-x-4 mx-auto">
+                      <div className="flex flex-row gap-x-2 lg:gap-x-16 mx-auto">
                       <div className="flex flex-row gap-x-2 lg:flex-col lg:gap-y-4 w-1/2">
                         <div className="avatar">
                           <div className="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
