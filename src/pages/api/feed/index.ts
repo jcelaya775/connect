@@ -5,6 +5,7 @@ import { getAuthUser } from "@/lib/auth";
 import { platformTypes } from "@/types/platform";
 import axios from "axios";
 import { GenericPost, IFacebookPost, IInstagramPost } from "@/types/post";
+import { ObjectId } from "mongoose";
 
 type GetData = {
   success: boolean;
@@ -52,30 +53,57 @@ export default async function handler(
         const facebookPostIds: Set<string> = new Set<string>();
         const instagramPostIds: Set<string> = new Set<string>();
 
+        const friendObjects: { user_id: ObjectId }[] = user.friends;
+        const friendIds: ObjectId[] = friendObjects.map(
+          (friend: { user_id: ObjectId }) => friend.user_id
+        );
+        friendIds.unshift(user._id);
+
         try {
-          // Get user's connect posts
-          const {
-            data: { posts: connectPosts },
-          } = await axios.get(`${url}/api/platforms/connect/posts`, {
-            headers: {
-              Cookie: req.headers.cookie,
-            },
-          });
-          if (connectPosts)
-            connectPosts.forEach((post: IConnectPost) => {
-              // Store all facebook and instagram post ids
-              for (const platform of post.platforms) {
-                switch (platform) {
-                  case platformTypes.facebook:
-                    facebookPostIds.add(post.facebook_id!);
-                    break;
-                  case platformTypes.instagram:
-                    instagramPostIds.add(post.instagram_id!);
-                    break;
-                }
+          // Get connect feed
+          for (const userId of friendIds) {
+            const {
+              data: { posts: connectPosts },
+            } = await axios.get(
+              `${url}/api/users/${userId}/platforms/connect/posts`,
+              {
+                headers: {
+                  Cookie: req.headers.cookie,
+                },
               }
-            });
-          allPosts.push(...connectPosts);
+            );
+            if (connectPosts)
+              connectPosts.forEach((post: IConnectPost) => {
+                // Keep track of all facebook and instagram post ids
+                for (const platform of post.platforms) {
+                  switch (platform) {
+                    case platformTypes.facebook:
+                      if (facebookPostIds.has(post.facebook_id!)) {
+                        // Remove repeated facebook posts
+                        post.platforms = post.platforms.filter(
+                          (platform) => platform !== platformTypes.facebook
+                        );
+                        post.facebook_id = undefined;
+                        break;
+                      }
+                      facebookPostIds.add(post.facebook_id!);
+                      break;
+                    case platformTypes.instagram:
+                      if (instagramPostIds.has(post.instagram_id!)) {
+                        // Remove repeated instagram posts
+                        post.platforms = post.platforms.filter(
+                          (platform) => platform !== platformTypes.instagram
+                        );
+                        post.instagram_id = undefined;
+                        break;
+                      }
+                      instagramPostIds.add(post.instagram_id!);
+                      break;
+                  }
+                }
+              });
+            allPosts.push(...connectPosts);
+          }
         } catch (error: any) {
           console.log(error.response.data);
         }

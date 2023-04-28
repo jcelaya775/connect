@@ -39,6 +39,7 @@ export default async function handler(
       try {
         const { uid }: { uid?: string } = req.query;
         const user: IUser | null | void = await User.findById(uid);
+
         if (!user)
           return res.status(404).json({
             success: false,
@@ -50,6 +51,7 @@ export default async function handler(
             error:
               "The user first needs to connect their Facebook page to view their posts",
           });
+
         const page_token = user.facebook.page_token;
 
         // TODO: add pagination

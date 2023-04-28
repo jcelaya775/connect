@@ -4,7 +4,7 @@ import axios from "axios";
 
 export default function useUser() {
   const {
-    isLoading,
+    isLoading: userLoading,
     error,
     data: user,
   } = useQuery<IUser>({

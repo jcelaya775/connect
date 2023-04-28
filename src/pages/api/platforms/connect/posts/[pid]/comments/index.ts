@@ -36,13 +36,26 @@ export default async function handler(
       try {
         const { pid } = req.query;
 
+        const url = process.env.NEXTAUTH_URL;
         const post: IConnectPost | null = await Post.findOne<IConnectPost>({
           _id: pid,
         });
         if (!post) return res.status(404).json({ success: false });
 
         const comments: IComment[] = post.comments ?? [];
-        const commentCount = comments.length;
+        let commentCount: number = comments.length;
+        for (const comment of comments) {
+          const { data } = await axios.get(
+            `${url}/api/platforms/connect/posts/${pid}/comments/${comment._id}`,
+            {
+              headers: {
+                Cookie: req.headers.cookie,
+              },
+            }
+          );
+          const replies = data.replies;
+          commentCount += replies.length;
+        }
 
         res.status(200).json({
           success: true,

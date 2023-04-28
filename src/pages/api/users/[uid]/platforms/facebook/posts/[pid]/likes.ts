@@ -3,6 +3,7 @@ import connectDB from "@/lib/mongodb";
 import axios from "axios";
 import { getAuthUser } from "@/lib/auth";
 import { ObjectId } from "mongoose";
+import User, { IUser } from "@/models/User";
 
 export type Data = {
   success: boolean;
@@ -17,19 +18,21 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
   await connectDB();
+  const { method } = req;
 
   const user = await getAuthUser(req, res);
-  if (!user || !user.facebook?.page_token)
+  if (!user)
     return res.status(401).json({ success: false, error: "Not logged in" });
+  if (!user.facebook?.page_token)
+    return res
+      .status(401)
+      .json({ success: false, error: "Your Facebook page is not connected" });
   const { page_token } = user.facebook;
-
-  const { method } = req;
 
   switch (method) {
     case "GET":
       try {
         const { pid } = req.query;
-
         const response = await axios.get(
           `https://graph.facebook.com/v16.0/${pid}/likes?summary=true&access_token=${page_token}`
         );
