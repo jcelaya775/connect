@@ -30,14 +30,12 @@ export default async function handler(
       try {
         const { pid } = req.query;
 
-        const {
-          data: { data, summary },
-        } = await axios.get(
+        const response = await axios.get(
           `https://graph.facebook.com/v16.0/${pid}/likes?summary=true&access_token=${page_token}`
         );
-        const likes = data;
-        const likeCount = data.length;
-        const hasLiked = summary.has_liked;
+        const likes = response.data.data;
+        const likeCount = response.data.data.length;
+        const hasLiked = response.data.summary.has_liked;
 
         res.status(200).json({ success: true, hasLiked, likes, likeCount });
       } catch (error: any) {
@@ -49,13 +47,9 @@ export default async function handler(
       try {
         const { pid } = req.query;
 
-        const { data } = await axios.post(
+        const response = await axios.post(
           `https://graph.facebook.com/v16.0/${pid}/likes?access_token=${page_token}`
         );
-        if (!data.success)
-          return res
-            .status(500)
-            .json({ success: false, error: "Internal server error" });
 
         res.status(200).json({ success: true });
       } catch (error: any) {
@@ -67,13 +61,9 @@ export default async function handler(
       try {
         const { pid } = req.query;
 
-        const { data } = await axios.delete(
+        const response = await axios.delete(
           `https://graph.facebook.com/v16.0/${pid}/likes?access_token=${page_token}`
         );
-        if (!data.success)
-          return res
-            .status(500)
-            .json({ success: false, error: "Internal server error" });
 
         res.status(200).json({ success: true });
       } catch (error: any) {

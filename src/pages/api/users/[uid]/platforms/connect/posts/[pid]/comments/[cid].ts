@@ -3,17 +3,16 @@ import connectDB from "@/lib/mongodb";
 import Comment, { IComment } from "@/models/Comment";
 import { getAuthUser } from "@/lib/auth";
 import Post, { IConnectPost } from "@/models/Post";
-import { ObjectId } from "mongoose";
+import { IUser } from "@/models/User";
 
 type CommentData = {
   success: boolean;
-  comment?: IComment;
+  data?: IComment;
   error?: string;
 };
 
 type ReplyData = {
   success: boolean;
-  reply?: IComment;
   replies?: IComment[];
   error?: string;
 };
@@ -92,15 +91,10 @@ export default async function handler(
         const { pid, cid } = req.query;
         const { content } = req.body;
 
-        // const comment: IComment | null = await Comment.findOne<IComment>({
-        //   _id: cid,
-        // });
-        // if (!comment) return res.status(404).json({ success: false });
-
-        const post: IPost | null = await Post.findOne<IPost>({ _id: pid });
-        if (!post) return res.status(404).json({ success: false });
-
-        const comment = post.comments?.find((c) => c._id == cid);
+        const comment: IComment | null = await Comment.findOne<IComment>({
+          _id: cid,
+        });
+        if (!comment) return res.status(404).json({ success: false });
 
         const reply: IComment = await Comment.create<IComment>({
           post_id: pid,
@@ -109,13 +103,11 @@ export default async function handler(
           content,
         });
 
-        await reply.save();
-
         comment.replies?.push(reply._id);
-        await comment.save();
-        console.log(comment.replies);
 
-        console.log(reply);
+        await reply.save();
+        await comment.save();
+
         res.status(200).json({ success: true, data: reply });
       } catch (error: any) {
         res.status(400).json({ success: false, error: error.message });
@@ -138,12 +130,13 @@ export default async function handler(
           _id: cid,
         });
         if (!comment) return res.status(404).json({ success: false });
+        if (String(comment.user_id) !== String(user_id))
+          return res.status(401).json({ success: false });
 
         comment.content = content;
-
         await comment.save();
 
-        res.status(200).json({ success: true, comment });
+        res.status(200).json({ success: true, data: comment });
       } catch (error: any) {
         res.status(400).json({ success: false, error: error.message });
       }

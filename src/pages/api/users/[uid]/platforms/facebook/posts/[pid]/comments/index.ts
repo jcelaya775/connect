@@ -2,13 +2,11 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import connectDB from "@/lib/mongodb";
 import axios from "axios";
 import { getAuthUser } from "@/lib/auth";
-import { ObjectId } from "mongoose";
 
-export type Data = {
+type Data = {
   success: boolean;
-  hasLiked?: boolean;
-  likes?: ObjectId[];
-  likeCount?: number;
+  comments?: any[];
+  commentCount?: number;
   error?: string;
 };
 
@@ -30,16 +28,13 @@ export default async function handler(
       try {
         const { pid } = req.query;
 
-        const {
-          data: { data, summary },
-        } = await axios.get(
-          `https://graph.facebook.com/v16.0/${pid}/likes?summary=true&access_token=${page_token}`
+        const response = await axios.get(
+          `https://graph.facebook.com/v16.0/${pid}/comments?summary=true&access_token=${page_token}`
         );
-        const likes = data;
-        const likeCount = data.length;
-        const hasLiked = summary.has_liked;
+        const comments = response.data.data;
+        const commentCount = response.data.data.length;
 
-        res.status(200).json({ success: true, hasLiked, likes, likeCount });
+        res.status(200).json({ success: true, comments, commentCount });
       } catch (error: any) {
         res.status(500).json({ success: false, error: error.message });
       }
@@ -48,14 +43,11 @@ export default async function handler(
     case "POST":
       try {
         const { pid } = req.query;
+        const { message } = req.body;
 
-        const { data } = await axios.post(
-          `https://graph.facebook.com/v16.0/${pid}/likes?access_token=${page_token}`
+        await axios.post(
+          `https://graph.facebook.com/v16.0/${pid}/comments?message=${message}&access_token=${page_token}`
         );
-        if (!data.success)
-          return res
-            .status(500)
-            .json({ success: false, error: "Internal server error" });
 
         res.status(200).json({ success: true });
       } catch (error: any) {
@@ -67,13 +59,9 @@ export default async function handler(
       try {
         const { pid } = req.query;
 
-        const { data } = await axios.delete(
-          `https://graph.facebook.com/v16.0/${pid}/likes?access_token=${page_token}`
+        await axios.post(
+          `https://graph.facebook.com/v16.0/${pid}/comments?access_token=${page_token}`
         );
-        if (!data.success)
-          return res
-            .status(500)
-            .json({ success: false, error: "Internal server error" });
 
         res.status(200).json({ success: true });
       } catch (error: any) {

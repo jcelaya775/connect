@@ -4,6 +4,7 @@ import Post from "@/models/Post";
 import { IConnectPost } from "@/models/Post";
 import Comment, { IComment } from "@/models/Comment";
 import { getAuthUser } from "@/lib/auth";
+import { Schema } from "mongoose";
 
 type GetData = {
   success: boolean;
@@ -21,8 +22,9 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<GetData | PostData>
 ) {
-  await connectDB();
   const { method } = req;
+
+  await connectDB();
 
   switch (method) {
     /**
