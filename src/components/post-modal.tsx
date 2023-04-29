@@ -43,26 +43,52 @@ const PostModal = ({ newPost = true, setVisible }: PostModalProps) => {
     setConnectAudience('');
   };
 
-  const postToConnect = async (postData: any) => {
-    const res = await axios.post("/api/platforms/connect/posts", postData);
 
-    if (res.data.success === false) {
-      throw new Error("Error posting to Connect");
+  
+    const postToConnect = async (postData: any) => {
+      const formData = new FormData();
+       formData.append('file', postData.image);
+       formData.append('body', JSON.stringify(postData.content));
+    
+      const res = await axios.post("/api/platforms/connect/posts", formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+    
+      if (res.data.success === false) {
+        throw new Error("Error posting to Connect");
+      }
+    
+      return res.data;
+    };
+  
+const postToFacebook = async (postData: any) => {
+  const formData = new FormData();
+  
+  // Check if there's a file to append
+  if (postData.file) {
+    formData.append('file', postData.file);
+    formData.append('caption', postData.caption);
+  } else if (postData.message) {
+    // Here we handle a situation where there's no image but there's a message
+    formData.append('message', postData.message);
+  }
+
+  const res = await axios.post("/api/platforms/facebook/posts", formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
     }
+  });
 
-    return res.data;
-  };
+  if (res.data.success === false) {
+    throw new Error("Error posting to Facebook");
+  }
 
-  const postToFacebook = async (postData: any) => {
-    const res = await axios.post("/api/platforms/facebook/posts", postData);
+  return res.data;
+};
 
-    if (res.data.success === false) {
-      throw new Error("Error posting to Facebook");
-    }
-
-    return res.data;
-  };
-
+  
   const createPostMutation = useMutation(
     async (postData: any) => {
       const results = [];
@@ -96,28 +122,50 @@ const PostModal = ({ newPost = true, setVisible }: PostModalProps) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+  
     let platforms = [];
     connectChecked && platforms.push(platformTypes.connect);
-    facebookChecked && platforms.push(platformTypes.facebook);
-    instagramChecked && platforms.push(platformTypes.instagram);
+    
+    const file = inputRef.current?.files?.[0];
+    if (file) {
+      facebookChecked && platforms.push(platformTypes.facebook);
+      instagramChecked && platforms.push(platformTypes.instagram);
 
-    // Define postData object based on your form inputs
-    const postData = {
-      connect: {
-        platforms,
-        content: {
-          body: description,
+      const postData = {
+        connect: {
+          platforms,
+          content: {
+            body: description,
+          },
+          //image: file,
         },
-        // image: inputRef.current.files[0],
-      },
-      facebook: {
-        message: description,
-      },
-    };
-
-    // Call the createPostMutation hook
-    createPostMutation.mutate(postData);
+        facebook: {
+          file: file,
+          caption: description,
+        },
+      };
+      createPostMutation.mutate(postData);
+      
+    } else {
+      facebookChecked && platforms.push(platformTypes.facebook);
+      instagramChecked && platforms.push(platformTypes.instagram);
+      const postData = {
+        connect: {
+          platforms,
+          content: {
+            body: description,
+          },
+          //image: file,
+        },
+        facebook: {
+          message: description
+        },
+      };
+      createPostMutation.mutate(postData);
+      
+    }
   };
+
 
   return (
     <>
