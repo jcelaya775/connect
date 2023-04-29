@@ -48,8 +48,8 @@ export default async function handler(
           signedUrl,
           filename: parsedFile.originalFilename!,
         });
-      } catch (err) {
-        res.status(500).json({ success: false, error: "Could not parse file" });
+      } catch (error: any) {
+        res.status(500).json({ success: false, error: error.message });
       }
 
       break;
