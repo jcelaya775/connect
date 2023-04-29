@@ -11,17 +11,13 @@ export const ProfilePage = () => {
   const [friendsModalVisible, setFriendsModalVisible] =
     useState<boolean>(false);
 
-  const { data: relationship, isLoading: relationshipLoading } = useQuery({
-    queryKey: ["friendButton", uid],
-    queryFn: async () => {
-      const {
-        data: { relationship },
-      } = await axios.get(`/api/users/${uid}/friends`);
-      console.log(relationship);
-
-      return relationship;
-    },
-  });
+  const {
+    relationship,
+    relationshipLoading,
+    friends,
+    friendsLoading,
+    friendButtonMutation,
+  } = useFriends(uid);
 
   return (
     <>
@@ -38,7 +34,10 @@ export const ProfilePage = () => {
                   {/*  Profile Card  */}
                   <div className="flex items-center w-full px-4 py-10 bg-cover card bg-[url('https://picsum.photos/id/314/1000/300')]">
                     <div className="card glass lg:card-side text-neutral-content">
-                      <button className="btn btn-sm absolute top-0 right-0 lg:mt-4 lg:mr-4 sm: mt-72 sm:mr-4 xs: mt-72 xs: mr-4">
+                      <button
+                        className="btn btn-sm absolute top-0 right-0 lg:mt-4 lg:mr-4 sm: mt-72 sm:mr-4 xs: mt-72 xs: mr-4"
+                        onClick={() => friendButtonMutation.mutate()}
+                      >
                         {relationshipLoading
                           ? "Loading..."
                           : relationship === relationshipTypes.friends

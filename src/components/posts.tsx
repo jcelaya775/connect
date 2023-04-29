@@ -25,8 +25,6 @@ export default function Posts({ uid }: { uid?: string }) {
   const { isLoading, error, data } = useQuery({
     queryKey,
     queryFn: async () => {
-      console.log(uid);
-      console.log(endpoint);
       const {
         data: { posts },
       } = await axios.get(endpoint);
