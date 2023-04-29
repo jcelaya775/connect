@@ -29,7 +29,7 @@ const SideNav = () => {
             </Link>
           </li>
           <li className="hover-bordered">
-            <Link href="/userprofile">
+            <Link href="/profile">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"

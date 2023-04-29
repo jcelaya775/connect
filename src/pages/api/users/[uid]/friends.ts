@@ -3,6 +3,7 @@ import connectDB from "@/lib/mongodb";
 import User, { IUser } from "@/models/User";
 import { ObjectId } from "mongoose";
 import { getAuthUser } from "@/lib/auth";
+import { relationshipTypes } from "@/types/relationship";
 
 type QueryParams = {
   uid?: string;
@@ -14,6 +15,7 @@ type QueryParams = {
 
 type Data = {
   success: boolean;
+  relationship?: relationshipTypes;
   friends?: IUser["_id"] &
     IUser["name"] &
     IUser["email"] &
@@ -28,6 +30,9 @@ export default async function handler(
 ) {
   await connectDB();
   const { method }: { method?: string } = req;
+
+  const currentUser: IUser | null | void = await getAuthUser(req, res);
+  if (!currentUser) return res.status(401).json({ success: false });
 
   switch (method) {
     /**
@@ -56,10 +61,38 @@ export default async function handler(
           orArray.push({ email: { $regex: email as string, $options: "i" } });
         if (orArray.length > 0) query.$or = orArray;
 
-        const currentUser = await User.findById(uid);
+        const targetUser = await User.findById(uid);
+        let relationship: relationshipTypes = relationshipTypes.notFriends;
+
         const friendObjects: { _id: ObjectId; user_id: ObjectId }[] =
-          currentUser.friends;
+          targetUser.friends;
         const friendIds = friendObjects.map((friend) => friend.user_id);
+
+        // Check if relationship is friends
+        friendIds.forEach((friendId: ObjectId) => {
+          if (String(friendId) === String(currentUser._id)) {
+            relationship = relationshipTypes.friends;
+          }
+        });
+
+        // Check if relationship is pendingFriend
+        const pendingFriendObjects: { user_id: ObjectId }[] =
+          currentUser.pending_friends;
+        pendingFriendObjects.forEach((pendingFriend: { user_id: ObjectId }) => {
+          if (String(pendingFriend.user_id) === String(targetUser._id)) {
+            relationship = relationshipTypes.pendingFriend;
+          }
+        });
+
+        // Check if relationship is friendRequest
+        const friendRequestObjects: {
+          user_id: ObjectId;
+        }[] = currentUser.friend_requests;
+        friendRequestObjects.forEach((friendRequest: { user_id: ObjectId }) => {
+          if (String(friendRequest.user_id) === String(targetUser._id)) {
+            relationship = relationshipTypes.friendRequest;
+          }
+        });
 
         const friends = await User.find({
           $and: [
@@ -68,7 +101,7 @@ export default async function handler(
           ],
         }).select("_id email username name profile_picture");
 
-        res.status(200).json({ success: true, friends });
+        res.status(200).json({ success: true, relationship, friends });
       } catch (error: any) {
         return res.status(500).json({ success: false, error: error.message });
       }
@@ -83,14 +116,10 @@ export default async function handler(
      */
     case "POST":
       try {
-        const currentUser: IUser | null | void = await getAuthUser(req, res);
-        if (!currentUser) return res.status(401).json({ success: false });
-        const { _id } = currentUser;
-
         const { uid } = req.query;
 
         // Check if the current currentUser is trying to add themselves as a friend
-        if (String(_id) === uid)
+        if (String(currentUser._id) === uid)
           return res.status(404).json({
             success: false,
             error: "You cannot add yourself as a friend",
@@ -135,7 +164,7 @@ export default async function handler(
           );
           targetUser.pending_friends = targetUser.pending_friends.filter(
             (pending_friend: { user_id: ObjectId }) =>
-              String(pending_friend.user_id) !== String(_id)
+              String(pending_friend.user_id) !== String(currentUser._id)
           );
 
           currentUser.friends.push({ user_id: targetUser._id });
@@ -176,10 +205,6 @@ export default async function handler(
      */
     case "DELETE":
       try {
-        const currentUser: IUser | null | void = await getAuthUser(req, res);
-        if (!currentUser) return res.status(401).json({ success: false });
-        const { _id } = currentUser;
-
         const { uid } = req.query;
 
         const targetUser: IUser | null = await User.findOne({ _id: uid });
@@ -207,7 +232,7 @@ export default async function handler(
           );
           targetUser.pending_friends = targetUser.pending_friends.filter(
             (pending_friend: { user_id: ObjectId }) =>
-              String(pending_friend.user_id) !== String(_id)
+              String(pending_friend.user_id) !== String(currentUser._id)
           );
         } else {
           // Remove the users from each other's friends list

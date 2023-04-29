@@ -13,18 +13,6 @@ import { useSession } from "next-auth/react";
 type HomeProps = { authenticated: boolean };
 
 export default function Home({ authenticated }: HomeProps) {
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme)
-      document.querySelector("html")?.setAttribute("data-theme", savedTheme);
-    else {
-      if (window.matchMedia("(prefers-color-scheme: dark)").matches)
-        document.querySelector("html")?.setAttribute("data-theme", "dark");
-      else
-        document.querySelector("html")?.setAttribute("data-theme", "corporate");
-    }
-  }, []);
-
   if (!authenticated) {
     return (
       <Layout_Logout>

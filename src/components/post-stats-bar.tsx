@@ -4,6 +4,7 @@ import CommentButton from "./comment-button";
 import LikeButton from "./like-button";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import Link from "next/link";
 
 type PostStatsProps = {
   postId: string;

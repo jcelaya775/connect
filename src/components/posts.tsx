@@ -25,6 +25,8 @@ export default function Posts({ uid }: { uid?: string }) {
   const { isLoading, error, data } = useQuery({
     queryKey,
     queryFn: async () => {
+      console.log(uid);
+      console.log(endpoint);
       const {
         data: { posts },
       } = await axios.get(endpoint);
@@ -36,61 +38,66 @@ export default function Posts({ uid }: { uid?: string }) {
   });
 
   return (
-    <div className="card w-full bg-base-100 rounded">
+    <>
       {isLoading ? (
         <p>Loading...</p>
       ) : (
         (!data || data?.length === 0) && <p>No posts found.</p>
       )}
-      <div className="flex flex-col w-full gap-5">
-        {data &&
-          data.map((post: GenericPost, idx: number) => {
-            const props: Partial<PostProps & { key: string }> = {
-              author: post.author,
-              userId: String(post.user_id),
-              mainPlatform: post.main_platform,
-            };
 
-            switch (post.main_platform) {
-              case platformTypes.connect:
-                props.key = (post as IConnectPost)._id;
-                props.postId = (post as IConnectPost)._id;
-                props.platforms = (post as IConnectPost).platforms;
-                props.platforms.forEach((platform: string) => {
-                  switch (platform) {
-                    case platformTypes.facebook:
-                      if (!targetUser?.facebook?.page_token) {
-                        props.platforms = props.platforms?.filter(
-                          (p) => p !== platformTypes.facebook
-                        );
+      <div className="card w-full bg-base-100 rounded">
+        <div className="flex flex-col w-full gap-5">
+          {data &&
+            data.map((post: GenericPost, idx: number) => {
+              const props: Partial<PostProps & { key: string }> = {
+                author: post.author,
+                userId: String(post.user_id),
+                mainPlatform: post.main_platform,
+              };
+
+              switch (post.main_platform) {
+                case platformTypes.connect:
+                  props.key = (post as IConnectPost)._id;
+                  props.postId = (post as IConnectPost)._id;
+                  props.platforms = (post as IConnectPost).platforms;
+                  props.platforms.forEach((platform: string) => {
+                    switch (platform) {
+                      case platformTypes.facebook:
+                        if (!targetUser?.facebook?.page_token) {
+                          props.platforms = props.platforms?.filter(
+                            (p) => p !== platformTypes.facebook
+                          );
+                          break;
+                        }
+
+                        props.facebookId = (post as IConnectPost).facebook_id!;
                         break;
-                      }
+                      case platformTypes.instagram:
+                        props.instagramId = (
+                          post as IConnectPost
+                        ).instagram_id!;
+                        break;
+                    }
+                  });
+                  props.content = (post as IConnectPost).content;
+                  break;
+                case platformTypes.facebook:
+                  props.key = (post as IFacebookPost).id;
+                  props.facebookId = (post as IFacebookPost).id;
+                  props.platforms = [platformTypes.facebook];
+                  props.content = {
+                    body: (post as IFacebookPost).message,
+                    image: {
+                      signedUrl: (post as IFacebookPost).full_picture,
+                    },
+                  };
+                  break;
+              }
 
-                      props.facebookId = (post as IConnectPost).facebook_id!;
-                      break;
-                    case platformTypes.instagram:
-                      props.instagramId = (post as IConnectPost).instagram_id!;
-                      break;
-                  }
-                });
-                props.content = (post as IConnectPost).content;
-                break;
-              case platformTypes.facebook:
-                props.key = (post as IFacebookPost).id;
-                props.facebookId = (post as IFacebookPost).id;
-                props.platforms = [platformTypes.facebook];
-                props.content = {
-                  body: (post as IFacebookPost).message,
-                  image: {
-                    signedUrl: (post as IFacebookPost).full_picture,
-                  },
-                };
-                break;
-            }
-
-            return <Post key={props.key} {...(props as PostProps)} />;
-          })}
+              return <Post key={props.key} {...(props as PostProps)} />;
+            })}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
