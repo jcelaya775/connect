@@ -123,16 +123,32 @@ const UserProfilePage = () => {
                       </div>
                       <Posts uid={user?._id} />
                     </div>
-                    <div className="flex flex-col gap-y-4 w-full md:w-1/4">
+                    <div className="flex flex-col gap-y-4 w-full xl:w-1/4 order-1 xl:order-2">
                     <div className="card w-full bg-base-100 rounded h-min">
                       <div className="card-title p-4">Friends</div>
                     </div>
 
                     <div className="card bg-base-100 rounded">
-                      <div className="card-body">
-                        <div className="flex flex-row gap-x-2 lg:gap-x-16 mx-auto">
-                          <div className="flex flex-row gap-x-2 lg:flex-col lg:gap-y-4 w-1/2">
-                            {/* First row */}
+                        <div className="card-body">
+                          
+                          <div className="flex flex-no-wrap xl:flex-wrap">
+                            {friendsList.slice(0, 4).map((friend) => (
+                              <div key={friend.id} className="w-full xl:w-1/2 p-3">
+                                <div className="avatar md:px-5 lg:px-10 xl:px-0">
+                                  <div className="w-full rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                                    <img src={friend.avatar} alt={friend.name} />
+                                  </div>
+                                </div>
+                                <h2 className="text-center text-sm">{friend.name}</h2>
+                              </div>
+                            ))}
+                            </div>
+
+
+
+
+                        {/* <div className="flex flex-row gap-x-2 lg:gap-x-16 mx-auto">
+                            <div className="flex flex-row gap-x-2 lg:flex-col lg:gap-y-4 w-1/2">
                             {friendsList.slice(0, 2).map((friend) => (
                               <div key={friend.id}>
                                 <div className="avatar">
@@ -145,7 +161,6 @@ const UserProfilePage = () => {
                             ))}
                           </div>
                           <div className="flex flex-row gap-x-2 lg:flex-col lg:gap-y-4 w-1/2">
-                            {/* Second row */}
                             {friendsList.slice(2, 4).map((friend) => (
                               <div key={friend.id}>
                                 <div className="avatar">
@@ -156,11 +171,13 @@ const UserProfilePage = () => {
                                 <h2 className="text-center">{friend.name}</h2>
                               </div>
                             ))}
-                          </div>
-                        </div>
+                            </div>
+                            
+
+                        </div> */}
                         <Link
                           href="/friends"
-                          className="btn btn-primary btn-sm mx-4 my-4"
+                          className="btn btn-primary btn-sm mx-4 my-4 normal-case"
                         >
                           View All Friends
                         </Link>
