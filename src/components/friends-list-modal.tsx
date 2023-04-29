@@ -57,7 +57,7 @@ const FriendsModal = ({ setVisible }: FriendsModalProps) => {
     };
   });
 
-  const handleSearch = (e) => {
+  const handleSearch = (e: any) => {
     setSearchTerm(e.target.value);
   };
 
