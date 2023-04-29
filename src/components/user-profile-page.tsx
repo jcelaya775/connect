@@ -143,38 +143,6 @@ const UserProfilePage = () => {
                               </div>
                             ))}
                             </div>
-
-
-
-
-                        {/* <div className="flex flex-row gap-x-2 lg:gap-x-16 mx-auto">
-                            <div className="flex flex-row gap-x-2 lg:flex-col lg:gap-y-4 w-1/2">
-                            {friendsList.slice(0, 2).map((friend) => (
-                              <div key={friend.id}>
-                                <div className="avatar">
-                                  <div className="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                                    <img src={friend.avatar} alt={friend.name} />
-                                  </div>
-                                </div>
-                                <h2 className="text-center">{friend.name}</h2>
-                              </div>
-                            ))}
-                          </div>
-                          <div className="flex flex-row gap-x-2 lg:flex-col lg:gap-y-4 w-1/2">
-                            {friendsList.slice(2, 4).map((friend) => (
-                              <div key={friend.id}>
-                                <div className="avatar">
-                                  <div className="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                                    <img src={friend.avatar} alt={friend.name} />
-                                  </div>
-                                </div>
-                                <h2 className="text-center">{friend.name}</h2>
-                              </div>
-                            ))}
-                            </div>
-                            
-
-                        </div> */}
                         <Link
                           href="/friends"
                           className="btn btn-primary btn-sm mx-4 my-4 normal-case"
