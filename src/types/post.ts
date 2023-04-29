@@ -3,6 +3,7 @@ import { platformTypes } from "./platform";
 
 export interface IFacebookPost {
   id: string;
+  user_id: string;
   created_time: string;
   message: string;
   full_picture: string;
@@ -19,6 +20,7 @@ export interface IFacebookPost {
 // TODO: Update
 export interface IInstagramPost {
   id: string;
+  user_id: string;
   timestamp: string;
   caption: string;
   media_url: string;

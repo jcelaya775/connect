@@ -11,6 +11,7 @@ import { ObjectId } from "mongodb";
 
 type OptionsDropdownProps = {
   postId: string;
+  userId: string;
   facebookId: string;
   instagramId: string;
   platforms: platformTypes[];
@@ -19,6 +20,7 @@ type OptionsDropdownProps = {
 
 const OptionsDropdown = ({
   postId,
+  userId,
   facebookId,
   instagramId,
   platforms,
@@ -65,6 +67,7 @@ const OptionsDropdown = ({
       {editModalVisible && (
         <EditPostModal
           postId={postId}
+          userId={userId}
           facebookId={facebookId}
           instagramId={instagramId}
           platforms={platforms}

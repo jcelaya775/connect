@@ -7,16 +7,21 @@ import axios from "axios";
 
 type PostStatsProps = {
   postId: string;
+  userId: string;
   platform: platformTypes;
 };
 
-export default function PostStatsBar({ postId, platform }: PostStatsProps) {
+export default function PostStatsBar({
+  postId,
+  userId,
+  platform,
+}: PostStatsProps) {
   // Connect stats
   const { data: connectLikes, isLoading: connectLikeLoading } = useQuery({
     queryKey: ["posts", postId, "likes", "count"],
     queryFn: async () => {
       const { data } = await axios.get(
-        `/api/platforms/connect/posts/${postId}/likes`
+        `/api/users/${userId}/platforms/connect/posts/${postId}/likes`
       );
       return data.likeCount;
     },
@@ -32,7 +37,7 @@ export default function PostStatsBar({ postId, platform }: PostStatsProps) {
     queryKey: ["posts", postId, "comments", "count"],
     queryFn: async () => {
       const { data } = await axios.get(
-        `/api/platforms/connect/posts/${postId}/comments`
+        `/api/users/${userId}/platforms/connect/posts/${postId}/comments`
       );
       return data.commentCount;
     },
@@ -52,8 +57,7 @@ export default function PostStatsBar({ postId, platform }: PostStatsProps) {
       const { data } = await axios.get(
         `/api/platforms/facebook/posts/${postId}/likes`
       );
-      if (data.hasLiked) return data.likeCount + 1;
-      else return data.likeCount;
+      return data.likeCount;
     },
     enabled: platform == platformTypes.facebook,
     refetchOnWindowFocus: false,
@@ -96,16 +100,38 @@ export default function PostStatsBar({ postId, platform }: PostStatsProps) {
   const likeButton = (() => {
     switch (platform) {
       case platformTypes.connect:
-        return <LikeButton postId={postId} platform={platformTypes.connect} />;
+        return (
+          <LikeButton
+            postId={postId}
+            userId={userId}
+            platform={platformTypes.connect}
+          />
+        );
       case platformTypes.facebook:
-        return <LikeButton postId={postId} platform={platformTypes.facebook} />;
+        return (
+          <LikeButton
+            postId={postId}
+            userId={userId}
+            platform={platformTypes.facebook}
+          />
+        );
       case platformTypes.instagram:
         return (
-          <LikeButton postId={postId} platform={platformTypes.instagram} />
+          <LikeButton
+            postId={postId}
+            userId={userId}
+            platform={platformTypes.instagram}
+          />
         );
       case platformTypes.tiktok:
         // TODO: Add TikTok icon
-        return <LikeButton postId={postId} platform={platformTypes.tiktok} />;
+        return (
+          <LikeButton
+            postId={postId}
+            userId={userId}
+            platform={platformTypes.tiktok}
+          />
+        );
     }
   })();
 

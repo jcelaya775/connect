@@ -75,6 +75,7 @@ export default async function handler(
         // const posts = response.data.data;
         posts.forEach((post: IFacebookPost) => {
           post.main_platform = platformTypes.facebook;
+          post.user_id = user._id!;
           post.author = user.facebook.page_name!;
         });
 

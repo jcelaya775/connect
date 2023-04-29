@@ -9,10 +9,15 @@ import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 
 type LikeButtonProps = {
   postId: string;
+  userId: string;
   platform: platformTypes;
 };
 
-export default function LikeButton({ postId, platform }: LikeButtonProps) {
+export default function LikeButton({
+  postId,
+  userId,
+  platform,
+}: LikeButtonProps) {
   const queryClient = useQueryClient();
 
   let queryKey: string[] = ["posts", postId, "likes", "hasLiked"];

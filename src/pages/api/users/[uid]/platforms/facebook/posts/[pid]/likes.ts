@@ -20,9 +20,10 @@ export default async function handler(
   await connectDB();
   const { method } = req;
 
-  const user = await getAuthUser(req, res);
+  const { uid } = req.query;
+  const user: IUser | null | void = await User.findById(uid);
   if (!user)
-    return res.status(401).json({ success: false, error: "Not logged in" });
+    return res.status(404).json({ success: false, error: "User not found" });
   if (!user.facebook?.page_token)
     return res
       .status(401)
@@ -37,8 +38,9 @@ export default async function handler(
           `https://graph.facebook.com/v16.0/${pid}/likes?summary=true&access_token=${page_token}`
         );
         const likes = response.data.data;
-        const likeCount = response.data.data.length;
+        let likeCount = response.data.data.length;
         const hasLiked = response.data.summary.has_liked;
+        if (hasLiked) likeCount++;
 
         res.status(200).json({ success: true, hasLiked, likes, likeCount });
       } catch (error: any) {

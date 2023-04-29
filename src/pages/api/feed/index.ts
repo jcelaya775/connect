@@ -59,9 +59,9 @@ export default async function handler(
         );
         friendIds.unshift(user._id);
 
-        try {
-          // Get connect feed
-          for (const userId of friendIds) {
+        for (const userId of friendIds) {
+          try {
+            // Get connect feed
             const {
               data: { posts: connectPosts },
             } = await axios.get(
@@ -103,10 +103,9 @@ export default async function handler(
                 }
               });
             allPosts.push(...connectPosts);
+          } catch (error: any) {
+            console.log(error.response.data);
           }
-        } catch (error: any) {
-          console.log(error.response.data);
-        }
 
         // // Get user's facebook posts
         // const {

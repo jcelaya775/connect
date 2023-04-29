@@ -38,11 +38,12 @@ export default async function handler(
         });
         if (!post) return res.status(404).json({ success: false });
 
-        const likeCount = post.likes.length;
+        let likeCount = post.likes.length;
         const likes = post.likes;
         const hasLiked = likes!.some(
           (like) => String(_id) === String(like.user_id)
         );
+        if (hasLiked) likeCount++;
 
         res.status(200).json({ success: true, hasLiked, likeCount, likes });
       } catch (error: any) {

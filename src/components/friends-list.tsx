@@ -25,7 +25,7 @@ const FriendsPage = () => {
       const {
         data: { friendRequests },
       }: { data: { friendRequests: Friend[] } } = await axios.get(
-        "/api/users/me/friends/requests"
+        "/api/friends/requests"
       );
 
       return friendRequests;
@@ -41,9 +41,7 @@ const FriendsPage = () => {
     queryFn: async () => {
       const {
         data: { friends },
-      }: { data: { friends: Friend[] } } = await axios.get(
-        `/api/users/me/friends?name=${searchTerm}&username=${searchTerm}&email=${searchTerm}`
-      );
+      }: { data: { friends: Friend[] } } = await axios.get(`/api/friends`);
 
       return friends;
     },
@@ -55,13 +53,12 @@ const FriendsPage = () => {
       const {
         data: { friends },
       }: { data: { friends: Friend[] } } = await axios.get(
-        `/api/users/me/friends?name=${searchTerm}&username=${searchTerm}&email=${searchTerm}`
+        `/api/friends?name=${searchTerm}&username=${searchTerm}&email=${searchTerm}`
       );
 
       return friends;
     },
     onSuccess: (filteredFriends) => {
-      console.log(filteredFriends);
       queryClient.setQueryData(["users", "me", "friends"], filteredFriends);
     },
   });
@@ -235,9 +232,7 @@ const FriendsPage = () => {
                       <p className="text-gray-500">Friend</p>
                     </div>
                     <button className="btn btn-primary btn-sm normal-case">
-                      <Link href={`/${friend.name.replace(" ", "")}`}>
-                        View Profile
-                      </Link>
+                      <Link href={`users/${friend._id}`}>View Profile</Link>
                     </button>
                   </div>
                 </li>

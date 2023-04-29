@@ -5,6 +5,7 @@ import PostStatsBar from "./post-stats-bar";
 import OptionsDropdown from "./options-dropdown";
 
 export type PostProps = {
+  userId: string;
   postId: string;
   facebookId: string;
   instagramId: string;
@@ -35,6 +36,7 @@ export type PostProps = {
 };
 
 const Post = ({
+  userId,
   postId,
   facebookId,
   instagramId,
@@ -43,6 +45,8 @@ const Post = ({
   platforms,
   content,
 }: PostProps) => {
+  const { user, userLoading } = useUser();
+
   const statsBar = (platform: platformTypes) => {
     switch (platform) {
       case platformTypes.connect:
@@ -50,6 +54,7 @@ const Post = ({
           <PostStatsBar
             key={platform}
             postId={postId}
+            userId={userId}
             platform={platformTypes.connect}
           />
         );
@@ -58,6 +63,7 @@ const Post = ({
           <PostStatsBar
             key={platform}
             postId={facebookId}
+            userId={userId}
             platform={platformTypes.facebook}
           />
         );
@@ -66,6 +72,7 @@ const Post = ({
           <PostStatsBar
             key={platform}
             postId={instagramId}
+            userId={userId}
             platform={platformTypes.instagram}
           />
         );
@@ -74,6 +81,7 @@ const Post = ({
           <PostStatsBar
             key={platform}
             postId={postId}
+            userId={userId}
             platform={platformTypes.tiktok}
           />
         );
@@ -87,19 +95,22 @@ const Post = ({
   return (
     <>
       <div className="card compact side w-full bg-base-100 shadow-xl">
-        <div className="h-4">
-          <div className="relative">
-            <div className="absolute right-3 top-1">
-              <OptionsDropdown
-                postId={postId}
-                facebookId={facebookId}
-                instagramId={instagramId}
-                platforms={platforms}
-                content={content}
-              />
+        {!userLoading && user?._id === userId && (
+          <div className="h-4">
+            <div className="relative">
+              <div className="absolute right-3 top-1">
+                <OptionsDropdown
+                  postId={postId}
+                  userId={userId}
+                  facebookId={facebookId}
+                  instagramId={instagramId}
+                  platforms={platforms}
+                  content={content}
+                />
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         <div className="card-body p-4 flex-col items-start lg:flex-row lg:items-center lg:space-x-3 space-y-1 flex-wrap">
           <div className="flex-none">

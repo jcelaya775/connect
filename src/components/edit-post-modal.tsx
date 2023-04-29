@@ -7,6 +7,7 @@ import { GenericPost } from "@/types/post";
 
 type EditPostModalProps = {
   postId: string;
+  userId: string;
   facebookId: string;
   instagramId: string;
   platforms: platformTypes[];
@@ -16,6 +17,7 @@ type EditPostModalProps = {
 
 const EditPostModal = ({
   postId,
+  userId,
   facebookId,
   instagramId,
   platforms,
@@ -62,10 +64,19 @@ const EditPostModal = ({
       for (const platform of platforms) {
         switch (platform) {
           case platformTypes.connect:
+            const { data } = await axios.get(
+              `/api/platforms/connect/posts/${postId}`
+            );
+            const postToUpdate = data.data;
+            const content = postToUpdate.content;
+            // TODO: Add support for images
+            content.body = description;
+            // content.image = ...
+
             const { data: connectData } = await axios.put(
               `/api/platforms/connect/posts/${postId}`,
               {
-                content: { body: description },
+                content,
               }
             );
             if (connectData.error) {
@@ -74,6 +85,7 @@ const EditPostModal = ({
             } else updatedPost.connect = connectData;
             break;
           case platformTypes.facebook:
+            // TODO: Add support for images
             const { data: facebookData } = await axios.put(
               `/api/platforms/facebook/posts/${facebookId}`,
               {
@@ -91,17 +103,7 @@ const EditPostModal = ({
       return updatedPost;
     },
     onSuccess: () => {
-      for (const platform of platforms) {
-        switch (platform) {
-          case platformTypes.facebook:
-            queryClient.invalidateQueries(["posts"]);
-            break;
-          default: // connect
-            queryClient.invalidateQueries(["posts"]);
-            break;
-        }
-      }
-
+      queryClient.invalidateQueries(["posts"]);
       setVisible(false);
     },
   });
