@@ -1,5 +1,7 @@
 import { useState } from "react";
+import useUser from "@/hooks/useUser";
 import SideNav from "./SideNav";
+import axios from "axios";
 import Post, { PostProps } from "./post";
 import PostModal from "./post-modal";
 import BtmNav from "./bottom-nav";
