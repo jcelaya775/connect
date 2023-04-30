@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import useFriends from "@/hooks/useFriends";
+import useUser from "@/hooks/useUser";
 
 type Friend = IUser["_id"] &
   IUser["name"] &
@@ -17,6 +18,8 @@ const FriendsPage = () => {
   const router = useRouter();
   const { uid }: { uid?: string } = router.query;
   const queryClient = useQueryClient();
+  const { user: currentUser } = useUser();
+  const { user: targetUser } = useUser(uid);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const {
     friends,
@@ -83,13 +86,12 @@ const FriendsPage = () => {
                     >
                       <button
                         title="Accept"
-                        onClick={() => {
-                          console.log(friend._id);
+                        onClick={() =>
                           friendButtonMutation.mutate({
                             addFriend: true,
                             userId: friend._id,
-                          });
-                        }}
+                          })
+                        }
                         className="inline-flex items-center px-0 py-0 mr-2 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                       >
                         <svg
@@ -143,13 +145,19 @@ const FriendsPage = () => {
           </div>
         </div>
       )}
-      {friendRequests && friendRequests.length > 0 ? (
+      {String(currentUser?._id) === String(targetUser?._id) &&
+      friendRequests &&
+      friendRequests.length > 0 ? (
         <div className="px-8 sm:px-24 lg:px-10 mt-0 divider"></div>
       ) : (
         <div className="py-2"></div>
       )}
       <div className="px-8 sm:px-24 lg:px-10 mt-0">
-        <h2 className="text-xl font-medium mb-4">All friends</h2>
+        <h2 className="text-xl font-medium mb-4">
+          {String(currentUser?._id) === String(targetUser?._id)
+            ? "All friends"
+            : `${targetUser?.name}'s friends`}
+        </h2>
         <div className="card bg-base-200 p-4 h-max">
           {!friends ||
             (friends.length === 0 && (

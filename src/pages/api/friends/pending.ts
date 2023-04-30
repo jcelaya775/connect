@@ -26,7 +26,7 @@ export default async function handler(
   await connectDB();
   const { method }: { method?: string } = req;
 
-  const currentUser: IUser | null | void = await getAuthUser(req, res);
+  const currentUser: IUser | null = await getAuthUser(req, res);
   if (!currentUser) return res.status(401).json({ success: false });
   const { _id } = currentUser;
 

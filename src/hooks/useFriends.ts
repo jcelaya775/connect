@@ -83,7 +83,7 @@ export default function useFriends(uid?: string) {
       if (addFriend !== undefined) {
         if (addFriend === true)
           data = await axios.post(`/api/users/${userId}/friends`);
-        else data = await axios.put(`/api/users/${userId}/friends`);
+        else data = await axios.delete(`/api/users/${userId}/friends`);
       } else {
         switch (relationship) {
           // Remove or cancel friend request
