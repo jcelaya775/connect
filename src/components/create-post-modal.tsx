@@ -93,7 +93,6 @@ const CreatePostModal = ({
 
       // TODO: If posted to other platforms, store post ID in Connect post
       if (postData.connect.platforms.includes(platformTypes.connect)) {
-        console.log(postData);
         const connectResult = await postToConnect(postData);
         results.push(connectResult);
       }

@@ -2,16 +2,11 @@ import { useEffect, useState } from "react";
 import SideNav from "./SideNav";
 import EditProfileModal from "./edit-profile-modal";
 import Link from "next/link";
-import Post, { PostProps } from "./post";
-import { platformTypes } from "@/types/platform";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import useUser from "@/hooks/useUser";
-import { GenericPost, IFacebookPost } from "@/types/post";
-import { IConnectPost } from "@/models/Post";
 import useFriends, { Friend } from "@/hooks/useFriends";
 import Posts from "./posts";
-import Image from "next/image";
 
 const friendsList = [
   {
@@ -40,19 +35,6 @@ const UserProfilePage = () => {
   const { friends, friendsLoading, friendsError } = useFriends();
   const [friendModalVisible, setFriendsModalVisible] = useState(false);
   const [editProfileModalVisible, setEditProfileModalVisible] = useState(false);
-
-  const { isLoading, error, data } = useQuery({
-    queryKey: [`${user?._id}`, "posts"],
-    queryFn: async () => {
-      const {
-        data: { posts },
-      } = await axios.get(`/api/feed`);
-
-      return posts;
-    },
-    refetchOnWindowFocus: false,
-    enabled: !userLoading,
-  });
 
   return (
     <>
@@ -123,7 +105,7 @@ const UserProfilePage = () => {
                       <div className="card w-full bg-base-100 rounded">
                         <div className="card-title p-4">Posts</div>
                       </div>
-                      <Posts uid={user?._id} />
+                      <Posts uid={user?._id} feed={true} />
                     </div>
                     <div className="flex flex-col gap-y-4 w-full xl:w-1/4 order-1 xl:order-2">
                       <div className="card w-full bg-base-100 rounded h-min">
@@ -133,23 +115,32 @@ const UserProfilePage = () => {
                       <div className="card bg-base-100 rounded">
                         <div className="card-body">
                           <div className="flex flex-no-wrap w-fit xl:flex-wrap">
-                            {friendsList.slice(0, 3).map((friend) => (
-                              <div key={friend.id} className="w-full xl:w-1/2 p-3">
-                                <div className="avatar md:px-5 lg:px-10 xl:px-0">
-                                  <div className="w-full rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                                    <img src={friend.avatar} alt={friend.name} />
+                            {friends &&
+                              friends.slice(0, 3).map((friend: Friend) => (
+                                <div
+                                  key={friend._id}
+                                  className="w-full xl:w-1/2 p-3"
+                                >
+                                  <div className="avatar md:px-5 lg:px-10 xl:px-0">
+                                    <div className="w-full rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                                      <img
+                                        src={friend.profile_picture}
+                                        alt={friend.name}
+                                      />
+                                    </div>
                                   </div>
+                                  <h2 className="text-center text-sm">
+                                    {friend.name}
+                                  </h2>
                                 </div>
-                                <h2 className="text-center text-sm">{friend.name}</h2>
-                              </div>
-                            ))}
-                            </div>
-                        <Link
-                          href="/friends"
-                          className="btn btn-primary btn-sm mx-4 my-4 normal-case"
-                        >
-                          View All Friends
-                        </Link>
+                              ))}
+                          </div>
+                          <Link
+                            href="/friends"
+                            className="btn btn-primary btn-sm mx-4 my-4 normal-case"
+                          >
+                            View All Friends
+                          </Link>
                         </div>
                       </div>
                     </div>

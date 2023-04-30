@@ -120,6 +120,7 @@ const Post = ({
                 <div className="rounded-full w-10 h-10 shadow">
                   <Link
                     href={`${
+                      mainPlatform === platformTypes.connect &&
                       String(user?._id) === userId
                         ? "profile"
                         : `users/${userId}`

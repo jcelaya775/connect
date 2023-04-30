@@ -25,6 +25,7 @@ export default function useFriends(uid?: string) {
     queryKey,
     queryFn: async () => {
       const { data } = await axios.get(endpoint);
+      console.log(data);
       setRelationship(data.relationship);
       return data.friends;
     },

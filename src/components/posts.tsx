@@ -8,28 +8,22 @@ import { PostProps } from "./post";
 import { platformTypes } from "@/types/platform";
 import { IConnectPost } from "@/models/Post";
 
-export default function Posts({ uid }: { uid?: string }) {
+export default function Posts({ uid, feed }: { uid?: string; feed?: boolean }) {
   const { user: currentUser, userLoading: currentUserLoading } = useUser();
   const { user: targetUser } = useUser(uid);
 
-  console.log("uid", uid);
-  console.log("currentUser", currentUser);
   let queryKey: string[] = [];
-  let endpoint: string = "";
+  const endpoint: string = feed ? "api/feed" : `/api/users/${uid!}/feed`;
   if (!currentUserLoading) {
     queryKey =
       String(currentUser?._id) === uid || !uid
         ? ["posts"]
         : ["users", uid!, "posts"];
-    endpoint = `/api/users/${uid!}/feed`;
   }
 
-  console.log("queryKey", queryKey);
-  console.log("endpoint", endpoint);
   const { isLoading, error, data } = useQuery({
     queryKey,
     queryFn: async () => {
-      console.log("fetching posts");
       const {
         data: { posts },
       } = await axios.get(endpoint);
@@ -49,7 +43,7 @@ export default function Posts({ uid }: { uid?: string }) {
         (!data || data?.length === 0) && <p>No posts found.</p>
       )}
 
-      <div className="card w-full bg-base-100 rounded">
+      <div className="card w-full bg-base-200 rounded">
         <div className="flex flex-col w-full gap-5">
           {data &&
             data.map((post: GenericPost, idx: number) => {
