@@ -95,9 +95,12 @@ const UserProfilePage = () => {
                           >
                             <path d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32L19.513 8.2z" />
                           </svg>
-                        </label>
-                        {/* <!-- End Edit Profile Picture Button --> */}
-                      </figure>
+                          </label>
+                          </span>
+                            <img src="https://picsum.photos/200" />
+                          </div>
+                        </div>
+                      </div>
                       <div className="max-w-md card-body">
                         <h2 className="card-title text-3xl font-bold text-gray-900">
                           John Doe
@@ -129,48 +132,24 @@ const UserProfilePage = () => {
 
                       <div className="card bg-base-100 rounded">
                         <div className="card-body">
-                          <div className="flex flex-no-wrap xl:flex-wrap">
-                            {friends &&
-                              friends.slice(0, 4).map((friend: Friend) => (
-                                <div
-                                  key={friend._id}
-                                  className="w-full xl:w-1/2 p-3"
-                                >
-                                  <div className="avatar md:px-5 lg:px-10 xl:px-0">
-                                    <div className="w-full rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                                      {friend.profile_picture ? (
-                                        <Image
-                                          src={friend.profile_picture}
-                                          width={100}
-                                          height={100}
-                                          alt={friend.name}
-                                          unoptimized
-                                        />
-                                      ) : (
-                                        <div className="w-9 rounded-full mr-6">
-                                          <svg
-                                            viewBox="0 0 512 512"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            className="fill-current"
-                                          >
-                                            <path d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c39.77 0 72 32.24 72 72S295.8 272 256 272c-39.76 0-72-32.24-72-72S216.2 128 256 128zM256 448c-52.93 0-100.9-21.53-135.7-56.29C136.5 349.9 176.5 320 224 320h64c47.54 0 87.54 29.88 103.7 71.71C356.9 426.5 308.9 448 256 448z" />
-                                          </svg>
-                                        </div>
-                                      )}
-                                    </div>
+                          <div className="flex flex-no-wrap w-fit xl:flex-wrap">
+                            {friendsList.slice(0, 3).map((friend) => (
+                              <div key={friend.id} className="w-full xl:w-1/2 p-3">
+                                <div className="avatar md:px-5 lg:px-10 xl:px-0">
+                                  <div className="w-full rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                                    <img src={friend.avatar} alt={friend.name} />
                                   </div>
-                                  <h2 className="text-center text-sm">
-                                    {friend.name}
-                                  </h2>
                                 </div>
-                              ))}
-                          </div>
-                          <Link
-                            href="/friends"
-                            className="btn btn-primary btn-sm mx-4 my-4 normal-case"
-                          >
-                            View All Friends
-                          </Link>
+                                <h2 className="text-center text-sm">{friend.name}</h2>
+                              </div>
+                            ))}
+                            </div>
+                        <Link
+                          href="/friends"
+                          className="btn btn-primary btn-sm mx-4 my-4 normal-case"
+                        >
+                          View All Friends
+                        </Link>
                         </div>
                       </div>
                     </div>
