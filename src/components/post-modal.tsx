@@ -43,133 +43,108 @@ const PostModal = ({ newPost = true, setVisible }: PostModalProps) => {
     setConnectAudience('');
   };
 
-
-  
   const postToConnect = async (postData: any) => {
-    if (postData.file) {
-      const formData = new FormData();
-      formData.append('file', postData.file);
-      const res = await axios.post("/api/platforms/connect/image", formData);
-      if (res.data.success === false) {
-        throw new Error("Error uploading file");
-      }
-      postData.image = res.data.signedUrl;
-      postData.filename = res.data.filename;
-    }
+    const formData = new FormData();
+    formData.append("file", postData.file);
+    const { data: { signedUrl, filename } } = await axios.post("/api/platforms/connect/posts/image", formData);
+    postData.connect.content.image = { signedUrl, filename };
+    const { data } = await axios.post("/api/platforms/connect/posts", postData.connect);
     
-    const res = await axios.post("/api/platforms/connect/posts", postData);
-    
-    if (res.data.success === false) {
-      throw new Error("Error posting to Connect");
-    }
-    
-    return res.data;
+    console.log("postToConnect post data:", data); // Add this line to print the response data
+
+    return data;
   };
-  
-  
-  
-    const postToFacebook = async (postData: any) => {
-      const formData = new FormData();
+
+  const postToFacebook = async (postData: any) => {
+    let data;
+    const formData = new FormData();
+
+    // Check if there's a file to append
+    if (postData.file !== null) {
+      console.log(postData.facebook.caption)
+      formData.append("file", postData.file);
+      formData.append("caption", postData.facebook.caption);
+      console.log(formData)
+      const res = await axios.post("/api/platforms/facebook/posts", formData);
+      data = res.data;
+    } else {
+      const res = await axios.post("/api/platforms/facebook/posts", postData.facebook);
+      data = res.data;
+    }
+
+    console.log("postToFacebook data:", data); // Add this line to print the response data
       
-      // Check if there's a file to append
-      if (postData.file) {
-        formData.append('file', postData.file);
-        formData.append('caption', postData.caption);
-      } else if (postData.message) {
-        // Here we handle a situation where there's no image but there's a message
-        formData.append('message', postData.message);
-      }
-    
-      const res = await axios.post("/api/platforms/facebook/posts", formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
-    
-      if (res.data.success === false) {
-        throw new Error("Error posting to Facebook");
-      }
-    
-      return res.data;
-    };
-    
-  
+    return data;
+  };
+
   const createPostMutation = useMutation(
     async (postData: any) => {
-      const results = [];
-
-      if (postData.connect.platforms.includes(platformTypes.facebook)) {
-        const facebookResult = await postToFacebook(postData.facebook);
-        postData.connect.facebook_id = facebookResult.postId;
-        results.push(facebookResult);
-      }
-
-      // TODO: If posted to other platforms, store post ID in Connect post
-      if (postData.connect.platforms.includes(platformTypes.connect)) {
-        const connectResult = await postToConnect(postData.connect);
-        results.push(connectResult);
-      }
-
-      return results;
-    },
-    {
-      onSuccess: (post: any) => {
-        // queryClient.setQueryData(["posts"], (oldPosts: any) => {
-        //   [post, ...oldPosts];
-        // });
-        queryClient.invalidateQueries(["posts"]);
-
-        resetPost();
-        setVisible(false);
-      },
+    console.log(`In mutation, postData = `);
+    console.log(postData);
+    
+    const results = [];
+    if (postData.connect.platforms.includes(platformTypes.facebook)) {
+      const facebookResult = await postToFacebook(postData);
+      postData.connect.facebook_id = facebookResult.postId;
+      results.push(facebookResult);
     }
+  
+    // TODO: If posted to other platforms, store post ID in Connect post
+    // if (postData.connect.platforms.includes(platformTypes.connect)) {
+    //   const connectResult = await postToConnect(postData);
+    //   results.push(connectResult);
+    // }
+  
+    return results;
+      // return null;
+  },
+  {
+    onSuccess: (post: any) => {
+      // queryClient.setQueryData(["posts"], (oldPosts: any) => {
+      //   [post, ...oldPosts];
+      // });
+      // queryClient.invalidateQueries(["posts"]);
+  
+      resetPost();
+      setVisible(false);
+    },
+  }
   );
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-  
-    let platforms = [];
-    connectChecked && platforms.push(platformTypes.connect);
-  
-    const file = inputRef.current?.files?.[0];
-    if (file) {
-      facebookChecked && platforms.push(platformTypes.facebook);
-      instagramChecked && platforms.push(platformTypes.instagram);
-  
-      const postData = {
-        connect: {
-          platforms,
-          content: {
-            body: description,
-          },
-          image: file,
-        },
-        facebook: {
-          file: file,
-          caption: description,
-        },
-      };
-      await postToConnect(postData.connect);
-      createPostMutation.mutate(postData);
-    } else {
-      facebookChecked && platforms.push(platformTypes.facebook);
-      instagramChecked && platforms.push(platformTypes.instagram);
-      const postData = {
-        connect: {
-          platforms,
-          content: {
-            body: description,
-          },
-        },
-        facebook: {
-          message: description
-        },
-      };
-      await postToConnect(postData.connect);
-      createPostMutation.mutate(postData);
-    }
+const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  let platforms = [];
+  if(connectChecked) platforms.push(platformTypes.connect);
+  if (facebookChecked) platforms.push(platformTypes.facebook);
+  if (instagramChecked) platforms.push(platformTypes.instagram);
+
+  console.log("Submit")
+
+  const file = inputRef.current?.files?.[0];
+  let postData: any = {
+    connect: {
+      main_platform: "Connect",
+      platforms,
+      content: {
+        body: description,
+      },
+    },
   };
-  
+
+  if (file) {
+    postData.file = file;
+    postData.facebook = {
+      caption: description,
+    };
+  } else {
+    postData.facebook = {
+      message: description,
+    };
+  }
+
+  console.log("handleSubmit postData:", postData); // Add this line to print the postData
+  createPostMutation.mutate(postData);
+};
 
 
   return (

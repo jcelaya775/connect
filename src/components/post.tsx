@@ -147,10 +147,10 @@ const Post = ({
           </div>
           {/* Content */}
           <div className="flex-1">
-            <p>{content.body}</p>
+            <p>{content?.body}</p>
           </div>
           <div className="basis-1/6">
-            {content.image?.signedUrl && (
+            {content?.image?.signedUrl && (
               <Image
                 className="w-full h-full"
                 priority
