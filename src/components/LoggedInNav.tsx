@@ -1,8 +1,37 @@
-import React, { useEffect } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
+import Image from 'next/image';
+import { IUser } from "@/models/User";
+import { useRouter } from "next/router";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import useFriends from "@/hooks/useFriends";
+import useUser from "@/hooks/useUser";
+
+type Friend = IUser["_id"] &
+  IUser["name"] &
+  IUser["email"] &
+  IUser["username"] &
+  IUser["profile_picture"];
 
 const LoggedInNav = () => {
+  const router = useRouter();
+  const { uid }: { uid?: string } = router.query;
+  const queryClient = useQueryClient();
+  const { user: currentUser } = useUser();
+  const { user: targetUser } = useUser(uid);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const {
+    friends,
+    friendsLoading,
+    searchFriendMutation,
+    friendRequests,
+    friendRequestsLoading,
+    friendButtonMutation,
+  } = useFriends(uid);
+
+
+
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme)
@@ -35,11 +64,51 @@ const LoggedInNav = () => {
         </div>
         <div className="flex-none gap-2">
           <div className="form-control">
+            <div className="relative">
             <input
               type="text"
               placeholder="Search..."
-              className="input input-bordered input-sm"
+              className="input input-bordered w-44 sm:w-72 rounded-b-none input-sm z-10"
             />
+              <div
+                className="absolute top-full z-0 left-0 mt-0 py-2 max-h-48 bg-base-200 rounded-b-lg w-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200">
+                <ul className="grid grid-cols-1 gap-y-1 p-2">
+                  {friends &&
+                    friends.map((friend: Friend) => (
+                      <li
+                        key={friend._id}
+                        className="btn btn-accent border-0 px-1 justify-start items-center bg-base-100 shadow-md h-max rounded-md overflow-hidden"
+                      >
+                        <div className="flex items-center">
+                          {friend.profile_picture ? (
+                            <Image
+                              src={friend.profile_picture}
+                              alt={friend.name}
+                              className="w-4 h-4 rounded-full mr-4"
+                            />
+                          ) : (
+                            <div className="w-6 rounded-full mx-2">
+                              <svg
+                                viewBox="0 0 512 512"
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="fill-current"
+                              >
+                                <path d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c39.77 0 72 32.24 72 72S295.8 272 256 272c-39.76 0-72-32.24-72-72S216.2 128 256 128zM256 448c-52.93 0-100.9-21.53-135.7-56.29C136.5 349.9 176.5 320 224 320h64c47.54 0 87.54 29.88 103.7 71.71C356.9 426.5 308.9 448 256 448z" />
+                              </svg>
+                            </div>
+                          )}
+                          <div className="flex-1">
+                            <h3 className="font-normal text-xs">{friend.name}</h3>
+                          </div>
+                          {/* <button className="btn btn-primary btn-xs normal-case">
+                            <Link href={`users/${friend._id}`}>View Profile</Link>
+                          </button> */}
+                        </div>
+                      </li>
+                    ))}
+                </ul>
+              </div>
+            </div>
           </div>
           <div className="dropdown dropdown-end">
             <label tabIndex={0} className="avatar cursor-pointer pt-1">
