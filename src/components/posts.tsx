@@ -9,21 +9,27 @@ import { platformTypes } from "@/types/platform";
 import { IConnectPost } from "@/models/Post";
 
 export default function Posts({ uid }: { uid?: string }) {
-  const { user: currentUser } = useUser();
+  const { user: currentUser, userLoading: currentUserLoading } = useUser();
   const { user: targetUser } = useUser(uid);
 
-  const queryKey: string[] =
-    String(currentUser?._id) === uid || !uid
-      ? ["posts"]
-      : ["users", uid!, "posts"];
-  const endpoint: string =
-    String(currentUser?._id) === uid || !uid
-      ? "/api/feed"
-      : `/api/users/${uid!}/feed`;
+  console.log("uid", uid);
+  console.log("currentUser", currentUser);
+  let queryKey: string[] = [];
+  let endpoint: string = "";
+  if (!currentUserLoading) {
+    queryKey =
+      String(currentUser?._id) === uid || !uid
+        ? ["posts"]
+        : ["users", uid!, "posts"];
+    endpoint = `/api/users/${uid!}/feed`;
+  }
 
+  console.log("queryKey", queryKey);
+  console.log("endpoint", endpoint);
   const { isLoading, error, data } = useQuery({
     queryKey,
     queryFn: async () => {
+      console.log("fetching posts");
       const {
         data: { posts },
       } = await axios.get(endpoint);
@@ -32,6 +38,7 @@ export default function Posts({ uid }: { uid?: string }) {
     },
     refetchOnWindowFocus: false,
     refetchInterval: 1000 * 60 * 5, // 5 minutes
+    enabled: !currentUserLoading,
   });
 
   return (

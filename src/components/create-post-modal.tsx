@@ -45,12 +45,14 @@ const CreatePostModal = ({
   };
 
   const postToConnect = async (postData: any) => {
-    const formData = new FormData();
-    formData.append("file", postData.file);
-    const {
-      data: { signedUrl, filename },
-    } = await axios.post("/api/platforms/connect/posts/image", formData);
-    postData.connect.content.image = { signedUrl, filename };
+    if (postData.file !== undefined) {
+      const formData = new FormData();
+      formData.append("file", postData.file);
+      const {
+        data: { signedUrl, filename },
+      } = await axios.post("/api/platforms/connect/posts/image", formData);
+      postData.connect.content.image = { signedUrl, filename };
+    }
     const { data } = await axios.post(
       "/api/platforms/connect/posts",
       postData.connect
@@ -64,7 +66,7 @@ const CreatePostModal = ({
     const formData = new FormData();
 
     // Check if there's a file to append
-    if (postData.file !== null) {
+    if (postData.file !== undefined) {
       formData.append("file", postData.file);
       formData.append("caption", postData.facebook.caption);
       const res = await axios.post("/api/platforms/facebook/posts", formData);
@@ -91,18 +93,15 @@ const CreatePostModal = ({
 
       // TODO: If posted to other platforms, store post ID in Connect post
       if (postData.connect.platforms.includes(platformTypes.connect)) {
+        console.log(postData);
         const connectResult = await postToConnect(postData);
         results.push(connectResult);
       }
 
       return results;
-      // return null;
     },
     {
       onSuccess: (post: any) => {
-        // queryClient.setQueryData(["posts"], (oldPosts: any) => {
-        //   [post, ...oldPosts];
-        // });
         queryClient.invalidateQueries(["posts"]);
 
         resetPost();
@@ -118,7 +117,6 @@ const CreatePostModal = ({
     if (facebookChecked) platforms.push(platformTypes.facebook);
     if (instagramChecked) platforms.push(platformTypes.instagram);
 
-    const file = inputRef.current?.files?.[0];
     let postData: any = {
       connect: {
         main_platform: "Connect",
@@ -129,7 +127,8 @@ const CreatePostModal = ({
       },
     };
 
-    if (file) {
+    const file = inputRef.current?.files?.[0];
+    if (file !== undefined) {
       postData.file = file;
       postData.facebook = {
         caption: description,
