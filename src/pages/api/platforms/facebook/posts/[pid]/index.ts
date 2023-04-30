@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import connectDB from "@/lib/mongodb";
 import axios from "axios";
 import { getAuthUser } from "@/lib/auth";
+import FormData from "form-data";
 
 type Data = {
   success: boolean;
@@ -50,12 +51,14 @@ export default async function handler(
         const { pid } = req.query;
         const { message } = req.body;
 
-        const response = await axios.post(
-          `https://graph.facebook.com/v16.0/${pid}?access_token=${page_token}`,
+        let response = await axios.post(
+          `https://graph.facebook.com/v16.0/${pid}`,
           {
             message,
+            access_token: page_token,
           }
         );
+
         const post = response.data;
 
         res.status(200).json({ success: true, post });

@@ -59,16 +59,14 @@ export default async function handler(
         const { image } = post.content;
 
         const deletedFileName = image?.filename;
-        if (!deletedFileName)
-          return res
-            .status(403)
-            .json({ success: false, error: "Post does not contain an image" });
-        const deleted: boolean = await deleteFileFromS3(deletedFileName);
-        if (!deleted)
-          return res.status(500).json({
-            success: false,
-            error: "Server error in deleteing the file",
-          });
+        if (deletedFileName) {
+          const deleted: boolean = await deleteFileFromS3(deletedFileName);
+          if (!deleted)
+            return res.status(500).json({
+              success: false,
+              error: "Server error in deleteing the file",
+            });
+        }
 
         // Update image
         let signedUrl: string = await uploadFileToS3(

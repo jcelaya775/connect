@@ -89,7 +89,6 @@ export default function useFriends(uid?: string) {
           // Remove or cancel friend request
           case relationshipTypes.friends:
           case relationshipTypes.pendingFriend: {
-            console.log("delete");
             const res = await axios.delete(`/api/users/${uid}/friends`);
             data = res.data;
             break;

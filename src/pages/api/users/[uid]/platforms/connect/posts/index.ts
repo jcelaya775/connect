@@ -33,7 +33,6 @@ export default async function handler(
     case "GET":
       try {
         const { uid }: { uid?: string } = req.query;
-        console.log(uid);
 
         // Get user's posts
         const posts: IConnectPost[] | null = await Post.find<IConnectPost>({
@@ -41,7 +40,6 @@ export default async function handler(
         }).sort({
           createdAt: -1,
         });
-        console.log(posts);
 
         res.status(200).json({
           success: true,

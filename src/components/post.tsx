@@ -170,7 +170,7 @@ const Post = ({
               return (
                 <>
                   {statBar}
-                  <div className="divider basis-full"></div>
+                  <div key={idx} className="divider basis-full"></div>
                 </>
               );
             } else return statBar;

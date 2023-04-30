@@ -61,18 +61,30 @@ const EditPostModal = ({
     mutationFn: async () => {
       const updatedPost: GenericPost & any = {};
 
+      const file: File | undefined = inputRef.current.files?.[0];
+      let formData: FormData | undefined;
+      if (file) {
+        formData = new FormData();
+        formData.append("file", file);
+      }
+
       for (const platform of platforms) {
         switch (platform) {
           case platformTypes.connect:
-            const { data } = await axios.get(
-              `/api/platforms/connect/posts/${postId}`
-            );
-            const postToUpdate = data.data;
-            const content = postToUpdate.content;
-            // TODO: Add support for images
+            // Update content
             content.body = description;
-            // content.image = ...
+            if (file) {
+              const {
+                data: { signedUrl, filename },
+              } = await axios.put(
+                `api/platforms/connect/posts/${postId}/image`,
+                formData
+              );
 
+              content.image = { signedUrl, filename };
+            }
+
+            // Update post
             const { data: connectData } = await axios.put(
               `/api/platforms/connect/posts/${postId}`,
               {
@@ -85,13 +97,19 @@ const EditPostModal = ({
             } else updatedPost.connect = connectData;
             break;
           case platformTypes.facebook:
-            // TODO: Add support for images
+            if (
+              content.image &&
+              !platforms.every(
+                (platform: platformTypes) => platform === platformTypes.facebook
+              )
+            )
+              break;
+
             const { data: facebookData } = await axios.put(
               `/api/platforms/facebook/posts/${facebookId}`,
-              {
-                message: description,
-              }
+              { message: description }
             );
+
             if (facebookData.error) {
               updatedPost.facebook = false;
               console.error(facebookData.error);
@@ -103,6 +121,7 @@ const EditPostModal = ({
       return updatedPost;
     },
     onSuccess: () => {
+      queryClient.invalidateQueries(["feed"]);
       queryClient.invalidateQueries(["posts"]);
       setVisible(false);
     },
@@ -155,11 +174,11 @@ const EditPostModal = ({
                   type="file"
                   className="hidden"
                   ref={inputRef}
-                  // onChange={(e) =>
-                  //   e.target.value === ""
-                  //     ? " "
-                  //     : setUpload(inputRef.current.files[0].name)
-                  // }
+                  onChange={(e) =>
+                    e.target.value === ""
+                      ? " "
+                      : setUpload(inputRef.current.files?.[0].name!)
+                  }
                 />
               </label>
             </div>

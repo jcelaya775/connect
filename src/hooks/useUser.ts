@@ -14,7 +14,6 @@ export default function useUser(uid?: string) {
     queryKey,
     queryFn: async () => {
       const { data } = await axios.get(endpoint);
-      console.log(data);
       return data.user;
     },
     refetchOnWindowFocus: false,

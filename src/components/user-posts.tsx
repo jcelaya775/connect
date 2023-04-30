@@ -88,7 +88,7 @@ export default function UserPosts() {
                   break;
               }
 
-              return <Post key={props.key} {...(props as PostProps)} />;
+              return <Post key={idx} {...(props as PostProps)} />;
             })}
         </div>
       </div>

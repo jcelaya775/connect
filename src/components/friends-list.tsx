@@ -29,6 +29,7 @@ const FriendsPage = () => {
     friendRequestsLoading,
     friendButtonMutation,
   } = useFriends(uid);
+  const url = process.env.NEXT_PUBLIC_URL;
 
   return (
     <div className="max-w-3xl mx-auto">
@@ -56,7 +57,7 @@ const FriendsPage = () => {
                   <div className="flex items-center p-4">
                     <Link
                       className="flex items-center p-4"
-                      href={`users/${friend._id}`}
+                      href={`${url}/users/${friend._id}`}
                     >
                       {friend.profile_picture ? (
                         <Image
@@ -193,7 +194,9 @@ const FriendsPage = () => {
                       <p className="text-gray-500">Friend</p>
                     </div>
                     <button className="btn btn-primary btn-sm normal-case">
-                      <Link href={`users/${friend._id}`}>View Profile</Link>
+                      <Link href={`${url}/users/${friend._id}`}>
+                        View Profile
+                      </Link>
                     </button>
                   </div>
                 </li>

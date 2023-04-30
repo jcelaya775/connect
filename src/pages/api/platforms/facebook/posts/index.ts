@@ -11,12 +11,14 @@ type GetData = {
   postId?: string;
   error?: string;
 };
+
 type PostData = {
   success: boolean;
   id?: string;
   postId?: string;
   error?: string;
 };
+
 type formidableData = {
   fields: formidable.Fields;
   files: formidable.Files;
@@ -94,7 +96,7 @@ export default async function handler(
           const res: AxiosResponse = await axios.post(
             "https://graph.facebook.com/v16.0/me/feed",
             {
-              message: message,
+              message,
               access_token: user.facebook.page_token,
             }
           );

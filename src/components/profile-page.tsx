@@ -7,9 +7,12 @@ import FriendsModal from "./friends-list";
 export const ProfilePage = () => {
   const router = useRouter();
   const { uid }: { uid?: string } = router.query;
-  const { user } = useUser(uid);
+  const { user: currentUser } = useUser();
+  const { user: targetUser } = useUser(uid);
+  const url = process.env.NEXT_PUBLIC_URL;
   const [friendsModalVisible, setFriendsModalVisible] =
     useState<boolean>(false);
+  const currentUserPage: boolean = String(currentUser?._id) === uid;
 
   const {
     relationship,
@@ -42,13 +45,15 @@ export const ProfilePage = () => {
                       <div className="max-w-md card-body">
                         <div className="flex flex-col gap-y-2 md:flex-row md:w-full justify-between">
                           <div className="card-title text-3xl font-bold text-gray-900">
-                            {user?.name}
+                            {targetUser?.name}
                           </div>
                           <div
                             className="btn btn-small btn-primary w-max justify-end normal-case"
                             onClick={() => friendButtonMutation.mutate({})}
                           >
-                            {relationshipLoading
+                            {currentUserPage
+                              ? ""
+                              : relationshipLoading
                               ? "Loading..."
                               : relationship === relationshipTypes.friends
                               ? "Remove Friend"
@@ -74,7 +79,7 @@ export const ProfilePage = () => {
                       <div className="card w-full bg-base-100 rounded">
                         <div className="card-title p-4">Posts</div>
                       </div>
-                      <UserPosts uid={user?._id} />
+                      <UserPosts />
                     </div>
                     <div className="flex flex-col gap-y-4 w-full xl:w-1/4 order-1 xl:order-2">
                       <div className="card w-full bg-base-100 rounded h-min">
@@ -104,7 +109,7 @@ export const ProfilePage = () => {
                             ))}
                           </div>
                           <Link
-                            href="/friends"
+                            href={`${url}/users/${uid}/friends`}
                             className="btn btn-primary btn-sm mx-4 my-4 normal-case"
                           >
                             View All Friends

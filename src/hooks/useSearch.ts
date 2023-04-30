@@ -22,7 +22,6 @@ export default function useSearch() {
   const searchMutation = useMutation({
     mutationKey: ["search", "users"],
     mutationFn: async (searchTerm: string) => {
-      console.log(`searching for ${searchTerm}`);
       const {
         data: { users },
       } = await axios.get(
