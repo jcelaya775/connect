@@ -9,8 +9,9 @@ import axios from "axios";
 import useUser from "@/hooks/useUser";
 import { GenericPost, IFacebookPost } from "@/types/post";
 import { IConnectPost } from "@/models/Post";
-import useFriends from "@/hooks/useFriends";
+import useFriends, { Friend } from "@/hooks/useFriends";
 import Posts from "./posts";
+import Image from "next/image";
 
 const friendsList = [
   {
@@ -32,10 +33,9 @@ const friendsList = [
     id: 4,
     name: "Alice Smith",
     avatar: "https://randomuser.me/api/portraits/women/2.jpg",
-  }
+  },
 ];
 const UserProfilePage = () => {
-  
   const { user, userLoading } = useUser();
   const { friends, friendsLoading, friendsError } = useFriends();
   const [friendModalVisible, setFriendsModalVisible] = useState(false);
@@ -54,7 +54,6 @@ const UserProfilePage = () => {
     enabled: !userLoading,
   });
 
-  
   return (
     <>
       {editProfileModalVisible && (
@@ -124,34 +123,56 @@ const UserProfilePage = () => {
                       <Posts uid={user?._id} />
                     </div>
                     <div className="flex flex-col gap-y-4 w-full xl:w-1/4 order-1 xl:order-2">
-                    <div className="card w-full bg-base-100 rounded h-min">
-                      <div className="card-title p-4">Friends</div>
-                    </div>
-
-                    <div className="card bg-base-100 rounded">
-                        <div className="card-body">
-                          
-                          <div className="flex flex-no-wrap xl:flex-wrap">
-                            {friendsList.slice(0, 4).map((friend) => (
-                              <div key={friend.id} className="w-full xl:w-1/2 p-3">
-                                <div className="avatar md:px-5 lg:px-10 xl:px-0">
-                                  <div className="w-full rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                                    <img src={friend.avatar} alt={friend.name} />
-                                  </div>
-                                </div>
-                                <h2 className="text-center text-sm">{friend.name}</h2>
-                              </div>
-                            ))}
-                            </div>
-                        <Link
-                          href="/friends"
-                          className="btn btn-primary btn-sm mx-4 my-4 normal-case"
-                        >
-                          View All Friends
-                        </Link>
+                      <div className="card w-full bg-base-100 rounded h-min">
+                        <div className="card-title p-4">Friends</div>
                       </div>
-                    </div>
 
+                      <div className="card bg-base-100 rounded">
+                        <div className="card-body">
+                          <div className="flex flex-no-wrap xl:flex-wrap">
+                            {friends &&
+                              friends.slice(0, 4).map((friend: Friend) => (
+                                <div
+                                  key={friend._id}
+                                  className="w-full xl:w-1/2 p-3"
+                                >
+                                  <div className="avatar md:px-5 lg:px-10 xl:px-0">
+                                    <div className="w-full rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                                      {friend.profile_picture ? (
+                                        <Image
+                                          src={friend.profile_picture}
+                                          width={100}
+                                          height={100}
+                                          alt={friend.name}
+                                          unoptimized
+                                        />
+                                      ) : (
+                                        <div className="w-9 rounded-full mr-6">
+                                          <svg
+                                            viewBox="0 0 512 512"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            className="fill-current"
+                                          >
+                                            <path d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c39.77 0 72 32.24 72 72S295.8 272 256 272c-39.76 0-72-32.24-72-72S216.2 128 256 128zM256 448c-52.93 0-100.9-21.53-135.7-56.29C136.5 349.9 176.5 320 224 320h64c47.54 0 87.54 29.88 103.7 71.71C356.9 426.5 308.9 448 256 448z" />
+                                          </svg>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                  <h2 className="text-center text-sm">
+                                    {friend.name}
+                                  </h2>
+                                </div>
+                              ))}
+                          </div>
+                          <Link
+                            href="/friends"
+                            className="btn btn-primary btn-sm mx-4 my-4 normal-case"
+                          >
+                            View All Friends
+                          </Link>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -231,7 +252,7 @@ const UserProfilePage = () => {
             </div> */}
           </div>
         </div>
-        </div>
+      </div>
     </>
   );
 };

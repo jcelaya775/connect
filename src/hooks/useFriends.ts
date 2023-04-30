@@ -3,6 +3,9 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { IUser } from "@/models/User";
 import axios from "axios";
 import { relationshipTypes } from "@/types/relationship";
+import { x } from "joi";
+import { clear } from "console";
+import { ObjectId } from "mongoose";
 
 export type Friend = IUser["_id"] &
   IUser["name"] &
@@ -24,51 +27,100 @@ export default function useFriends(uid?: string) {
     queryKey,
     queryFn: async () => {
       const { data } = await axios.get(endpoint);
+      console.log(data.friends);
       setRelationship(data.relationship);
       return data.friends;
     },
   });
 
+  const searchFriendMutation = useMutation({
+    mutationKey: queryKey,
+    mutationFn: async (searchTerm: string) => {
+      let endpoint: string = uid ? `/api/users/${uid}/friends` : "/api/friends";
+      endpoint += `?name=${searchTerm}&username=${searchTerm}&email=${searchTerm}`;
+      const {
+        data: { friends },
+      }: { data: { friends: Friend[] } } = await axios.get(endpoint);
+
+      return friends;
+    },
+    onSuccess: (filteredFriends) => {
+      queryClient.setQueryData(queryKey, filteredFriends);
+    },
+  });
+
+  const {
+    data: friendRequests,
+    isLoading: friendRequestsLoading,
+    error: friendRequestsError,
+  } = useQuery({
+    queryKey: [...queryKey, "requests"],
+    queryFn: async () => {
+      const endpoint = uid
+        ? `/api/users/${uid}/friends/requests`
+        : "/api/friends/requests";
+      const {
+        data: { friendRequests },
+      }: { data: { friendRequests: Friend[] } } = await axios.get(endpoint);
+
+      return friendRequests;
+    },
+  });
+
   const friendButtonMutation = useMutation({
     mutationKey: queryKey,
-    mutationFn: async () => {
-      console.log(`relationship: ${relationship}`);
+    mutationFn: async ({
+      addFriend = undefined,
+      userId = undefined,
+    }: {
+      addFriend?: boolean;
+      userId?: ObjectId;
+    }) => {
       let data;
 
-      switch (relationship) {
-        // Remove or cancel friend request
-        case relationshipTypes.friends:
-        case relationshipTypes.pendingFriend: {
-          console.log(`Removing or canceling friend request`);
-          const res = await axios.delete(`/api/users/${uid}/friends`);
-          data = res.data;
-          break;
-        }
-        // Add or accept friend request
-        case relationshipTypes.notFriends:
-        case relationshipTypes.friendRequest: {
-          console.log(`Adding or accepting friend request`);
-          const res = await axios.post(`/api/users/${uid}/friends`);
-          data = res.data;
-          break;
+      console.log(addFriend, userId);
+
+      if (addFriend !== undefined) {
+        if (addFriend === true)
+          data = await axios.post(`/api/users/${userId}/friends`);
+        else data = await axios.put(`/api/users/${userId}/friends`);
+      } else {
+        switch (relationship) {
+          // Remove or cancel friend request
+          case relationshipTypes.friends:
+          case relationshipTypes.pendingFriend: {
+            const res = await axios.delete(`/api/users/${uid}/friends`);
+            data = res.data;
+            break;
+          }
+          // Add or accept friend request
+          case relationshipTypes.notFriends:
+          case relationshipTypes.friendRequest: {
+            const res = await axios.post(`/api/users/${uid}/friends`);
+            data = res.data;
+            break;
+          }
         }
       }
 
-      console.log(data);
-
+      console.log(`data: ${data}`);
       return data;
     },
     onSuccess: () => {
+      console.log(queryKey);
       queryClient.invalidateQueries(queryKey);
     },
   });
 
   return {
     relationship,
-    relationshipLoading: !relationship && !friendsLoading,
+    relationshipLoading: friendsLoading,
     friends,
-    friendButtonMutation,
     friendsLoading,
+    searchFriendMutation,
+    friendRequests,
+    friendRequestsLoading,
+    friendButtonMutation,
     friendsError,
   };
 }

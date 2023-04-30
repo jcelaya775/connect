@@ -10,7 +10,6 @@ export const ProfilePage = () => {
   const { user } = useUser(uid);
   const [friendsModalVisible, setFriendsModalVisible] =
     useState<boolean>(false);
-
   const {
     relationship,
     relationshipLoading,
@@ -36,7 +35,7 @@ export const ProfilePage = () => {
                     <div className="card glass lg:card-side text-neutral-content">
                       <button
                         className="btn btn-sm absolute top-0 right-0 lg:mt-4 lg:mr-4 sm: mt-72 sm:mr-4 xs: mt-72 xs: mr-4"
-                        onClick={() => friendButtonMutation.mutate()}
+                        onClick={() => friendButtonMutation.mutate({})}
                       >
                         {relationshipLoading
                           ? "Loading..."

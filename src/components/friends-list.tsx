@@ -4,6 +4,8 @@ import { IUser } from "@/models/User";
 import axios from "axios";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/router";
+import useFriends from "@/hooks/useFriends";
 
 type Friend = IUser["_id"] &
   IUser["name"] &
@@ -12,84 +14,18 @@ type Friend = IUser["_id"] &
   IUser["profile_picture"];
 
 const FriendsPage = () => {
+  const router = useRouter();
+  const { uid }: { uid?: string } = router.query;
   const queryClient = useQueryClient();
   const [searchTerm, setSearchTerm] = useState<string>("");
-
   const {
-    data: friendRequests,
-    isLoading: friendRequestsLoading,
-    error: friendRequestsError,
-  } = useQuery({
-    queryKey: ["users", "me", "friends", "requests"],
-    queryFn: async () => {
-      const {
-        data: { friendRequests },
-      }: { data: { friendRequests: Friend[] } } = await axios.get(
-        "/api/friends/requests"
-      );
-
-      return friendRequests;
-    },
-  });
-
-  const {
-    data: friends,
-    isLoading: friendsLoading,
-    error: friendsError,
-  } = useQuery({
-    queryKey: ["users", "me", "friends"],
-    queryFn: async () => {
-      const {
-        data: { friends },
-      }: { data: { friends: Friend[] } } = await axios.get(`/api/friends`);
-
-      return friends;
-    },
-  });
-
-  const searchFriendMutation = useMutation({
-    mutationKey: ["users", "me", "friends", "search"],
-    mutationFn: async (searchTerm: string) => {
-      const {
-        data: { friends },
-      }: { data: { friends: Friend[] } } = await axios.get(
-        `/api/friends?name=${searchTerm}&username=${searchTerm}&email=${searchTerm}`
-      );
-
-      return friends;
-    },
-    onSuccess: (filteredFriends) => {
-      queryClient.setQueryData(["users", "me", "friends"], filteredFriends);
-    },
-  });
-
-  const addFriendMutation = useMutation({
-    mutationKey: ["users", "me", "friends", "add"],
-    mutationFn: async (userId: string) => {
-      const {
-        data: { friend },
-      } = await axios.post(`/api/users/${userId}/friends`);
-
-      return friend;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries(["users", "me", "friends"]);
-    },
-  });
-
-  const declineFriendRequestMutation = useMutation({
-    mutationKey: ["users", "me", "friends", "delete"],
-    mutationFn: async (userId: string) => {
-      const {
-        data: { success },
-      } = await axios.delete(`/api/users/${userId}/friends`);
-
-      return success;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries(["users", "me", "friends"]);
-    },
-  });
+    friends,
+    friendsLoading,
+    searchFriendMutation,
+    friendRequests,
+    friendRequestsLoading,
+    friendButtonMutation,
+  } = useFriends(uid);
 
   return (
     <div className="max-w-3xl mx-auto">
@@ -147,7 +83,13 @@ const FriendsPage = () => {
                     >
                       <button
                         title="Accept"
-                        onClick={() => addFriendMutation.mutate(friend._id)}
+                        onClick={() => {
+                          console.log(friend._id);
+                          friendButtonMutation.mutate({
+                            addFriend: true,
+                            userId: friend._id,
+                          });
+                        }}
                         className="inline-flex items-center px-0 py-0 mr-2 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                       >
                         <svg
@@ -171,7 +113,10 @@ const FriendsPage = () => {
                       <button
                         title="Decline"
                         onClick={() =>
-                          declineFriendRequestMutation.mutate(friend._id)
+                          friendButtonMutation.mutate({
+                            addFriend: false,
+                            userId: friend._id,
+                          })
                         }
                         className="inline-flex items-center px-0 py-0 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                       >
