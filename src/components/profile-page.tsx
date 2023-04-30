@@ -10,6 +10,7 @@ export const ProfilePage = () => {
   const { user } = useUser(uid);
   const [friendsModalVisible, setFriendsModalVisible] =
     useState<boolean>(false);
+
   const {
     relationship,
     relationshipLoading,
@@ -33,36 +34,33 @@ export const ProfilePage = () => {
                   {/*  Profile Card  */}
                   <div className="flex items-center w-full px-4 py-10 bg-cover card bg-[url('https://picsum.photos/id/314/1000/300')]">
                     <div className="card glass lg:card-side text-neutral-content">
-                      <button
-                        className="btn btn-sm absolute top-0 right-0 lg:mt-4 lg:mr-4 sm: mt-72 sm:mr-4 xs: mt-72 xs: mr-4"
-                        onClick={() => friendButtonMutation.mutate({})}
-                      >
-                        {relationshipLoading
-                          ? "Loading..."
-                          : relationship === relationshipTypes.friends
-                          ? "Remove Friend"
-                          : relationship === relationshipTypes.pendingFriend
-                          ? "Pending Friend"
-                          : relationship === relationshipTypes.friendRequest
-                          ? "Accept Request"
-                          : "Add Friend"}
-                      </button>
-                      <figure className="p-6 relative">
-                        <Image
-                          src="https://picsum.photos/200"
-                          width={200}
-                          height={200}
-                          alt="Profile Picture"
-                          unoptimized
-                          className="rounded-full ml-0 mx-auto border-white border-2"
-                        ></Image>
-                      </figure>
+                      <div className="avatar m-auto pt-6 lg:pl-6 lg:pt-0 w-fit">
+                        <div className="w-[200px] h-[200px] rounded-full ring ring-primary">
+                          <img src="https://picsum.photos/200" />
+                        </div>
+                      </div>
                       <div className="max-w-md card-body">
-                        <h2 className="card-title text-3xl font-bold text-gray-900">
-                          {user?.name}
-                        </h2>
+                        <div className="flex flex-col gap-y-2 md:flex-row md:w-full justify-between">
+                          <div className="card-title text-3xl font-bold text-gray-900">
+                            {user?.name}
+                          </div>
+                          <div
+                            className="btn btn-small btn-primary w-max justify-end normal-case"
+                            onClick={() => friendButtonMutation.mutate()}
+                          >
+                            {relationshipLoading
+                              ? "Loading..."
+                              : relationship === relationshipTypes.friends
+                              ? "Remove Friend"
+                              : relationship === relationshipTypes.pendingFriend
+                              ? "Pending Friend"
+                              : relationship === relationshipTypes.friendRequest
+                              ? "Accept Request"
+                              : "Add Friend"}
+                          </div>
+                        </div>
                         <p className="text-gray-700">Connect User Since 2023</p>
-                        <p className="text-white-400">
+                        <p className="text-black">
                           Lorem ipsum dolor sit amet consectetur adipisicing
                           elit. Unde laudantium enim ab doloremque quod velit
                           tenetur delectus hic labore aliquam, soluta id magni
@@ -71,32 +69,42 @@ export const ProfilePage = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="grid grid-cols-3 gap-4 mt-8">
-                    <div className="col-span-2">
-                      <h2 className="text-xl font-bold text-base-content ml-1 mb-0">
-                        Posts
-                      </h2>
-                      <Posts uid={uid} />
-                    </div>
-                    {/* <!-- Friends Card --> */}
-                    <div className="card shadow-md bg-white col-span-1 h-min">
-                      <div className="card-body">
-                        <h2 className="text-lg font-bold text-gray-700 mb-4">
-                          Friends
-                        </h2>
-                        <label
-                          htmlFor="my-modal"
-                          className="btn"
-                          onClick={() =>
-                            setFriendsModalVisible((prev) => !prev)
-                          }
-                        >
-                          View Friends
-                        </label>
-                        {friendsModalVisible && (
-                          <FriendsModal setVisible={setFriendsModalVisible} />
-                        )}
+                  <div className="flex flex-col gap-y-4 xl:flex-row xl:gap-x-4 mt-4 mr-0">
+                    <div className="flex flex-col gap-y-4 w-full xl:w-3/4 order-2 xl:order-1">
+                      <div className="card w-full bg-base-100 rounded">
+                        <div className="card-title p-4">Posts</div>
                       </div>
+                      <Posts uid={user?._id} />
+                    </div>
+                    <div className="flex flex-col gap-y-4 w-full xl:w-1/4 order-1 xl:order-2">
+                    <div className="card w-full bg-base-100 rounded h-min">
+                      <div className="card-title p-4">Friends</div>
+                    </div>
+
+                    <div className="card bg-base-100 rounded">
+                        <div className="card-body">
+                          
+                          <div className="flex flex-no-wrap w-fit xl:flex-wrap">
+                            {friendsList.slice(0, 3).map((friend) => (
+                              <div key={friend.id} className="w-full xl:w-1/2 p-3">
+                                <div className="avatar md:px-5 lg:px-10 xl:px-0">
+                                  <div className="w-full rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                                    <img src={friend.avatar} alt={friend.name} />
+                                  </div>
+                                </div>
+                                <h2 className="text-center text-sm">{friend.name}</h2>
+                              </div>
+                            ))}
+                            </div>
+                        <Link
+                          href="/friends"
+                          className="btn btn-primary btn-sm mx-4 my-4 normal-case"
+                        >
+                          View All Friends
+                        </Link>
+                      </div>
+                    </div>
+
                     </div>
                   </div>
                 </div>
