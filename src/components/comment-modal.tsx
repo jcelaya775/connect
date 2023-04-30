@@ -117,9 +117,36 @@ export const CommentModal: React.FC<PostModalProps> = ({ post, onClose }) => {
                   value={comment}
                   onChange={handleCommentChange}
                 />
-              <div className="btn btn-primary normal-case">Add Comment</div>
-          </form>
-          </div>
+              </form>
+              <div className="modal-action">
+              <label
+                htmlFor="comment-modal"
+                className="btn btn-sm btn-ghost gap-2 py-0 px-5 normal-case"
+              >
+                Cancel
+              </label>
+              <button
+                type="submit"
+                className="btn btn-sm btn-primary gap-2 py-0 px-5 normal-case"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                Add Comment
+              </button>
+            </div>
+            </div>
           </div>
         </div>
       </div>
