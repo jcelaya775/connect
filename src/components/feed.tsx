@@ -3,7 +3,7 @@ import useUser from "@/hooks/useUser";
 import SideNav from "./SideNav";
 import axios from "axios";
 import Post, { PostProps } from "./post";
-import PostModal from "./post-modal";
+import CreatePostModal from "./create-post-modal";
 import BtmNav from "./bottom-nav";
 import { platformTypes } from "@/types/platform";
 import cityImage from "../images/cityscape.jpg";

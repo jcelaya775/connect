@@ -9,9 +9,8 @@ import { platformTypes } from "@/types/platform";
 import { IConnectPost } from "@/models/Post";
 
 export default function Posts({ uid }: { uid?: string }) {
-  const { user: currentUser, userLoading: currentUserLoading } = useUser();
-  const { user: targetUser, userLoading: targetUserLoading } = useUser(uid);
-  const [postModalVisible, setPostModalVisible] = useState(false);
+  const { user: currentUser } = useUser();
+  const { user: targetUser } = useUser(uid);
 
   const queryKey: string[] =
     String(currentUser?._id) === uid || !uid

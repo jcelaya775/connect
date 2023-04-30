@@ -3,11 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import EditPostModal from "./edit-post-modal";
 import axios from "axios";
 import { platformTypes } from "@/types/platform";
-import { platform } from "os";
 import { IConnectPost } from "@/models/Post";
-import { GenericPost } from "@/types/post";
-import { getPostId } from "@/lib/postHelpers";
-import { ObjectId } from "mongodb";
 
 type OptionsDropdownProps = {
   postId: string;
@@ -50,14 +46,7 @@ const OptionsDropdown = ({
         }
       }
     },
-    onSuccess: (deletedPostId: ObjectId | string) => {
-      // queryClient.setQueryData(["posts"], (oldPosts: any) => {
-      //   const newPosts = oldPosts.filter((post: GenericPost) => {
-      //     String(getPostId(post)) !== String(deletedPostId);
-      //   });
-      //   return newPosts;
-      // });
-
+    onSuccess: () => {
       queryClient.invalidateQueries(["posts"]);
     },
   });

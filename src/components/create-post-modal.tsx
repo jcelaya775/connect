@@ -2,18 +2,19 @@ import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Insta from "../images/insta_color_logo.png";
 import Facebook from "../images/fb_color_logo.png";
-import Connect from "../images/connect_logo.svg";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { platformTypes } from "@/types/platform";
-import { GenericPost } from "@/types/post";
 
-type PostModalProps = {
+type CreatePostModalProps = {
   newPost?: boolean;
   setVisible: (visible: boolean) => void;
 };
 
-const PostModal = ({ newPost = true, setVisible }: PostModalProps) => {
+const CreatePostModal = ({
+  newPost = true,
+  setVisible,
+}: CreatePostModalProps) => {
   const queryClient = useQueryClient();
 
   const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
@@ -303,4 +304,4 @@ const PostModal = ({ newPost = true, setVisible }: PostModalProps) => {
   );
 };
 
-export default PostModal;
+export default CreatePostModal;
