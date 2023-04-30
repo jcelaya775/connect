@@ -3,8 +3,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { IUser } from "@/models/User";
 import axios from "axios";
 import { relationshipTypes } from "@/types/relationship";
-import { x } from "joi";
-import { clear } from "console";
 import { ObjectId } from "mongoose";
 
 export type Friend = IUser["_id"] &
@@ -27,7 +25,6 @@ export default function useFriends(uid?: string) {
     queryKey,
     queryFn: async () => {
       const { data } = await axios.get(endpoint);
-      console.log(data.friends);
       setRelationship(data.relationship);
       return data.friends;
     },
@@ -78,8 +75,6 @@ export default function useFriends(uid?: string) {
     }) => {
       let data;
 
-      console.log(addFriend, userId);
-
       if (addFriend !== undefined) {
         if (addFriend === true)
           data = await axios.post(`/api/users/${userId}/friends`);
@@ -103,12 +98,11 @@ export default function useFriends(uid?: string) {
         }
       }
 
-      console.log(`data: ${data}`);
       return data;
     },
     onSuccess: () => {
-      console.log(queryKey);
       queryClient.invalidateQueries(queryKey);
+      queryClient.invalidateQueries(["friends"]);
     },
   });
 

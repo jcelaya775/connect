@@ -46,7 +46,7 @@ export const ProfilePage = () => {
                           </div>
                           <div
                             className="btn btn-small btn-primary w-max justify-end normal-case"
-                            onClick={() => friendButtonMutation.mutate()}
+                            onClick={() => friendButtonMutation.mutate({})}
                           >
                             {relationshipLoading
                               ? "Loading..."
@@ -77,34 +77,40 @@ export const ProfilePage = () => {
                       <Posts uid={user?._id} />
                     </div>
                     <div className="flex flex-col gap-y-4 w-full xl:w-1/4 order-1 xl:order-2">
-                    <div className="card w-full bg-base-100 rounded h-min">
-                      <div className="card-title p-4">Friends</div>
-                    </div>
+                      <div className="card w-full bg-base-100 rounded h-min">
+                        <div className="card-title p-4">Friends</div>
+                      </div>
 
-                    <div className="card bg-base-100 rounded">
+                      <div className="card bg-base-100 rounded">
                         <div className="card-body">
-                          
                           <div className="flex flex-no-wrap w-fit xl:flex-wrap">
                             {friendsList.slice(0, 3).map((friend) => (
-                              <div key={friend.id} className="w-full xl:w-1/2 p-3">
+                              <div
+                                key={friend.id}
+                                className="w-full xl:w-1/2 p-3"
+                              >
                                 <div className="avatar md:px-5 lg:px-10 xl:px-0">
                                   <div className="w-full rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                                    <img src={friend.avatar} alt={friend.name} />
+                                    <img
+                                      src={friend.avatar}
+                                      alt={friend.name}
+                                    />
                                   </div>
                                 </div>
-                                <h2 className="text-center text-sm">{friend.name}</h2>
+                                <h2 className="text-center text-sm">
+                                  {friend.name}
+                                </h2>
                               </div>
                             ))}
-                            </div>
-                        <Link
-                          href="/friends"
-                          className="btn btn-primary btn-sm mx-4 my-4 normal-case"
-                        >
-                          View All Friends
-                        </Link>
+                          </div>
+                          <Link
+                            href="/friends"
+                            className="btn btn-primary btn-sm mx-4 my-4 normal-case"
+                          >
+                            View All Friends
+                          </Link>
+                        </div>
                       </div>
-                    </div>
-
                     </div>
                   </div>
                 </div>

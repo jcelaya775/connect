@@ -40,7 +40,6 @@ export default async function handler(
           `https://graph.facebook.com/v16.0/${pid}/likes?summary=true&access_token=${page_token}`
         );
         const likes = data;
-        console.log(likes);
         let likeCount = data.length;
         const hasLiked = summary.has_liked;
         if (hasLiked) likeCount++;
