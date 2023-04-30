@@ -1,4 +1,3 @@
-import { useState } from "react";
 import useUser from "@/hooks/useUser";
 import { GenericPost, IFacebookPost } from "@/types/post";
 import { useQuery } from "@tanstack/react-query";
@@ -7,30 +6,27 @@ import Post from "./post";
 import { PostProps } from "./post";
 import { platformTypes } from "@/types/platform";
 import { IConnectPost } from "@/models/Post";
+import { useRouter } from "next/router";
 
-export default function Posts({ uid, feed }: { uid?: string; feed?: boolean }) {
+export default function UserPosts() {
+  const router = useRouter();
+  const { uid }: { uid?: string } = router.query;
   const { user: currentUser, userLoading: currentUserLoading } = useUser();
   const { user: targetUser } = useUser(uid);
 
-  let queryKey: string[] = [];
-  const endpoint: string = feed ? "api/feed" : `/api/users/${uid!}/feed`;
-  if (!currentUserLoading) {
-    queryKey =
-      String(currentUser?._id) === uid || !uid
-        ? ["posts"]
-        : ["users", uid!, "posts"];
-  }
+  const url = process.env.NEXT_PUBLIC_URL;
 
   const { isLoading, error, data } = useQuery({
-    queryKey,
+    queryKey: ["users", uid, "posts"],
     queryFn: async () => {
-      const {
-        data: { posts },
-      } = await axios.get(endpoint);
+      const endpoint: string =
+        uid !== undefined
+          ? `${url}/api/users/${uid}/feed`
+          : `${url}/api/users/${currentUser?._id}/feed`;
+      const { data } = await axios.get(endpoint);
 
-      return posts;
+      return data.posts;
     },
-    refetchOnWindowFocus: false,
     refetchInterval: 1000 * 60 * 5, // 5 minutes
     enabled: !currentUserLoading,
   });

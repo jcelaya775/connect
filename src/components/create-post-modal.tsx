@@ -87,8 +87,8 @@ const CreatePostModal = ({
       const results = [];
       if (postData.connect.platforms.includes(platformTypes.facebook)) {
         const facebookResult = await postToFacebook(postData);
-        postData.connect.facebook_id = facebookResult.postId;
         results.push(facebookResult);
+        postData.connect.facebook_id = facebookResult.postId;
       }
 
       // TODO: If posted to other platforms, store post ID in Connect post
@@ -101,6 +101,7 @@ const CreatePostModal = ({
     },
     {
       onSuccess: (post: any) => {
+        queryClient.invalidateQueries(["feed"]);
         queryClient.invalidateQueries(["posts"]);
 
         resetPost();

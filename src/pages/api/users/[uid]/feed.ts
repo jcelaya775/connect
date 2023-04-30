@@ -38,6 +38,7 @@ export default async function handler(
   // Authenticate user
   const user = await getAuthUser(req, res);
   if (!user) return res.status(401).json({ success: false });
+  console.log(user);
 
   const url = process.env.NEXTAUTH_URL;
 

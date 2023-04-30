@@ -74,7 +74,7 @@ export const ProfilePage = () => {
                       <div className="card w-full bg-base-100 rounded">
                         <div className="card-title p-4">Posts</div>
                       </div>
-                      <Posts uid={user?._id} />
+                      <UserPosts uid={user?._id} />
                     </div>
                     <div className="flex flex-col gap-y-4 w-full xl:w-1/4 order-1 xl:order-2">
                       <div className="card w-full bg-base-100 rounded h-min">

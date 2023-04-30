@@ -6,7 +6,9 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import useUser from "@/hooks/useUser";
 import useFriends, { Friend } from "@/hooks/useFriends";
-import Posts from "./posts";
+import UserPosts from "./user-posts";
+import UserFeed from "./user-feed";
+import { useRouter } from "next/router";
 
 const friendsList = [
   {
@@ -31,8 +33,10 @@ const friendsList = [
   },
 ];
 const UserProfilePage = () => {
+  const router = useRouter();
+  const { uid }: { uid?: string } = router.query;
   const { user, userLoading } = useUser();
-  const { friends, friendsLoading, friendsError } = useFriends();
+  // const { friends } = useFriends();
   const [friendModalVisible, setFriendsModalVisible] = useState(false);
   const [editProfileModalVisible, setEditProfileModalVisible] = useState(false);
 
@@ -105,7 +109,7 @@ const UserProfilePage = () => {
                       <div className="card w-full bg-base-100 rounded">
                         <div className="card-title p-4">Posts</div>
                       </div>
-                      <Posts uid={user?._id} feed={true} />
+                      <UserPosts />
                     </div>
                     <div className="flex flex-col gap-y-4 w-full xl:w-1/4 order-1 xl:order-2">
                       <div className="card w-full bg-base-100 rounded h-min">
@@ -115,7 +119,7 @@ const UserProfilePage = () => {
                       <div className="card bg-base-100 rounded">
                         <div className="card-body">
                           <div className="flex flex-no-wrap w-fit xl:flex-wrap">
-                            {friends &&
+                            {/* {friends &&
                               friends.slice(0, 3).map((friend: Friend) => (
                                 <div
                                   key={friend._id}
@@ -133,7 +137,7 @@ const UserProfilePage = () => {
                                     {friend.name}
                                   </h2>
                                 </div>
-                              ))}
+                              ))} */}
                           </div>
                           <Link
                             href="/friends"

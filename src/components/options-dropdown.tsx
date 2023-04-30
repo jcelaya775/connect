@@ -47,6 +47,7 @@ const OptionsDropdown = ({
       }
     },
     onSuccess: () => {
+      queryClient.invalidateQueries(["feed"]);
       queryClient.invalidateQueries(["posts"]);
     },
   });
