@@ -12,11 +12,11 @@ type Data = {
 
 type Data = {
   success: boolean;
-  users?: IUser["_id"] &
+  users?: (IUser["_id"] &
     IUser["name"] &
     IUser["email"] &
     IUser["username"] &
-    IUser["profile_picture"];
+    IUser["profile_picture"])[];
   error?: string;
 };
 

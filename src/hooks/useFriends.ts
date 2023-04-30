@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { IUser } from "@/models/User";
 import axios from "axios";
@@ -13,7 +12,6 @@ export type Friend = IUser["_id"] &
 
 export default function useFriends(uid?: string) {
   const queryClient = useQueryClient();
-  const [relationship, setRelationship] = useState<relationshipTypes>();
   const queryKey: string[] = uid ? ["users", uid!, "friends"] : ["friends"];
   const endpoint = uid ? `/api/users/${uid!}/friends` : `/api/friends`;
 
@@ -25,9 +23,15 @@ export default function useFriends(uid?: string) {
     queryKey,
     queryFn: async () => {
       const { data } = await axios.get(endpoint);
-      console.log(data);
-      setRelationship(data.relationship);
       return data.friends;
+    },
+  });
+
+  const { data: relationship, isLoading: relationshipLoading } = useQuery({
+    queryKey: [...queryKey, "relationship"],
+    queryFn: async () => {
+      const { data } = await axios.get(endpoint);
+      return data.relationship;
     },
   });
 
@@ -109,7 +113,7 @@ export default function useFriends(uid?: string) {
 
   return {
     relationship,
-    relationshipLoading: friendsLoading,
+    relationshipLoading,
     friends,
     friendsLoading,
     searchFriendMutation,
