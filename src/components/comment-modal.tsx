@@ -1,10 +1,10 @@
 import { useQueryClient } from "@tanstack/react-query";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import cityscape from "@/images/Cityscape.jpg";
 import Image from "next/image";
 import { platformTypes } from "@/types/platform";
 import usePost from "@/hooks/usePost";
+import useUser from "@/hooks/useUser";
 
 type CommentModalProps = {
   postId: string;
@@ -18,6 +18,7 @@ export const CommentModal: React.FC<CommentModalProps> = ({
   setVisible,
 }: CommentModalProps) => {
   const queryClient = useQueryClient();
+  const { user } = useUser();
   const [comment, setComment] = useState("");
   const {
     post,
@@ -29,6 +30,8 @@ export const CommentModal: React.FC<CommentModalProps> = ({
     postId,
     platform,
   });
+
+  console.log(user);
 
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
