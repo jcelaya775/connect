@@ -10,6 +10,7 @@ export const ProfilePage = () => {
   const { user: currentUser } = useUser();
   const { user: targetUser, biography, profilePicture } = useUser(uid);
   const url = process.env.NEXT_PUBLIC_URL;
+  console.log(url);
   const [friendsModalVisible, setFriendsModalVisible] =
     useState<boolean>(false);
   const currentUserPage: boolean = String(currentUser?._id) === uid;

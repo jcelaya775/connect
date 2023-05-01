@@ -15,10 +15,12 @@ export default function UserPosts() {
   const { user: targetUser } = useUser(uid);
 
   const url = process.env.NEXT_PUBLIC_URL;
+  console.log(url);
 
   const { isLoading, error, data } = useQuery({
     queryKey: ["users", uid, "posts"],
     queryFn: async () => {
+      console.log(url);
       const endpoint: string =
         uid !== undefined
           ? `${url}/api/users/${uid}/feed`

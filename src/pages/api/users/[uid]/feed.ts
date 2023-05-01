@@ -40,6 +40,7 @@ export default async function handler(
   if (!user) return res.status(401).json({ success: false });
 
   const url = process.env.NEXTAUTH_URL;
+  console.log(url);
 
   switch (method) {
     /**
