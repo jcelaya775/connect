@@ -32,9 +32,9 @@ export default function NotFound() {
               </h1>
               <p className="text-base-content">
                 We apologize for the inconvenience. The page you were looking
-                for doesn't exist or is currently undergoing maitenance. Please
-                also double check your URL to make sure there were no errors as
-                this may have also caused this issue.
+                for doesn&apos;t exist or is currently undergoing maitenance.
+                Please also double check your URL to make sure there were no
+                errors as this may have also caused this issue.
               </p>
               <p className="text-primary text-right pt-2">
                 <Link href="/" className="hover:underline">
