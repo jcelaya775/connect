@@ -39,7 +39,7 @@ export const ProfilePage = () => {
                     <div className="card glass lg:card-side text-neutral-content">
                       <div className="avatar m-auto pt-6 lg:pl-6 lg:pt-0 w-fit">
                         <div className="w-[200px] h-[200px] rounded-full ring ring-primary">
-                          <img src="https://picsum.photos/200" />
+                          <Image src="https://picsum.photos/200" alt="image" />
                         </div>
                       </div>
                       <div className="max-w-md card-body">

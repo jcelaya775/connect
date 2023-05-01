@@ -44,7 +44,7 @@ const LoggedInNav = () => {
       document.removeEventListener("click", handleOutsideClick);
       document.removeEventListener("keydown", handleEscape);
     };
-  }, []);
+  }, [queryClient]);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
