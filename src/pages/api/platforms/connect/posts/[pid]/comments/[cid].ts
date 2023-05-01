@@ -65,16 +65,23 @@ export default async function handler(
      */
     case "GET":
       try {
-        const { cid } = req.query;
+        const { pid, cid } = req.query;
 
-        const comment: IComment | null = await Comment.findOne<IComment>({
+        let comment: IComment | null;
+        comment = await Comment.findOne<IComment>({
           _id: cid,
         });
+        if (!comment) {
+          const post: IConnectPost | null = await Post.findById(pid);
+          if (!post) return res.status(404).json({ success: false });
+          const commentIdx = post.comments?.findIndex(
+            (comment) => comment._id == cid
+          );
+          comment = post.comments?.[commentIdx!]!;
+        }
         if (!comment) return res.status(404).json({ success: false });
 
-        console.log("getting replies");
         const replies: IComment[] = await getReplies(comment);
-        console.log(replies);
 
         res.status(200).json({ success: true, replies });
       } catch (error: any) {
@@ -163,13 +170,10 @@ export default async function handler(
 
         const comment: IComment | null = await Comment.findById<IComment>(cid);
         if (comment) {
-          console.log(comment);
-          console.log(comment.user_id);
           if (String(comment.user_id) !== String(user_id))
             return res.status(401).json({ success: false });
 
           await comment.remove();
-          return res.status(200).json({ success: true });
         }
 
         const post: IConnectPost | null = await Post.findById<IConnectPost>(

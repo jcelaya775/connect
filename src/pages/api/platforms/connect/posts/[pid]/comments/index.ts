@@ -46,7 +46,6 @@ export default async function handler(
         const comments: IComment[] = post.comments ?? [];
         let commentCount: number = comments.length;
         for (const comment of comments) {
-          console.log(comment);
           const { data } = await axios.get(
             `${url}/api/platforms/connect/posts/${pid}/comments/${comment._id}`,
             {
@@ -55,7 +54,6 @@ export default async function handler(
               },
             }
           );
-          console.log(data);
           const replies = comment.replies!;
           commentCount += replies.length;
         }
@@ -100,7 +98,8 @@ export default async function handler(
 
         post.comments!.push(comment);
 
-        await post!.save();
+        await post.save();
+
         res.status(200).json({ success: true, comment: comment });
       } catch (error: any) {
         res.status(400).json({ success: false, error: error.message });

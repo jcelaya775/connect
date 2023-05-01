@@ -19,11 +19,16 @@ export const CommentModal: React.FC<CommentModalProps> = ({
 }: CommentModalProps) => {
   const queryClient = useQueryClient();
   const [comment, setComment] = useState("");
-  const { post, postLoading, comments, commentsLoading, postCommentMutation } =
-    usePost({
-      postId,
-      platform,
-    });
+  const {
+    post,
+    postLoading,
+    comments,
+    postCommentMutation,
+    deleteCommentMutation,
+  } = usePost({
+    postId,
+    platform,
+  });
 
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
