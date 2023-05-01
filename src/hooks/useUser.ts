@@ -1,15 +1,16 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { IUser } from "@/models/User";
 import axios from "axios";
 
 export default function useUser(uid?: string) {
-  const queryKey: string[] = uid ? ["users", uid!] : ["users"];
+  const queryClient = useQueryClient();
+  const queryKey: string[] = uid ? ["users", uid!] : ["users", "me"];
   const endpoint: string = uid ? `/api/users/${uid}` : `/api/auth`;
 
   const {
-    isLoading: userLoading,
-    error,
     data: user,
+    isLoading: userLoading,
+    error: userError,
   } = useQuery<IUser>({
     queryKey,
     queryFn: async () => {

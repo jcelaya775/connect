@@ -11,6 +11,7 @@ import UserFeed from "./user-feed";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import defaultProfile from "../images/default_profile.jpg";
+import { profile } from "console";
 
 const friendsList = [
   {
@@ -38,7 +39,7 @@ const friendsList = [
 const UserProfilePage = () => {
   const router = useRouter();
   const { uid }: { uid?: string } = router.query;
-  const { user, userLoading } = useUser();
+  const { user, profilePicture, biography } = useUser();
   const { friends } = useFriends(uid);
   const [friendModalVisible, setFriendsModalVisible] = useState(false);
   const [editProfileModalVisible, setEditProfileModalVisible] = useState(false);
@@ -133,7 +134,7 @@ const UserProfilePage = () => {
                                       <Link href={`/users/${friend._id}`}>
                                         <Image
                                           src={
-                                            friend.profile_picture ??
+                                            friend.profile_picture?.signedUrl ??
                                             defaultProfile
                                           }
                                           width={100}

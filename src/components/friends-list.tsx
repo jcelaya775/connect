@@ -61,7 +61,7 @@ const FriendsPage = () => {
                     >
                       {friend.profile_picture ? (
                         <Image
-                          src={friend.profile_picture}
+                          src={friend.profile_picture.signedUrl}
                           alt={friend.name}
                           className="w-10 h-10 rounded-full mr-4"
                         />
@@ -174,7 +174,7 @@ const FriendsPage = () => {
                   <div className="flex items-center p-4">
                     {friend.profile_picture ? (
                       <Image
-                        src={friend.profile_picture}
+                        src={friend.profile_picture.signedUrl}
                         alt={friend.name}
                         className="w-10 h-10 rounded-full mr-4"
                       />

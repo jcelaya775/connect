@@ -1,3 +1,4 @@
+import useUser from "@/hooks/useUser";
 import { useState, useEffect, useRef, MutableRefObject } from "react";
 
 type EditProfileModalProps = {
@@ -6,7 +7,9 @@ type EditProfileModalProps = {
 
 const EditProfileModal = ({ setVisible }: EditProfileModalProps) => {
   const inputRef = useRef() as MutableRefObject<HTMLInputElement>;
-  const [bio, setBio] = useState("");
+  const { biography, updateBiographyMutation, updateProfilePictureMutation } =
+    useUser();
+  const [bio, setBio] = useState(biography);
   const [pfp, setPFP] = useState("no file uploaded");
   const [cover, setCover] = useState("no file uploaded");
 
@@ -63,6 +66,19 @@ const EditProfileModal = ({ setVisible }: EditProfileModalProps) => {
       </>
     );
   }
+
+  const handleSubmit = () => {
+    if (inputRef.current?.files?.[0]) {
+      const formData = new FormData();
+      formData.append("file", inputRef.current.files[0]);
+      updateProfilePictureMutation.mutate(formData);
+    }
+
+    if (bio) updateBiographyMutation.mutate(bio);
+
+    resetProfile();
+    setVisible(false);
+  };
 
   return (
     <>
@@ -150,26 +166,26 @@ const EditProfileModal = ({ setVisible }: EditProfileModalProps) => {
                 }
               />
             </label>
-          </div>
-          <p className="test-gray-500 text-sm py-2">File: {cover}</p>
+          </div> */}
 
-          <div className="divider pb-3 my-0"></div>
+            <div className="divider pb-3 my-0"></div>
 
-          <div className="modal-action">
-            <label
-              htmlFor="edit-profile-modal"
-              className="btn btn-sm btn-ghost bg-base-100 gap-2 py-0 px-5 normal-case"
-              onClick={() => resetProfile()}
-            >
-              Reset
-            </label>
-            <label
-              htmlFor="edit-profile-modal"
-              className="btn btn-sm btn-primary gap-2 py-0 px-5 normal-case"
-            >
-              Save Changes
-            </label>
-          </div>
+            <div className="modal-action">
+              <label
+                htmlFor="edit-profile-modal"
+                className="btn btn-sm btn-ghost bg-base-100 gap-2 py-0 px-5 normal-case"
+                onClick={() => resetProfile()}
+              >
+                Reset
+              </label>
+              <button
+                type="submit"
+                className="btn btn-sm btn-primary gap-2 py-0 px-5 normal-case"
+              >
+                Save Changes
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </>

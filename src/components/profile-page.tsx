@@ -8,7 +8,7 @@ export const ProfilePage = () => {
   const router = useRouter();
   const { uid }: { uid?: string } = router.query;
   const { user: currentUser } = useUser();
-  const { user: targetUser } = useUser(uid);
+  const { user: targetUser, biography, profilePicture } = useUser(uid);
   const url = process.env.NEXT_PUBLIC_URL;
   const [friendsModalVisible, setFriendsModalVisible] =
     useState<boolean>(false);
@@ -68,10 +68,7 @@ export const ProfilePage = () => {
                         </div>
                         <p className="text-gray-700">Connect User Since 2023</p>
                         <p className="text-black">
-                          Lorem ipsum dolor sit amet consectetur adipisicing
-                          elit. Unde laudantium enim ab doloremque quod velit
-                          tenetur delectus hic labore aliquam, soluta id magni
-                          praesentium facere quos rem facilis numquam dolore.{" "}
+                          {biography ?? "No biography yet."}
                         </p>
                       </div>
                     </div>
@@ -102,7 +99,7 @@ export const ProfilePage = () => {
                                       <Link href={`/users/${friend._id}`}>
                                         <Image
                                           src={
-                                            friend.profile_picture ??
+                                            friend.profile_picture?.signedUrl ??
                                             defaultProfile
                                           }
                                           width={100}

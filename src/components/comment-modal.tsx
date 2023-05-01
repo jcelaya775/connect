@@ -31,8 +31,6 @@ export const CommentModal: React.FC<CommentModalProps> = ({
     platform,
   });
 
-  console.log(user);
-
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
       if ((e.target as Element)?.classList.contains("modal")) {

@@ -62,9 +62,7 @@ export default function usePost({ postId, platform }: usePostProps) {
   const deleteCommentMutation = useMutation({
     mutationKey: [...queryKey, "comments"],
     mutationFn: async ({ commentId }: { commentId: string }) => {
-      console.log(`Deleting ${endpoint}/comments/${commentId}`);
       const { data } = await axios.delete(`${endpoint}/comments/${commentId}`);
-      console.log(data);
       return data.success;
     },
     onSuccess: () => {

@@ -103,7 +103,7 @@ const LoggedInNav = () => {
                           <div className="flex items-center">
                             {user.profile_picture ? (
                               <Image
-                                src={user.profile_picture}
+                                src={user.profile_picture.signedUrl}
                                 alt={user.name}
                                 className="w-4 h-4 rounded-full mr-4"
                               />
