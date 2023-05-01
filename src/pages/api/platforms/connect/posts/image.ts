@@ -32,16 +32,23 @@ export default async function handler(
   switch (method) {
     case "POST":
       try {
+        console.log("POST /api/platforms/connect/posts/image");
         const { files }: formidableData = await parseForm(req);
         const parsedFile: formidable.File = files.file as formidable.File;
         const url: string = parsedFile.filepath;
         const buffer: Buffer = fs.readFileSync(url);
+
+        console.log("parsedFile", parsedFile);
+        console.log("url", url);
+        console.log("buffer", buffer);
 
         let signedUrl: string = await uploadFileToS3(
           buffer,
           parsedFile.originalFilename!
         );
         signedUrl = signedUrl.split("?")[0];
+
+        console.log("signedUrl", signedUrl);
 
         res.status(200).json({
           success: true,

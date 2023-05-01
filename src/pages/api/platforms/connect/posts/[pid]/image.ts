@@ -37,12 +37,17 @@ export default async function handler(
 
   switch (method) {
     case "PUT":
+      console.log("PUT /api/platforms/connect/posts/image");
       try {
         const { pid } = req.query;
         const { files }: formidableData = await parseForm(req);
         const parsedFile: formidable.File = files.file as formidable.File;
         const url: string = parsedFile.filepath;
         const buffer: Buffer = fs.readFileSync(url);
+
+        console.log("parsedFile", parsedFile);
+        console.log("url", url);
+        console.log("buffer", buffer);
 
         // Delete current image
         const post: IConnectPost | null = await Post.findById(pid);

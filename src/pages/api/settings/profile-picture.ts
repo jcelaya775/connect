@@ -51,11 +51,16 @@ export default async function handler(
      * @access  Private
      */
     case "PUT":
+      console.log("PUT api/settings/profile-picture");
       try {
         const { files }: formidableData = await parseForm(req);
         const parsedFile: formidable.File = files.file as formidable.File;
         const url: string = parsedFile.filepath;
         const buffer: Buffer = fs.readFileSync(url);
+
+        console.log("parsedFile", parsedFile);
+        console.log("url", url);
+        console.log("buffer", buffer);
 
         // Delete previous profile picture
         const { profile_picture } = user;
@@ -79,6 +84,8 @@ export default async function handler(
           filename: parsedFile.originalFilename!,
           signedUrl,
         };
+
+        console.log("signedUrl", signedUrl);
 
         await user.save();
 
