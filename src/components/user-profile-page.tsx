@@ -9,34 +9,37 @@ import useFriends, { Friend } from "@/hooks/useFriends";
 import UserPosts from "./user-posts";
 import UserFeed from "./user-feed";
 import { useRouter } from "next/router";
+import Image from "next/image";
+import defaultProfile from "../images/default_profile.jpg";
 
 const friendsList = [
   {
-    id: 1,
+    _id: 1,
     name: "John Doe",
-    avatar: "https://randomuser.me/api/portraits/men/1.jpg",
+    profile_picture: "https://randomuser.me/api/portraits/men/1.jpg",
   },
   {
-    id: 2,
+    _id: 2,
     name: "Jane Doe",
-    avatar: "https://randomuser.me/api/portraits/women/1.jpg",
+    profile_picture: "https://randomuser.me/api/portraits/women/1.jpg",
   },
   {
-    id: 3,
+    _id: 3,
     name: "Bob Smith",
-    avatar: "https://randomuser.me/api/portraits/men/2.jpg",
+    profile_picture: "https://randomuser.me/api/portraits/men/2.jpg",
   },
   {
-    id: 4,
+    _id: 4,
     name: "Alice Smith",
-    avatar: "https://randomuser.me/api/portraits/women/2.jpg",
+    profile_picture: "https://randomuser.me/api/portraits/women/2.jpg",
   },
 ];
+
 const UserProfilePage = () => {
   const router = useRouter();
   const { uid }: { uid?: string } = router.query;
   const { user, userLoading } = useUser();
-  // const { friends } = useFriends();
+  const { friends } = useFriends(uid);
   const [friendModalVisible, setFriendsModalVisible] = useState(false);
   const [editProfileModalVisible, setEditProfileModalVisible] = useState(false);
 
@@ -119,25 +122,33 @@ const UserProfilePage = () => {
                       <div className="card bg-base-100 rounded">
                         <div className="card-body">
                           <div className="flex flex-no-wrap w-fit xl:flex-wrap">
-                            {/* {friends &&
-                              friends.slice(0, 3).map((friend: Friend) => (
+                            {friends &&
+                              friends.slice(0, 4).map((friend: Friend) => (
                                 <div
                                   key={friend._id}
                                   className="w-full xl:w-1/2 p-3"
                                 >
                                   <div className="avatar md:px-5 lg:px-10 xl:px-0">
-                                    <div className="w-full rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                                      <img
-                                        src={friend.profile_picture}
-                                        alt={friend.name}
-                                      />
+                                    <div className="w-full rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 max-h-36">
+                                      <Link href={`/users/${friend._id}`}>
+                                        <Image
+                                          src={
+                                            friend.profile_picture ??
+                                            defaultProfile
+                                          }
+                                          width={100}
+                                          height={100}
+                                          alt={friend.name}
+                                          unoptimized
+                                        />
+                                      </Link>
                                     </div>
                                   </div>
                                   <h2 className="text-center text-sm">
                                     {friend.name}
                                   </h2>
                                 </div>
-                              ))} */}
+                              ))}
                           </div>
                           <Link
                             href="/friends"

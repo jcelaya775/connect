@@ -47,22 +47,24 @@ export const ProfilePage = () => {
                           <div className="card-title text-3xl font-bold text-gray-900">
                             {targetUser?.name}
                           </div>
-                          <div
-                            className="btn btn-small btn-primary w-max justify-end normal-case"
-                            onClick={() => friendButtonMutation.mutate({})}
-                          >
-                            {currentUserPage
-                              ? ""
-                              : relationshipLoading
-                              ? "Loading..."
-                              : relationship === relationshipTypes.friends
-                              ? "Remove Friend"
-                              : relationship === relationshipTypes.pendingFriend
-                              ? "Pending Friend"
-                              : relationship === relationshipTypes.friendRequest
-                              ? "Accept Request"
-                              : "Add Friend"}
-                          </div>
+                          {!currentUserPage && (
+                            <div
+                              className="btn btn-small btn-primary w-max justify-end normal-case"
+                              onClick={() => friendButtonMutation.mutate({})}
+                            >
+                              {relationshipLoading
+                                ? "Loading..."
+                                : relationship === relationshipTypes.friends
+                                ? "Remove Friend"
+                                : relationship ===
+                                  relationshipTypes.pendingFriend
+                                ? "Pending Friend"
+                                : relationship ===
+                                  relationshipTypes.friendRequest
+                                ? "Accept Request"
+                                : "Add Friend"}
+                            </div>
+                          )}
                         </div>
                         <p className="text-gray-700">Connect User Since 2023</p>
                         <p className="text-black">
@@ -89,24 +91,33 @@ export const ProfilePage = () => {
                       <div className="card bg-base-100 rounded">
                         <div className="card-body">
                           <div className="flex flex-no-wrap w-fit xl:flex-wrap">
-                            {friendsList.slice(0, 3).map((friend) => (
-                              <div
-                                key={friend.id}
-                                className="w-full xl:w-1/2 p-3"
-                              >
-                                <div className="avatar md:px-5 lg:px-10 xl:px-0">
-                                  <div className="w-full rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                                    <img
-                                      src={friend.avatar}
-                                      alt={friend.name}
-                                    />
+                            {friends &&
+                              friends.slice(0, 4).map((friend: Friend) => (
+                                <div
+                                  key={friend._id}
+                                  className="w-full xl:w-1/2 p-3"
+                                >
+                                  <div className="avatar md:px-5 lg:px-10 xl:px-0">
+                                    <div className="w-full rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 max-h-36">
+                                      <Link href={`/users/${friend._id}`}>
+                                        <Image
+                                          src={
+                                            friend.profile_picture ??
+                                            defaultProfile
+                                          }
+                                          width={100}
+                                          height={100}
+                                          alt={friend.name}
+                                          unoptimized
+                                        />
+                                      </Link>
+                                    </div>
                                   </div>
+                                  <h2 className="text-center text-sm">
+                                    {friend.name}
+                                  </h2>
                                 </div>
-                                <h2 className="text-center text-sm">
-                                  {friend.name}
-                                </h2>
-                              </div>
-                            ))}
+                              ))}
                           </div>
                           <Link
                             href={`${url}/users/${uid}/friends`}

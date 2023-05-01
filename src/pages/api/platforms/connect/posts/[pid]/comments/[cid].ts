@@ -72,7 +72,9 @@ export default async function handler(
         });
         if (!comment) return res.status(404).json({ success: false });
 
+        console.log("getting replies");
         const replies: IComment[] = await getReplies(comment);
+        console.log(replies);
 
         res.status(200).json({ success: true, replies });
       } catch (error: any) {
@@ -161,6 +163,8 @@ export default async function handler(
 
         const comment: IComment | null = await Comment.findById<IComment>(cid);
         if (comment) {
+          console.log(comment);
+          console.log(comment.user_id);
           if (String(comment.user_id) !== String(user_id))
             return res.status(401).json({ success: false });
 
@@ -181,9 +185,6 @@ export default async function handler(
             (comment: IComment) => String(comment._id) === cid
           )
         ) {
-          if (String(post.user_id) !== String(user_id))
-            return res.status(401).json({ success: false });
-
           post.comments = post.comments?.filter(
             (comment: IComment) => String(comment._id) !== cid
           );

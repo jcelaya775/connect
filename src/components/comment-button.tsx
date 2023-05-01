@@ -1,13 +1,40 @@
+import { useState } from "react";
+import CommentModal from "./comment-modal";
 import { platformTypes } from "@/types/platform";
+import usePost from "@/hooks/usePost";
+import { useQueryClient } from "@tanstack/react-query";
 
 type CommentButtonProps = {
   postId: string;
+  platform: platformTypes;
 };
 
-export default function CommentButton({ postId }: CommentButtonProps) {
+export default function CommentButton({
+  postId,
+  platform,
+}: CommentButtonProps) {
+  const queryClient = useQueryClient();
+  const [commentModalVisible, setCommentModalVisible] =
+    useState<boolean>(false);
+  // const { updatePostMutation } = usePost({ postId, platform });
+
   return (
-      <label htmlFor="comment-modal"
-        className="cursor-pointer">
+    <>
+      {commentModalVisible && (
+        <CommentModal
+          postId={postId}
+          platform={platform}
+          setVisible={setCommentModalVisible}
+        />
+      )}
+      <label
+        htmlFor="comment-modal"
+        className="cursor-pointer"
+        onClick={() => {
+          queryClient.invalidateQueries(["posts", postId]);
+          setCommentModalVisible(true);
+        }}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -23,5 +50,6 @@ export default function CommentButton({ postId }: CommentButtonProps) {
           />
         </svg>
       </label>
+    </>
   );
 }

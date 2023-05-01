@@ -1,71 +1,89 @@
-import React, { useState } from "react";
-import Link from 'next/link';
-import cityscape from '@/images/Cityscape.jpg'
+import { useQueryClient } from "@tanstack/react-query";
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import cityscape from "@/images/Cityscape.jpg";
 import Image from "next/image";
+import { platformTypes } from "@/types/platform";
+import usePost from "@/hooks/usePost";
 
-type Post = {
-  id: number;
-  image: string;
-  comments: Comment[];
+type CommentModalProps = {
+  postId: string;
+  platform: platformTypes;
+  setVisible: (visible: boolean) => void;
 };
 
-type Comment = {
-  id: number;
-  text: string;
-};
-
-type PostModalProps = {
-  post: Post;
-  onClose: () => void;
-};
-
-const comments = [
-  {
-    id: 1,
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde laudantium enim ab doloremque quod velit",
-  },
-  {
-    id: 2,
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde laudantium enim ab doloremque quod velit",
-  },
-  {
-    id: 3,
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde laudantium enim ab doloremque quod velit",
-  },
-  {
-    id: 4,
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde laudantium enim ab doloremque quod velit",
-  },
-];
-
-export const CommentModal: React.FC<PostModalProps> = ({ post, onClose }) => {
+export const CommentModal: React.FC<CommentModalProps> = ({
+  postId,
+  platform,
+  setVisible,
+}: CommentModalProps) => {
+  const queryClient = useQueryClient();
   const [comment, setComment] = useState("");
+  const { post, postLoading, comments, commentsLoading, postCommentMutation } =
+    usePost({
+      postId,
+      platform,
+    });
 
-  const handleCommentChange = (
-    event: React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
-    setComment(event.target.value);
-  };
+  useEffect(() => {
+    const handleOutsideClick = (e: MouseEvent) => {
+      if ((e.target as Element)?.classList.contains("modal")) {
+        setVisible(false);
+      }
+    };
+
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setVisible(false);
+      }
+    };
+
+    document.addEventListener("click", handleOutsideClick);
+    document.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  });
 
   const handleCommentSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    postCommentMutation.mutate({ content: comment });
+
     // Add comment logic here
     setComment("");
   };
+
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCount((count) => {
+        if (count === 100) {
+          return 0;
+        }
+        return count + 1;
+      });
+    }, 5);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <>
       <input type="checkbox" id="comment-modal" className="modal-toggle" />
 
       <div className="modal">
-        <div className="modal-box rounded-lg">
+        <div className="modal-box rounded-lg h-max">
           <form onSubmit={handleCommentSubmit}></form>
           <div className="flex flex-col w-full items-start gap-y-2 flex-wrap">
             <div className="flex-none">
               <div className="flex flex-row space-x-3">
                 <div className="flex-none avatar">
                   <Link href="#">
-                  <svg
+                    <svg
                       viewBox="0 0 512 512"
                       xmlns="http://www.w3.org/2000/svg"
                       className="fill-current"
@@ -77,10 +95,10 @@ export const CommentModal: React.FC<PostModalProps> = ({ post, onClose }) => {
               </div>
               <div className="flex-none w-content">
                 <div className="card-title">
-                  <Link href="#">User</Link>
+                  <Link href="#">{post?.username}</Link>
                 </div>
                 <div className="text-base-content text-opacity-80">
-                  Connect
+                  {post?.main_platform ?? "Facebook"}
                 </div>
               </div>
             </div>
@@ -110,42 +128,43 @@ export const CommentModal: React.FC<PostModalProps> = ({ post, onClose }) => {
             </div>
             <div className="basis-full"></div>
             <div className="basis-full w-full">
-            <form onSubmit={handleCommentSubmit}>
+              <form onSubmit={handleCommentSubmit}>
                 <textarea
-                  className="textarea h-24 w-full resize-none border-base-200 border-solid"
+                  className="textarea h-24 w-full resize-none bg-base-200 border-base-200 border-solid"
                   placeholder="Write a comment"
                   value={comment}
-                  onChange={handleCommentChange}
+                  onChange={(e) => setComment(e.target.value)}
                 />
+                <div className="modal-action">
+                  <label
+                    htmlFor="comment-modal"
+                    className="btn btn-sm btn-ghost gap-2 py-0 px-5 normal-case"
+                    onClick={() => setVisible(false)}
+                  >
+                    Cancel
+                  </label>
+                  <button
+                    type="submit"
+                    className="btn btn-sm btn-primary gap-2 py-0 px-5 normal-case"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      className="w-6 h-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                    Add Comment
+                  </button>
+                </div>
               </form>
-              <div className="modal-action">
-              <label
-                htmlFor="comment-modal"
-                className="btn btn-sm btn-ghost gap-2 py-0 px-5 normal-case"
-              >
-                Cancel
-              </label>
-              <button
-                type="submit"
-                className="btn btn-sm btn-primary gap-2 py-0 px-5 normal-case"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-                Add Comment
-              </button>
-            </div>
             </div>
           </div>
         </div>

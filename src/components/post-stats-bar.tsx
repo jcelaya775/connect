@@ -68,6 +68,7 @@ export default function PostStatsBar({
       else return 1000 * 60 * 60;
     },
   });
+
   const { data: facebookComments, isLoading: facebookCommentsLoading } =
     useQuery({
       queryKey: ["posts", postId, "comments", "count"],
@@ -136,6 +137,19 @@ export default function PostStatsBar({
     }
   })();
 
+  const commentButton = (() => {
+    switch (platform) {
+      case platformTypes.connect:
+        return <CommentButton postId={postId} platform={platform} />;
+      case platformTypes.facebook:
+        return <CommentButton postId={postId} platform={platform} />;
+      case platformTypes.instagram:
+        return <CommentButton postId={postId} platform={platform} />;
+      case platformTypes.tiktok:
+        return <CommentButton postId={postId} platform={platform} />;
+    }
+  })();
+
   const likeCount = (() => {
     switch (platform) {
       case platformTypes.connect:
@@ -168,9 +182,7 @@ export default function PostStatsBar({
         {icon}
         <div className="flex-none w-content lg:-ml-2">{likeButton}</div>
         <div className="flex-none w-content">{likeCount} Likes</div>
-        <div className="flex-none w-content">
-          <CommentButton postId={postId} />
-        </div>
+        <div className="flex-none w-content">{commentButton}</div>
         <div className="flex-none w-content">{commentCount} Comments</div>
       </div>
     </div>

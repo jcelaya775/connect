@@ -3,10 +3,11 @@ import connectDB from "@/lib/mongodb";
 import Post from "@/models/Post";
 import { IConnectPost } from "@/models/Post";
 import { getAuthUser } from "@/lib/auth";
+import User from "@/models/User";
 
 type Data = {
   success: boolean;
-  data?: IConnectPost;
+  post?: IConnectPost & any;
   postId?: string;
   error?: string;
 };
@@ -19,7 +20,7 @@ export default async function handler(
   const { method } = req;
 
   switch (method) {
-    /**
+    /*
      * @route   GET api/platforms/connect/posts/:pid
      * @desc    Get a post by id
      * @access  Public
@@ -30,15 +31,18 @@ export default async function handler(
       try {
         const { pid } = req.query;
 
-        // Get post
+        // Get post with populated comments
         const post: IConnectPost | null = await Post.findOne<IConnectPost>({
           _id: pid,
-        });
-        if (!post) return res.status(404).json({ success: false });
+        }); //.populate("comments.user_id", "name");
+        if (!post)
+          return res
+            .status(404)
+            .json({ success: false, error: "Post not found" });
 
         res.status(200).json({
           success: true,
-          data: post,
+          post,
         });
       } catch (error: any) {
         res.status(400).json({ success: false, error: error.message });
@@ -92,7 +96,7 @@ export default async function handler(
         if (!updatedPost) return res.status(404).json({ success: false });
 
         // Return deleted post
-        return res.status(200).json({ success: true, data: updatedPost });
+        return res.status(200).json({ success: true, post: updatedPost });
       } catch (error: any) {
         res.status(400).json({ success: false, error: error.message });
       }
