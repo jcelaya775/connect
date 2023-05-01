@@ -29,7 +29,7 @@ export interface IUser extends Document {
     theme: themeTypes;
   };
   biography?: string;
-  profile_picture: string;
+  profile_picture: { signedUrl?: string; filename?: string };
   cover_image: string;
   code: Number;
   timestamp: Date;
@@ -63,8 +63,8 @@ export const UserSchema = new Schema<IUser>(
       },
     },
     profile_picture: {
-      type: String,
-      trim: true,
+      signedUrl: { type: String, trim: true },
+      filename: { type: String, trim: true },
       required: false,
     },
     cover_image: {
