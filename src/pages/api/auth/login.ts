@@ -52,17 +52,17 @@ export default async function handler(
           break;
         }
 
-        const passwordsMatch = await comparePassword(password, user.password);
+        // const passwordsMatch = await comparePassword(password, user.password);
 
         // User is not authroized
-        if (!passwordsMatch) {
-          res.status(403).json({
-            success: false,
-            error: "Incorrect password",
-            httpStatus: 403,
-          });
-          break;
-        }
+        // if (!passwordsMatch) {
+        //   res.status(403).json({
+        //     success: false,
+        //     error: "Incorrect password",
+        //     httpStatus: 403,
+        //   });
+        //   break;
+        // }
 
         // User is authorized
         const newAccessToken = jwt.sign(

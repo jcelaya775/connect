@@ -64,6 +64,9 @@ const FriendsPage = () => {
                           src={friend.profile_picture.signedUrl}
                           alt={friend.name}
                           className="w-10 h-10 rounded-full mr-4"
+                          width={100}
+                          height={100}
+                          unoptimized
                         />
                       ) : (
                         <div className="w-9 rounded-full mr-6">
@@ -177,6 +180,9 @@ const FriendsPage = () => {
                         src={friend.profile_picture.signedUrl}
                         alt={friend.name}
                         className="w-10 h-10 rounded-full mr-4"
+                        width={100}
+                        height={100}
+                        unoptimized
                       />
                     ) : (
                       <div className="w-9 rounded-full mr-6">

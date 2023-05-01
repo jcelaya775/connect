@@ -13,7 +13,7 @@ export interface IUser extends Document {
   name: string;
   is_verified: boolean;
   email: string;
-  facebook: {
+  facebook?: {
     user_id?: string;
     page_id?: string;
     page_name?: string;

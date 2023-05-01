@@ -106,6 +106,9 @@ const LoggedInNav = () => {
                                 src={user.profile_picture.signedUrl}
                                 alt={user.name}
                                 className="w-4 h-4 rounded-full mr-4"
+                                width={100}
+                                height={100}
+                                unoptimized
                               />
                             ) : (
                               <div className="w-6 rounded-full mx-2">
