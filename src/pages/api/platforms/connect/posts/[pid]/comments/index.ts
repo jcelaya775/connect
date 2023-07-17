@@ -38,7 +38,6 @@ export default async function handler(
         const { pid } = req.query;
 
         const url = process.env.NEXTAUTH_URL;
-        console.log(url);
         const post: IConnectPost | null = await Post.findOne<IConnectPost>({
           _id: pid,
         });

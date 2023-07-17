@@ -10,7 +10,6 @@ type usePostProps = {
 export default function usePost({ postId, platform }: usePostProps) {
   const queryClient = useQueryClient();
   const url = process.env.NEXT_PUBLIC_URL;
-  console.log(url);
   const queryKey = ["posts", postId];
   const endpoint: string = (() => {
     switch (platform) {

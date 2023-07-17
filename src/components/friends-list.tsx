@@ -30,7 +30,6 @@ const FriendsPage = () => {
     friendButtonMutation,
   } = useFriends(uid);
   const url = process.env.NEXT_PUBLIC_URL;
-  console.log(url);
 
   return (
     <div className="max-w-3xl mx-auto">
