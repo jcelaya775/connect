@@ -1,32 +1,33 @@
-.header{
-    position: fixed;
-    margin: 0px;
-    padding-left: 25px;
-    padding-top: 0px;
-    width: 100%;
-    background: #495464;
-    color: #F4F4F2;
+.header {
+	position: fixed;
+	margin: 0px;
+	padding-left: 25px;
+	padding-top: 0px;
+	width: 100%;
+	background: #495464;
+	color: #f4f4f2;
+	z-index: 100;
 }
 
-.logo{
-    float: left;
-    margin-top:5px;
-    padding:0px;
-    height: 20px;
+.logo {
+	float: left;
+	margin-top: 5px;
+	padding: 0px;
+	height: 20px;
 }
 
-.logo_icon{
-    width: 25px;
-    height: 25px;
-    margin: 0px;
-    padding: 0px 0px 0px 5px;
+.logo_icon {
+	width: 25px;
+	height: 25px;
+	margin: 0px;
+	padding: 0px 0px 0px 5px;
 }
 
 .home_link {
-    color: #F4F4F2;
-    text-decoration: none;
+	color: #f4f4f2;
+	text-decoration: none;
 }
 
 .home_link:hover {
-	color: #F4F4F2;
+	color: #f4f4f2;
 }

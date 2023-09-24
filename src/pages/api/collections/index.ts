@@ -1,4 +1,4 @@
-import connectDB from "@/connectDB";
+import connectDB from "@/lib/connectDB";
 import { NextApiRequest, NextApiResponse } from "next";
 import Collection, { ICollection } from "@/models/Collection";
 

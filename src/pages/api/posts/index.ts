@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import connectDB from "../../../connectDB";
+import connectDB from "../../../lib/connectDB";
 import Post, { IPost } from "../../../models/Post";
 
 //response to client

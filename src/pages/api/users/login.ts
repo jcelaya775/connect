@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import connectDB from "../../../connectDB";
+import connectDB from "../../../lib/connectDB";
 import User, { IUser } from "../../../models/User";
 import { comparePassword } from "@/validation/passwordHash";
 
@@ -34,13 +34,11 @@ export default async function handler(
 
 				// User is not verified
 				if (!user.is_verified) {
-					res
-						.status(403)
-						.json({
-							success: false,
-							error: "User is not verified",
-							httpStatus: 403,
-						});
+					res.status(403).json({
+						success: false,
+						error: "User is not verified",
+						httpStatus: 403,
+					});
 					break;
 				}
 
@@ -48,13 +46,11 @@ export default async function handler(
 
 				// User is not authroized
 				if (!passwordsMatch) {
-					res
-						.status(403)
-						.json({
-							success: false,
-							error: "Incorrect password",
-							httpStatus: 403,
-						});
+					res.status(403).json({
+						success: false,
+						error: "Incorrect password",
+						httpStatus: 403,
+					});
 					break;
 				}
 

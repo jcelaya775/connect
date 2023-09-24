@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import connectDB from "../../../connectDB";
+import connectDB from "../../../lib/connectDB";
 import About, { IAbout } from "../../../models/About";
 
 type Data = {
