@@ -108,29 +108,76 @@ export const CommentModal: React.FC<CommentModalProps> = ({
                 </div>
               </div>
             </div>
-          <div className="flex-1">
-            <p>This is my post...</p>
-          </div>
-          <img src={post.image} alt={`Post ${post.id}`} />
-          <div className="mt-4 mb-8">
-            {post.comments.map((comment) => (
-              <Comment key={comment.id} text={comment.text} />
-            ))}
-          </div>
-          <form onSubmit={handleCommentSubmit}>
-            <div className="relative mb-4">
-              <textarea
-                className="textarea h-24 w-full pr-10"
-                placeholder="Write a comment"
-                value={comment}
-                onChange={handleCommentChange}
-              />
-              <button
-                className="btn btn-primary absolute right-2 top-2"
-                type="submit"
-              >
-                Comment
-              </button>
+            <div className="flex-1 my-2 w-full">
+              {postLoading ? (
+                <progress
+                  className="progress progress-primary w-full"
+                  value={count}
+                  max="100"
+                ></progress>
+              ) : (
+                post?.content?.body ?? post?.message ?? ""
+              )}
+            </div>
+            <div className="basis-1/6">
+              {(post?.content?.image || post?.full_picture) && (
+                <Image
+                  className="w-full h-full"
+                  priority
+                  width={800}
+                  height={800}
+                  src={post?.content?.image.signedUrl ?? post?.full_picture}
+                  alt="post image"
+                  unoptimized
+                />
+              )}
+            </div>
+            <div className="divider basis-full"></div>
+            <div className="basis-full w-full">
+              <h2 className="text-md mb-4">Comments</h2>
+              <div className="flex flex-col gap-y-4 w-full max-h-40 overflow-y-scroll scrollbar-width mb-4">
+                {comments &&
+                  comments.map((comment: any) => (
+                    <>
+                      <div className="card compact card-side w-full bg-base-200 shadow-lg">
+                        <div className="card-body p-3 flex-row items-start">
+                          <div className="flex-none">
+                            <div className="card-title">
+                              <h3 className="text-sm">
+                                {comment.name ?? comment.from.name}
+                              </h3>
+                            </div>
+                          </div>
+                          <div className="flex-1">
+                            {comment.content ?? comment.message}
+                          </div>
+                          {(user?._id === comment.user_id ||
+                            platform === platformTypes.facebook) && (
+                            <button
+                              onClick={() =>
+                                deleteCommentMutation.mutate({
+                                  commentId: comment._id ?? comment.id,
+                                })
+                              }
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                fill="currentColor"
+                                className="text-error w-5 h-5"
+                                viewBox="0 0 16 16"
+                              >
+                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
+                                <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
+                              </svg>
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    </>
+                  ))}
+              </div>
             </div>
             <div className="basis-full"></div>
             <div className="basis-full w-full">

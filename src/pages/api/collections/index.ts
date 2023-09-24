@@ -1,4 +1,4 @@
-import connectDB from "@/lib/connectDB";
+import connectDB from "@/lib/mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
 import Collection, { ICollection } from "@/models/Collection";
 import { getAuthUser } from "@/lib/auth";

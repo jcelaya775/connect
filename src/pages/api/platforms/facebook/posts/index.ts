@@ -2,6 +2,11 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import connectDB from "@/lib/mongodb";
 import axios, { AxiosResponse } from "axios";
 import { getAuthUser } from "@/lib/auth";
+import formidable from "formidable";
+import { parseForm } from "@/lib/parseForm";
+import FormData from "form-data";
+import fs from "fs";
+import { IUser } from "@/models/User";
 import { platformTypes } from "@/types/platform";
 import { IFacebookPost } from "@/types/post";
 
@@ -31,12 +36,13 @@ export default async function handler(
   await connectDB();
   const { method }: { method?: string } = req;
 
-  const user = await getAuthUser(req, res);
-  if (!user || !user.facebook?.page_token)
-    return res.status(401).json({ success: false, error: "Not logged in" });
-  const { page_token } = user.facebook;
-
-  const { method } = req;
+  const user: IUser | null | void = await getAuthUser(req, res);
+  if (!user)
+    return res.status(401).json({ success: false, error: "Unauthorized" });
+  if (!user.facebook?.page_token)
+    return res
+      .status(401)
+      .json({ success: false, error: "Your Facebook page is not connected" });
 
   switch (method) {
     case "GET":
@@ -73,16 +79,22 @@ export default async function handler(
       break;
     case "POST":
       try {
-        const { message } = req.body;
+        const { fields, files }: formidableData = await parseForm(req);
+        const { message, caption }: formidable.Fields = fields;
+        const file: formidable.File = files.file as formidable.File;
 
-        const postResponse = await axios.post(
-          `https://graph.facebook.com/me/feed`,
-          {
-            message,
-            access_token: page_token,
-          }
-        );
-        const postId: string = postResponse.data.id;
+        let id: string, postId: string;
+        if (file) {
+          // Create image post
+          const url: string = file.filepath;
+          const buffer: Buffer = fs.readFileSync(url);
+          const formData: FormData = new FormData();
+          caption && formData.append("caption", caption);
+          formData.append("source", buffer, {
+            filename: url,
+            contentType: "image/jpeg",
+          });
+          formData.append("access_token", user.facebook.page_token);
 
           const res: AxiosResponse = await axios.post(
             "https://graph.facebook.com/v16.0/me/photos",

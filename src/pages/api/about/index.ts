@@ -1,6 +1,6 @@
 import { getAuthUser } from "@/lib/auth";
 import type { NextApiRequest, NextApiResponse } from "next";
-import connectDB from "../../../lib/connectDB";
+import connectDB from "@/lib/mongodb";
 import About, { IAbout } from "../../../models/About";
 
 type Data = {

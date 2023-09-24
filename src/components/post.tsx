@@ -4,6 +4,8 @@ import Link from "next/link";
 import { platformTypes } from "@/types/platform";
 import PostStatsBar from "./post-stats-bar";
 import OptionsDropdown from "./options-dropdown";
+import { IConnectPost } from "@/models/Post";
+import useUser from "@/hooks/useUser";
 
 export type PostProps = {
   userId: string;
@@ -13,27 +15,7 @@ export type PostProps = {
   author: string;
   mainPlatform: platformTypes;
   platforms: platformTypes[];
-  content: {
-    body?: string;
-    image?: string | StaticImageData;
-    link?: string;
-  };
-  connectStats?: {
-    likes: number;
-    comments: number;
-  };
-  facebookStats?: {
-    likes: number;
-    comments: number;
-  };
-  instagramStats?: {
-    likes: number;
-    comments: number;
-  };
-  tiktokStats?: {
-    likes: number;
-    comments: number;
-  };
+  content: IConnectPost["content"];
 };
 
 const Post = ({

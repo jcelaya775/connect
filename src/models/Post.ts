@@ -3,42 +3,82 @@ import { CommentSchema, IComment } from "../models/Comment";
 import { ObjectId } from "mongodb";
 import { platformTypes } from "@/types/platform";
 
-export interface IPost extends Document {
-	user_id: string;
-	email: string;
-	timestamp: Date;
-	author: string;
-	visibility: Number /* 1: public-post, 2: friends, 3: private-post */;
-	likes: Number;
-	views: Number;
-	community: string;
-	//comments?: IComment[];
-	content: {
-		body?: string;
-		image?: string;
-		link?: string;
-		[x: string | number | symbol]: any;
-	};
+export interface IConnectPost extends Document {
+  user_id?: ObjectId;
+  username: string;
+  email: string;
+  author: string;
+  community_id?: ObjectId;
+  main_platform: platformTypes;
+  platforms: platformTypes[];
+  facebook_id?: string;
+  instagram_id?: string;
+  content: {
+    body?: string;
+    image?: {
+      signedUrl?: string;
+      filename?: string;
+    };
+    video?: {
+      bucket?: string;
+      key?: string;
+      location?: string;
+    };
+    link?: string;
+    [x: string | number | symbol]: any;
+  };
+  likes: [{ user_id: ObjectId }];
+  comments?: IComment[];
+  views: [{ user_id: ObjectId }];
+  visibility: "Public" | "Private";
+  createdAt: string;
+  updatedAt: string;
 }
 
-const PostSchema = new Schema<IPost>({
-	user_id: SchemaTypes.ObjectId,
-	// email: { type: String, required: true, trim: true },
-	author: { type: String, required: true, trim: true },
-	title: { type: String, required: true, trim: true },
-	community: { type: String, trim: true },
-	content: {
-		body: { type: String, trim: true },
-		image: { type: String, trim: true },
-		link: { type: String, trim: true },
-	},
-	
-	//comments: [CommentSchema],
-	likes: { type: Number, default: 0 },
-	views: { type: Number, default: 0 },
-	visibility: { type: Number, required: true, default: 1 },
-	timestamp: { type: Date, default: Date.now },
-});
+const PostSchema = new Schema<IConnectPost>(
+  {
+    user_id: { type: SchemaTypes.ObjectId, required: true },
+    username: { type: String, required: true, trim: true },
+    email: { type: String, required: true, trim: true },
+    community_id: SchemaTypes.ObjectId,
+    main_platform: {
+      type: String,
+      required: true,
+      trim: true,
+      enum: Object.values(platformTypes),
+    },
+    platforms: {
+      type: [String],
+      trim: true,
+      enum: Object.values(platformTypes),
+    },
+    facebook_id: { type: String, trim: true, required: false },
+    instagram_id: { type: String, trim: true, required: false },
+    content: {
+      body: { type: String, trim: true },
+      image: {
+        signedUrl: { type: String, trim: true },
+        filename: { type: String, trim: true },
+      },
+      video: {
+        bucket: { type: String, trim: true },
+        key: { type: String, trim: true },
+        location: { type: String, trim: true },
+      },
+      link: { type: String, trim: true },
+    },
+    comments: [CommentSchema],
+    likes: [{ user_id: { type: SchemaTypes.ObjectId, required: true } }],
+    views: [{ user_id: { type: SchemaTypes.ObjectId, required: true } }],
+    visibility: {
+      type: String,
+      required: true,
+      default: "Public",
+      enum: ["Public", "Private"],
+    },
+  },
+  { strict: false, timestamps: true }
+);
 
 PostSchema.virtual("allComments", {
   ref: "Comment",

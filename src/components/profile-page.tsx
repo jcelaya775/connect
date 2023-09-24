@@ -1,8 +1,36 @@
 import { useState } from "react";
 import SideNav from "./SideNav";
-import ConnectPost from "./ConnectPost";
-import SocialPost from "./post";
-import FriendsModal from "./friends-list";
+import UserPosts from "./user-posts";
+import useUser from "@/hooks/useUser";
+import { useRouter } from "next/router";
+import { relationshipTypes } from "@/types/relationship";
+import useFriends, { Friend } from "@/hooks/useFriends";
+import Link from "next/link";
+import Image from "next/image";
+import defaultProfile from "../images/default_profile.jpg";
+
+const friendsList = [
+  {
+    id: 1,
+    name: "John Doe",
+    avatar: "https://randomuser.me/api/portraits/men/1.jpg",
+  },
+  {
+    id: 2,
+    name: "Jane Doe",
+    avatar: "https://randomuser.me/api/portraits/women/1.jpg",
+  },
+  {
+    id: 3,
+    name: "Bob Smith",
+    avatar: "https://randomuser.me/api/portraits/men/2.jpg",
+  },
+  {
+    id: 4,
+    name: "Alice Smith",
+    avatar: "https://randomuser.me/api/portraits/women/2.jpg",
+  },
+];
 
 export const ProfilePage = () => {
   const router = useRouter();

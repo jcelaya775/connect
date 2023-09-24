@@ -101,15 +101,10 @@ export default async function handler(
         const { pid, cid } = req.query;
         const { content } = req.body;
 
-        // const comment: IComment | null = await Comment.findOne<IComment>({
-        //   _id: cid,
-        // });
-        // if (!comment) return res.status(404).json({ success: false });
-
-        const post: IPost | null = await Post.findOne<IPost>({ _id: pid });
-        if (!post) return res.status(404).json({ success: false });
-
-        const comment = post.comments?.find((c) => c._id == cid);
+        const comment: IComment | null = await Comment.findOne<IComment>({
+          _id: cid,
+        });
+        if (!comment) return res.status(404).json({ success: false });
 
         const reply: IComment = await Comment.create<IComment>({
           post_id: pid,
@@ -118,14 +113,12 @@ export default async function handler(
           content,
         });
 
-        await reply.save();
-
         comment.replies?.push(reply._id);
-        await comment.save();
-        console.log(comment.replies);
 
-        console.log(reply);
-        res.status(200).json({ success: true, data: reply });
+        await reply.save();
+        await comment.save();
+
+        res.status(200).json({ success: true, reply });
       } catch (error: any) {
         res.status(400).json({ success: false, error: error.message });
       }

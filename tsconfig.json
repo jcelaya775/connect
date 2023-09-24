@@ -21,6 +21,6 @@
     },
     "typeRoots": ["./node_modules/@types", "./types"]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "utils/custom.d.ts", "src/pages/index.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "utils/custom.d.ts", "src/pages/api/auth/[...nextauth].js", "src/middleware/withAuth.js", "src/pages/api/upload.ts"],
   "exclude": ["node_modules"]
 }

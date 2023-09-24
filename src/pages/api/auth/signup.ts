@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import connectDB from "../../../lib/connectDB";
+import connectDB from "../../../lib/mongodb";
 import User, { IUser } from "../../../models/User";
 import { hashPassword } from "@/lib/validation/passwordHash";
 import { userValidationSchema } from "@/lib/validation/userValidation";

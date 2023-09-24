@@ -1,13 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import connectDB from "../../../lib/connectDB";
-import User, { IUser } from "../../../models/User";
-import { hashPassword, comparePassword } from "@/validation/passwordHash";
-import { userValidationSchema } from "@/validation/userValidation";
+import connectDB from "@/lib/mongodb";
+import axios, { AxiosResponse } from "axios";
+import { getAuthUser } from "@/lib/auth";
+import User, { IUser } from "@/models/User";
 
-type Data = {
-	name?: string;
-	success: boolean;
-	data?: IUser[];
+type QueryParams = {
+  name?: string;
+  username?: string;
+  email?: string;
 };
 
 type Data = {
@@ -21,83 +21,46 @@ type Data = {
 };
 
 export default async function handler(
-	req: NextApiRequest,
-	res: NextApiResponse<Data>
+  req: NextApiRequest,
+  res: NextApiResponse<Data>
 ) {
-	const { method } = req;
+  await connectDB();
+  const { method }: { method?: string } = req;
 
-	await connectDB();
+  const user: IUser | null | void = await getAuthUser(req, res);
+  if (!user)
+    return res.status(401).json({ success: false, error: "Unauthorized" });
 
-	switch (method) {
-		case "GET":
-			//make sure the username follows conventions
-			const validationResult = userValidationSchema.validate(req.body.username);
-			if (validationResult.error) {
-				return res.status(400).json({ success: false });
-			}
-			try {
-				//find user with username matching req
-				let username = req.body.username;
-				let thisUser = await User.findOne({ username });
-				const { query } = req;
-				if ("code" in query) {
-				}
-				//hash the attempted password
-				let attemptedPassHash = await hashPassword(req.body.password);
-				let userPassHash = thisUser.pass_hash;
+  switch (method) {
+    case "GET":
+      try {
+        const { name, username, email }: QueryParams = req.query;
 
-				//compare the hashes
-				let isCorrectPassword = await comparePassword(
-					attemptedPassHash,
-					userPassHash
-				);
+        // Query users by name, username, or email
+        const query: { $or: {}[] } = { $or: [] };
+        const orArray = [];
+        if (name)
+          orArray.push({ name: { $regex: name as string, $options: "i" } });
+        if (username)
+          orArray.push({
+            username: { $regex: username as string, $options: "i" },
+          });
+        if (email)
+          orArray.push({ email: { $regex: email as string, $options: "i" } });
+        if (orArray.length > 0) query.$or = orArray;
 
-				//if the passwords are the same, return the user
-				if (isCorrectPassword) {
-					res.status(200).json({ success: true, data: thisUser });
-				} else {
-					//unsure what error status to return upon failed password verification
-					res.status(401).json({ success: false });
-				}
-			} catch (error) {
-				res.status(400).json({ success: false });
-			}
-			break;
-		case "POST":
-			try {
-				//make sure email follows conventions
-				const validationResult = userValidationSchema.validate(req.body.email);
-				if (validationResult.error) {
-					return res.status(400).json({ success: false });
-				}
-				//store the data into const's
-				const { name, email, password, username } = req.body;
-				const hashedPassword = await hashPassword(req.body.password);
-				let vCode = Math.random() * (99999 - 11111) + 11111;
+        const users: IUser[] = await User.find(query).select(
+          "_id email username name friends profile_picture"
+        );
 
-				//create the wire frame user
-				const wireUser = new User({
-					username: req.body.username,
-					email: req.body.email,
-					code: vCode,
-					password: hashedPassword,
-				});
+        res.status(200).json({ success: true, users });
+      } catch (error: any) {
+        return res.status(500).json({ success: false, error: error.message });
+      }
 
-				//save the user
-				await wireUser.save();
-
-				//send the verification email and success status
-				res.status(201).json({ success: true });
-			} catch (error) {
-				res.status(400).json({ success: false });
-			}
-			break;
-		case "PUT":
-			break;
-		case "DELETE":
-			break;
-		default:
-			res.status(400).json({ success: false });
-			break;
-	}
+      break;
+    default:
+      res.status(405).json({ success: false, error: "Method not allowed" });
+      break;
+  }
 }

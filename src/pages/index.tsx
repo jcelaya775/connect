@@ -1,14 +1,12 @@
-import Image from "next/image";
-import Header from "@/components/Header";
-import style from "@/styles/FormBox.module.css";
-import logo from "@/images/link_icon_content.svg";
-import Link from "next/link";
-import { useEffect } from "react";
-import Feed from "@/components/Feed";
 import { useEffect } from "react";
 import { GetServerSidePropsContext } from "next";
-import { getServerSession } from "next-auth/next";
-import { useSession } from "next-auth/react";
+import SignUpBox from "@/components/signup-box";
+import Feed from "@/components/feed";
+import { getAuthUserFromPage } from "@/lib/auth";
+import { IUser } from "@/models/User";
+import Layout_Logout from "@/components/Layout_Out";
+import Layout_Login from "@/components/Layout_In";
+import connectDB from "@/lib/mongodb";
 
 type HomeProps = { authenticated: boolean };
 
@@ -21,20 +19,15 @@ export default function Home({ authenticated }: HomeProps) {
     );
   }
 
-	useEffect(() => {
-		// User is authenticated at this point
-		console.log(status);
-		console.log(session);
-	}, [status]);
-
-	return (
-		<>
-			<Feed />
-		</>
-	);
+  return (
+    <Layout_Login>
+      <Feed />
+    </Layout_Login>
+  );
 }
 
-// TODO: Fix decryption error in getServerSession
+Home.Layout = "LoggedIn";
+
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   await connectDB();
   const user: IUser | null = await getAuthUserFromPage(context);
